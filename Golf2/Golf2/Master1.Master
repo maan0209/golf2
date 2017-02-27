@@ -70,13 +70,9 @@
 	</nav>
 <!--/.Navbar slutar här -->
         
-<div class="container" id="topbar">
-    <!--/.Grå "bar" under nav -->            
-    </div>        
     
-<div class="container" id="welcome" >    
-<h1>Välkommen till Hålslaget GK!</h1>    
-</div>      
+
+ 
 
     <form id="form1" runat="server">
 <%--         vad har denna för funktion??--%>
