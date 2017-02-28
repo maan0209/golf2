@@ -3,18 +3,24 @@
 public class Person
 {
 
-    public string golfId { get; set; }
-    public string gender { get; set; }
-    public string firstName { get; set; }
-    public string surName { get; set; }
-    public string email { get; set; }
-    public string postalcode { get; set; }
-    public string city { get; set; }
-    public int hcp { get; set; }
-    public string adress { get; set; }
+    public string GolfId { get; set; }
+    public string Gender { get; set; }
+    public string FirstName { get; set; }
+    public string SurName { get; set; }
+    public string Email { get; set; }
+    public string Postalcode { get; set; }
+    public string City { get; set; }
+    public int Hcp { get; set; }
+    public string Adress { get; set; }
+
+    public int TypId { get; set; }
+    public string Kategori { get; set; }
+    public int Price { get; set; }
 
 
-	public Person()
+
+
+    public Person()
 	{
        
 	}
