@@ -162,6 +162,7 @@
     <Compile Include="Master1.Master.designer.cs">
       <DependentUpon>Master1.Master</DependentUpon>
     </Compile>
+    <Compile Include="person.cs" />
     <Compile Include="Postgress.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
