@@ -122,6 +122,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BookingSchedule.aspx" />
     <Content Include="Home1.aspx" />
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config">
@@ -141,6 +142,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BookingSchedule.aspx.cs">
+      <DependentUpon>BookingSchedule.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BookingSchedule.aspx.designer.cs">
+      <DependentUpon>BookingSchedule.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Home.aspx.cs">
       <DependentUpon>Home.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
