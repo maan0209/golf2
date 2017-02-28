@@ -149,6 +149,7 @@
     <Compile Include="BookingSchedule.aspx.designer.cs">
       <DependentUpon>BookingSchedule.aspx</DependentUpon>
     </Compile>
+    <Compile Include="course.cs" />
     <Compile Include="Home.aspx.cs">
       <DependentUpon>Home.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
