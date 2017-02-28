@@ -1,11 +1,7 @@
 ﻿using System;
 
-public class Class1
+public class Person
 {
-	public Class1()
-	{
-       
-	}
 
     public string golfId { get; set; }
     public string gender { get; set; }
@@ -16,5 +12,13 @@ public class Class1
     public string city { get; set; }
     public int hcp { get; set; }
     public string adress { get; set; }
+
+
+	public Person()
+	{
+       
+	}
+
+
 
 }
