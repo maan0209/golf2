@@ -7,8 +7,8 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <div class="container" id="main" >    
-<h1>Välkommen till Hålslaget GK!</h1>    
-
+<h1>Välkommen till Hålslaget GK!</h1>
+    
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
     <ol class="carousel-indicators">
