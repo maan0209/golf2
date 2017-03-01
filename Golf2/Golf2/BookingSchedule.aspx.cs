@@ -34,11 +34,21 @@ namespace Golf2
 
             DailyBookings ShowBookings = new DailyBookings(anyDate);
 
-            for (int i = 0; i < 72; i++)
+            //for (int i = 0; i < 72; i++)
+            //{
+            //    HtmlGenericControl aDiv = new HtmlGenericControl("div");
+            //    aDiv.Attributes.Add("class", "aScheduleBox");
+            //    Schedule.Controls.Add(aDiv);
+            //}
+
+            foreach (string item in ShowBookings.AvailableBookingTimes)
             {
-                HtmlGenericControl aDiv = new HtmlGenericControl("div");
-                aDiv.Attributes.Add("class", "aScheduleBox");
-                Schedule.Controls.Add(aDiv);
+                HtmlGenericControl aBooking = new HtmlGenericControl("div");
+                aBooking.Attributes.Add("class", "aBooking");
+                HtmlGenericControl aBookingTime = new HtmlGenericControl("p");
+                aBookingTime.InnerText = item.ToString();
+                aBooking.Controls.Add(aBookingTime);
+                Schedule.Controls.Add(aBooking);
             }
 
 
