@@ -34,7 +34,7 @@ namespace Golf2
 
             DailyBookings ShowBookings = new DailyBookings(anyDate);
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 72; i++)
             {
                 HtmlGenericControl aDiv = new HtmlGenericControl("div");
                 aDiv.Attributes.Add("class", "aScheduleBox");

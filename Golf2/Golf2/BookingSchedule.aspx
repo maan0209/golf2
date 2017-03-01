@@ -4,9 +4,12 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     
-    <!-- Bokningsschemat printas ut här-->
-    <div id="DisplayBookingSchedule" runat="server">       
+    <div class="container">
+        <h1>Bokningsschema</h1><br />
+        <!-- Bokningsschemat printas ut här-->
+        <div id="DisplayBookingSchedule" runat="server">       
 
+        </div>
+        <!-- Bokningsschemat printas ut här-->
     </div>
-    <!-- Bokningsschemat printas ut här-->
 </asp:Content>
