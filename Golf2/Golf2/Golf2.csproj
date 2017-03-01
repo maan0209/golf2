@@ -123,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BookingSchedule.aspx" />
+    <Content Include="BookingStyleSheet.css" />
     <Content Include="Index.aspx" />
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config">

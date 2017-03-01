@@ -5,14 +5,45 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.ComponentModel;
+using System.Web.UI.HtmlControls;
 
 namespace Golf2
 {
     public partial class BookingSchedule : System.Web.UI.Page
     {
+        /// <summary>
+        /// ######### CONSTRUCTOR ######### 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
+            GenerateBookingSchedule();
+            
+        }
 
+        private DateTime anyDate = DateTime.Now;
+
+        /// <summary>
+        /// Bygger upp och printar ut bokningsschemat
+        /// </summary>
+        private void GenerateBookingSchedule()
+        {
+            HtmlGenericControl Schedule = new HtmlGenericControl("div");
+            Schedule.Attributes.Add("id", "schedule");
+
+            DailyBookings ShowBookings = new DailyBookings(anyDate);
+            ShowBookings.
+
+            for (int i = 0; i < 5; i++)
+            {
+                HtmlGenericControl aDiv = new HtmlGenericControl("div");
+                aDiv.Attributes.Add("class", "aScheduleBox");
+                Schedule.Controls.Add(aDiv);
+            }
+
+
+            DisplayBookingSchedule.Controls.Add(Schedule);          // den ihopbyggda HTML-strukturen läggs in i sidan härifrån
         }
 
 
