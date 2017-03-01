@@ -15,5 +15,6 @@ namespace Golf2
         public string Gender { get; set; }
         public string FirstName { get; set; }
         public string SurName { get; set; }
+        public double Hcp { get; set; }
     }
 }

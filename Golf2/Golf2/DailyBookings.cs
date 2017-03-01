@@ -17,7 +17,7 @@ namespace Golf2
         /// </summary>
         public DailyBookings(DateTime date)
         {
-            GetTodaysBookingTimes(date);
+            GetTodaysBookingTimes();
             GetTodaysBookings(date);
         }
 
@@ -27,7 +27,7 @@ namespace Golf2
         private DataTable table;
         private Booking newBooking;
         public List<Booking> BookingsPerSpecifiedDate = new List<Booking>();    // innehåller alla bokningar som gjorts en viss dag
-        public List<DateTime> AvailableBookingTimes = new List<DateTime>();     // innehåller alla tiders om är möjliga att boka en viss dag
+        public List<string> AvailableBookingTimes = new List<string>();     // innehåller alla tiders om är möjliga att boka en viss dag
 
         #endregion
 
@@ -40,7 +40,7 @@ namespace Golf2
         /// 
         /// </summary>
         /// <param name="date"></param>
-        private void GetTodaysBookingTimes(DateTime date)
+        private void GetTodaysBookingTimes()
         {
             string sql = "SELECT time from bookingtime WHERE active = 'true';";
             table = new DataTable();                    // skapar ny instans av table eftersom den används flera ggr i denna klass
@@ -48,7 +48,7 @@ namespace Golf2
 
             foreach (DataRow row in table.Rows)
             {
-                AvailableBookingTimes.Add(Convert.ToDateTime(row["time"]));
+                AvailableBookingTimes.Add(Convert.ToString(row["time"]));
             }
         }
 
@@ -63,7 +63,7 @@ namespace Golf2
         /// <param name="date"></param>
         private void GetTodaysBookings(DateTime date)
         {
-            string sql = "SELECT booking.bookingid, course.coursename, booking.bookingdate, bookingtime.time, person.golfid, person.gender, person.firstname, person.surname FROM PERSON ";
+            string sql = "SELECT booking.bookingid, course.coursename, booking.bookingdate, bookingtime.time, person.golfid, person.hcp, person.gender, person.firstname, person.surname FROM PERSON ";
             sql += "RIGHT JOIN included ON person.golfid = included.golfid ";
             sql += "JOIN booking ON included.bookingid = booking.bookingid ";
             sql += "JOIN course ON booking.courseid = booking.courseid ";
@@ -79,13 +79,17 @@ namespace Golf2
 
                 newBooking.BookingId = (int)row["bookingid"];
                 newBooking.CourseName = (string)row["coursename"];
-                newBooking.BookingDate = Convert.ToDateTime(row["bookingdate"]);
-                newBooking.BookingTime = Convert.ToDateTime(row["time"]);
+                newBooking.BookingDate = Convert.ToDateTime(row["bookingdate"]); 
+                newBooking.BookingTime = Convert.ToDateTime(row["time"].ToString()); 
+                             
+                
                 newBooking.GolfId = (string)row["golfid"];
                 newBooking.Gender = (string)row["gender"];
                 newBooking.FirstName = (string)row["firstname"];
                 newBooking.SurName = (string)row["surname"];
-                BookingsPerSpecifiedDate.Add(newBooking);
+                newBooking.Hcp = Math.Round(Convert.ToDouble(row["hcp"]),1);
+
+                BookingsPerSpecifiedDate.Add(newBooking);       // objekt läggs in i listan och loopen börjar om tills sista raden nåtts i datatable
             }
 
         }
