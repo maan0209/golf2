@@ -134,6 +134,7 @@
     font-family: Roboto;
     background-color: #fafafa;;
 }
+
 #banan h2{
     font-size: 28px;
     padding-top: 45px;
@@ -146,6 +147,8 @@
 .portfolio-item{
     margin: 18px 5px;
 }
-
+.hej{
+   height:  500px;
+}
 
 
