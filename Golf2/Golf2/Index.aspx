@@ -1,5 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master1.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="Golf2.Home1" %>
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master1.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="Golf2.Home1" %>   
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -8,7 +7,7 @@
 
    
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
-    <!-- Indicators -->
+    <!-- Indikator för bilder -->
     <ol class="carousel-indicators">
       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
       <li data-target="#myCarousel" data-slide-to="1"></li>
@@ -16,7 +15,7 @@
         
     </ol>
 
-    <!-- Wrapper for slides -->
+    <!-- Wrapper -->
     <div class="carousel-inner" role="listbox">
       <div class="item active">
         <img src="Bilder/bild1.jpg" alt="Banan" width="100%" height="100%">
@@ -80,22 +79,22 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="portfolio-item">
-                                    <img class="img-portfolio img-responsive" src="Bilder/bild1.jpg">
+                                    <img class="img-portfolio img-responsive" src="bilder/bild1.jpg">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="portfolio-item">
-                                    <img class="img-portfolio img-responsive" src="Bilder/bild1.jpg">
+                                    <img class="img-portfolio img-responsive" src="bilder/bild1.jpg">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="portfolio-item">
-                                    <img class="img-portfolio img-responsive" src="Bilder/bild1.jpg">
+                                    <img class="img-portfolio img-responsive" src="bilder/bild1.jpg">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="portfolio-item">
-                                    <img class="img-portfolio img-responsive" src="Bilder/bild1.jpg">
+                                    <img class="img-portfolio img-responsive" src="bilder/bild1.jpg">
                             </div>
                         </div>
                     </div>
