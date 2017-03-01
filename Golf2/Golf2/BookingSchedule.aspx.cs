@@ -33,7 +33,6 @@ namespace Golf2
             Schedule.Attributes.Add("id", "schedule");
 
             DailyBookings ShowBookings = new DailyBookings(anyDate);
-            ShowBookings.
 
             for (int i = 0; i < 5; i++)
             {
