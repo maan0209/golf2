@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title></title>
+    <title>Index - Hålslaget</title>
 
       <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
@@ -18,11 +18,11 @@
     </asp:ContentPlaceHolder>
 
 </head>
-<body>
 
-            
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="50">
+
     <nav class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
+		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 				<span class="sr-only">Toggle navigation</span>
@@ -32,45 +32,69 @@
 				</button>
 				<a class="navbar-brand" href="#">Hålslaget GK</a>      <!--/.Hålslaget GK -->
 			</div>
-
-			<div id="navbar" class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-					<li class="navbar-link"><a href="#">Nyheter</a></li>
-                    <li class=""><a href="#">Tävlingar</a></li>
-					<li class=""><a href="#">Om oss</a></li>
+            
+			<div id="navbar" class="navbar-collapse collapse">				
+                <ul class="nav navbar-nav">
+					<li class=""><a href="#about">Boka</a></li>
+					<li class=""><a href="#">Nyheter</a></li>
+					<li class=""><a href="#banan">Banan</a></li>
+                    <li class=""><a href="#">Om oss</a></li>
                     <li class=""><a href="#">Kontakt</a></li>
 				</ul>
-
-				<ul class="nav navbar-nav navbar-right">
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-							Logga in <span class="glyphicon glyphicon-log-in"></span>
-						</a>
-						<div class="dropdown-menu" id="formLogin">
-							<div class="row">
-								<div class="container-fluid">
-									<form>
-										<div class="form-group">
-											<label>Golf-Id:</label>
-											<input class="form-control" name="username" id="username" type="text"/>
+                
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Logga in</b> <span class="caret"></span></a>
+			<ul id="login-dp" class="dropdown-menu">
+				<li>
+					 <div class="row">
+							<div class="col-md-12">
+								 <form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
+										<div class="form-group">                                            
+											 <label>Användarnamn:</label>
+											 <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Golf-id" required>
 										</div>
 										<div class="form-group">
-											<label>Lösenord:</label>
-											<input class="form-control" name="password" id="password" type="password"/><br/>
+											 <label>Lösenord:</label>
+											 <input type="password" class="form-control" id="exampleInputPassword2" placeholder="***" required>                                         
+				                        </div>
+										<div class="form-group">
+											 <button type="submit" class="btn btn-primary btn-block">Logga in</button>
 										</div>
-										<button type="submit" id="btnLogin" class="btn btn-success btn-sm">Logga in</button>
-									</form>
-								</div>
+								 </form>
 							</div>
-						</div>
-					</li>
-				</ul>				
+					 </div>
+				</li>
+			</ul>
+        </li>
+  </ul> 
+                
 			</div><!--/.navbar-collapse -->
 		</div>
 	</nav>
-<!--/.Navbar slutar här -->
+<!--/.Navbar slutar här -->        
         
     
+
+    <script>
+
+    $(document).ready(function(){       
+   var scroll_start = 0;
+   var startchange = $('#myCarousel');
+   var offset = startchange.offset();
+    if (startchange.length){
+   $(document).scroll(function() { 
+      scroll_start = $(this).scrollTop();
+      if(scroll_start > offset.top) {
+          $(".navbar-inverse").css('background-color', 'rgb(34, 34, 34)');
+       } else {
+          $('.navbar-inverse').css('background-color', 'rgba(34, 34, 34, 0.81');
+       }
+   });
+    }
+});
+
+</script>  
 
  
 
@@ -85,3 +109,8 @@
     </form>
 </body>
 </html>
+
+
+
+
+
