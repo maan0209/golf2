@@ -20,7 +20,7 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner" role="listbox">
       <div class="item active">
-        <img src="Bilder/bild1.jpg" alt="Banan" width="100%" height="100%">
+        <img src="bilder/bild1.jpg" alt="Banan" width="100%" height="100%">
         <div class="carousel-caption">
           <h3>Banan</h3>
           <p>Banan är nu öppen och i toppenskick!</p>
@@ -28,7 +28,7 @@
       </div>
 
       <div class="item">
-        <img src="Bilder/bild3.jpg" alt="Klubbhuset" width="100%" height="100%">
+        <img src="bilder/bild3.jpg" alt="Klubbhuset" width="100%" height="100%">
         <div class="carousel-caption">
           <h3>Utslag hål 9</h3>
           <p>Vår bana har jättemånga hål.</p>
@@ -36,7 +36,7 @@
       </div>
         
         <div class="item">
-        <img src="Bilder/bild2.jpg" alt="Klubbhuset" width="100%" height="100%">
+        <img src="bilder/bild2.jpg" alt="Klubbhuset" width="100%" height="100%">
         <div class="carousel-caption">
           <h3>Hålslagets klubbhus</h3>
           <p>Välkommen in och ta en matbit. Öppet från 11.00 - 18.00</p>
@@ -81,21 +81,21 @@
   <div class="row text-center slideanim">
     <div class="col-sm-4">
       <div class="thumbnail">
-        <img src="Bilder/nyhet1.jpg" alt="nyhet1" width="400" height="300">
+        <img src="bilder/nyhet1.jpg" alt="nyhet1" width="400" height="300">
         <p><strong>Sega Rundor</strong></p>
         <p>Här kommer det finnas lite text....</p>
       </div>
         </div>
     <div class="col-sm-4">
       <div class="thumbnail">
-        <img src="Bilder/nyhet2.jpg" alt="nyhet2" width="400" height="300">
+        <img src="bilder/nyhet2.jpg" alt="nyhet2" width="400" height="300">
         <p><strong>Skräp på banan</strong></p>
         <p>Jag dricker gärna Öl men när min boll.....</p>
       </div>
     </div>
     <div class="col-sm-4">
       <div class="thumbnail">
-        <img src="Bilder/nyhet3.jpg" alt="nyhet3" width="400" height="300">
+        <img src="bilder/nyhet3.jpg" alt="nyhet3" width="400" height="300">
         <p><strong>Inge kul, bara strul</strong></p>
         <p>texte text text text.....</p>
       </div>
@@ -116,8 +116,8 @@
   <div class="row">
     <div class="col-md-4">
       <div class="portfolio-item">
-        <a href="bild5.jpg" target="_blank">
-          <img src="Bilder/bild5.jpg" alt="golf" style="width:100%">
+        <a href="bilder/bild5.jpg" target="_blank">
+          <img src="bilder/bild5.jpg" alt="golf" style="width:100%">
 
         </a>
       </div>
@@ -125,16 +125,16 @@
       
     <div class="col-md-4">
       <div class="portfolio-item">
-        <a href="bild6.jpg" target="_blank">
-          <img src="Bilder/bild6.jpg" alt="golf" style="width:100%">
+        <a href="bilder/bild6.jpg" target="_blank">
+          <img src="bilder/bild6.jpg" alt="golf" style="width:100%">
 
         </a>
       </div>
     </div>
     <div class="col-md-4">
       <div class="portfolio-item">
-        <a href="bild7.jpg" target="_blank">
-          <img src="Bilder/bild7.jpg" alt="golf" style="width:100%">
+        <a href="bilder/bild7.jpg" target="_blank">
+          <img src="bilder/bild7.jpg" alt="golf" style="width:100%">
 
         </a>
       </div>
@@ -142,8 +142,8 @@
       
        <div class="col-md-4">
       <div class="portfolio-item">
-        <a href="bild7.jpg" target="_blank">
-          <img src="Bilder/bild9.jpg" alt="golf" style="width:100%">
+        <a href="bilder/bild7.jpg" target="_blank">
+          <img src="bilder/bild9.jpg" alt="golf" style="width:100%">
 
         </a>
       </div>
@@ -151,8 +151,8 @@
       
        <div class="col-md-4">
       <div class="portfolio-item">
-        <a href="bild10.jpg" target="_blank">
-          <img src="Bilder/bild11.jpg" alt="golf" style="width:100%">
+        <a href="bilder/bild10.jpg" target="_blank">
+          <img src="bilder/bild11.jpg" alt="golf" style="width:100%"/>
 
         </a>
       </div>
@@ -160,8 +160,8 @@
       
        <div class="col-md-4">
       <div class="portfolio-item">
-        <a href="bild11.jpg" target="_blank">
-          <img src="Bilder/bild10.jpg" alt="golf" style="width:100%">
+        <a href="bilder/bild11.jpg" target="_blank">
+          <img src="bilder/bild10.jpg" alt="golf" style="width:100%"/>
 
         </a>
       </div>

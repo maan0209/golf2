@@ -203,6 +203,26 @@ namespace Golf2
             return true;
         }
 
+
+        private void ChangeDay()
+        {
+            HtmlGenericControl ScheduelChangeDay = new HtmlGenericControl("div");
+            ScheduelChangeDay.Attributes.Add("id", "changeDay");
+
+            DisplayChangeDay.Controls.Add(ScheduelChangeDay);
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            anyDate = DateTime.Now.AddDays(-1);
+          
+        }
+
+        protected void Button2_Click(object sender, EventArgs e)
+        {
+            anyDate = DateTime.Now.AddDays(1);
+        }
+
         /// <summary>
         /// Kontroll om någon av de anmälda redan har en tid anmäld idag
         /// </summary>
@@ -219,7 +239,7 @@ namespace Golf2
 
         //        golfids--;
         //    }
-            
+
 
         //    if (golfids != 0)
         //    {
