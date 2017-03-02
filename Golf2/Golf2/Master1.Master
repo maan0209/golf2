@@ -60,7 +60,7 @@
 											 <input type="password" class="form-control" id="exampleInputPassword2" placeholder="***" required>                                         
 				                        </div>
 										<div class="form-group">
-											 <button type="submit" class="btn btn-primary btn-block">Logga in</button>
+											 <button type="submit" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-log-in"></span>  Logga in</button>
 										</div>
 								 </form>
 							</div>
