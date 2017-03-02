@@ -8,8 +8,9 @@
         <h1>Bokningsschema</h1><br />
         <!-- Bokningsschemat printas ut här-->
         <div id="DisplayBookingSchedule" runat="server">       
-
+        
         </div>
         <!-- Bokningsschemat printas ut här-->
+
     </div>
 </asp:Content>
