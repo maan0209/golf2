@@ -1,26 +1,25 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Master1.master.cs" Inherits="Golf2.Master1" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Master2_SignedIn.master.cs" Inherits="Golf2.Master2_SignedIn" %>
 
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Master1</title>
+    <title></title>
 
-      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <script/ src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <link href="https://fonts.googleapis.com/css?family=Righteous|Roboto" rel="stylesheet"/>
     <link rel="stylesheet" href="stylesheet1.css"/>      
-    <link rel="stylesheet" href="BookingStyleSheet.css"/>      
-    
+    <link rel="stylesheet" href="BookingStyleSheet.css"/>     
+
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
-
 </head>
 
-<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="50">
+    <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="50">
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
@@ -37,30 +36,28 @@
 			<div id="navbar" class="navbar-collapse collapse">				
                 <ul class="nav navbar-nav">
 					<li class=""><a href="#about">Boka</a></li>
-					<li class=""><a href="#">Nyheter</a></li>
+					<li class=""><a href="#nyheter">Nyheter</a></li>
 					<li class=""><a href="#banan">Banan</a></li>
                     <li class=""><a href="#">Om oss</a></li>
                     <li class=""><a href="#">Kontakt</a></li>
 				</ul>
+        
                 
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Logga in</b> <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Inloggad:</b><label class="user"></label>  <span class="caret"></span></a>   <!--/.Label för att visa vem som är inloggad -->
 			<ul id="login-dp" class="dropdown-menu">
 				<li>
 					 <div class="row">
 							<div class="col-md-12">
 								 <form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
-										<div class="form-group">                                            
-											 <label>Användarnamn:</label>
-											 <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Golf-id" required>
+                                     		<p>Ändra dina uppgifter:</p>								<div class="form-group">
+                                         <button type="button"  class="btn btn-primary btn-block" id="settings"> <span class="glyphicon glyphicon-cog" id=""></span>  Inställningar</button>
 										</div>
+                                     
+                                           <hr class="small">
 										<div class="form-group">
-											 <label>Lösenord:</label>
-											 <input type="password" class="form-control" id="exampleInputPassword2" placeholder="***" required>                                         
-				                        </div>
-										<div class="form-group">
-											 <button type="submit" class="btn btn-primary btn-block">Logga in</button>
+											 <button type="submit" class="btn btn-primary btn-block"> <span class="glyphicon glyphicon-log-out"></span>  Logga ut</button>
 										</div>
 								 </form>
 							</div>
@@ -68,50 +65,26 @@
 				</li>
 			</ul>
         </li>
-  </ul> 
-                
-			</div><!--/.navbar-collapse -->
-		</div>
-	</nav>
-<!--/.Navbar slutar här -->        
-        
-    
+  </ul>                 
+</div>
+</div>
+</nav>
 
-    <script>
 
-    $(document).ready(function(){       
-   var scroll_start = 0;
-   var startchange = $('#myCarousel');
-   var offset = startchange.offset();
-    if (startchange.length){
-   $(document).scroll(function() { 
-      scroll_start = $(this).scrollTop();
-      if(scroll_start > offset.top) {
-          $(".navbar-inverse").css('background-color', 'rgb(34, 34, 34)');
-       } else {
-          $('.navbar-inverse').css('background-color', 'rgba(34, 34, 34, 0.81');
-       }
-   });
-    }
-});
 
-</script>  
 
- 
+
+
+
+
 
     <form id="form1" runat="server">
-<%--         vad har denna för funktion??--%>
     <div>
-         
+
         <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
-                    
+        
         </asp:ContentPlaceHolder>
     </div>
     </form>
 </body>
 </html>
-
-
-
-
-
