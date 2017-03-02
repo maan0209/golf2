@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using Npgsql;
 using System.Data;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace Golf2
 {
@@ -12,7 +14,7 @@ namespace Golf2
         private NpgsqlConnection conn;
         private NpgsqlCommand cmd;
         private NpgsqlDataReader dr;
-        private DataTable tabel;
+        private DataTable table;
 
         //Metod för att ansluta till databasen
         public Postgress()
@@ -28,7 +30,7 @@ namespace Golf2
                 string message = ex.Message;
             }
 
-            tabel = new DataTable();
+            table = new DataTable();
         }
 
         //Metod för att avsluta anslutningen till databasen
@@ -42,10 +44,26 @@ namespace Golf2
         {
             cmd = new NpgsqlCommand(sql, conn);
             dr = cmd.ExecuteReader();
-            tabel.Load(dr);
+            table.Load(dr);
             conn.Close();
-            return tabel;
+            return table;
         }
+
+        //public DataTable getaccount(string user, string pass)
+        //{
+        //    string sql = "select * from account where golfid = '" + user + "' AND password = '" +pass+"'";
+
+        //    cmd = new NpgsqlCommand(sql, conn);
+        //    dr = cmd.ExecuteReader();
+
+        //    return table;
+            
+           
+            
+           
+
+
+        //}
 
     }
 }

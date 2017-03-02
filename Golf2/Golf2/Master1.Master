@@ -20,7 +20,8 @@
 
 </head>
 
-<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="50">
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="50" runat="server">
+    <form id="test" runat="server">
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
@@ -53,14 +54,17 @@
 								 <form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
 										<div class="form-group">                                            
 											 <label>Användarnamn:</label>
-											 <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Golf-id" required>
+                                             <asp:TextBox ID="golf_id" runat="server" CssClass="form-control"></asp:TextBox>
+											 
 										</div>
 										<div class="form-group">
 											 <label>Lösenord:</label>
-											 <input type="password" class="form-control" id="exampleInputPassword2" placeholder="***" required>                                         
+                                             <asp:TextBox ID="password" runat="server" CssClass="form-control"></asp:TextBox>
+											                                         
 				                        </div>
-										<div class="form-group">
-											 <button type="submit" class="btn btn-primary btn-block">Logga in</button>
+										<div class="form-group" runat="server">
+                                            <asp:Button ID="Log_In" Cssclass="btn btn-primary btn-block" runat="server" Text="Logga in" OnClick="Log_In_Click"/>
+											 
 										</div>
 								 </form>
 							</div>
@@ -99,15 +103,15 @@
 
  
 
-    <form id="form1" runat="server">
-<%--         vad har denna för funktion??--%>
+   
     <div>
          
         <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
                     
         </asp:ContentPlaceHolder>
     </div>
-    </form>
+    
+  </form>
 </body>
 </html>
 
