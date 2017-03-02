@@ -11,10 +11,10 @@ namespace Golf2
 {
     public class Postgress
     {
-        private NpgsqlConnection conn;
-        private NpgsqlCommand cmd;
-        private NpgsqlDataReader dr;
-        private DataTable table;
+        public NpgsqlConnection conn;
+        public NpgsqlCommand cmd;
+        public NpgsqlDataReader dr;
+        public DataTable table;
 
         //Metod för att ansluta till databasen
         public Postgress()
