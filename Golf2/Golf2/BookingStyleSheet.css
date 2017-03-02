@@ -9,7 +9,7 @@
     margin-top: 60px;
     margin-left: auto;
     margin-right: auto;
-    width: 1200px;
+    width: 60%;
     height: 1200px;
 }
 
@@ -64,6 +64,11 @@
     border-width: thin;
     border-color: #969696;
     margin-bottom: 2px;
+}
+
+.badgeRow {
+    width:100%;
+    text-align: center;
 }
 
 #ContentPlaceHolder1_DisplayChangeDay{

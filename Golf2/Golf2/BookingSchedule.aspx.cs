@@ -52,15 +52,14 @@ namespace Golf2
                 Schedule.Controls.Add(aBooking);
             }
 
-
-
             DisplayBookingSchedule.Controls.Add(Schedule);                          // den ihopbyggda HTML-strukturen läggs in i sidan
             DisplayBookingSchedule.Controls.Add(newModals);
         }
 
         /// <summary>
-        /// Skapar content i modals popuperna och visar 
-        /// statusen för bokningstiden
+        /// Skapar modals popuper och dess innehåll.
+        /// Visar mer detaljerad status för bokningstiden om hur
+        /// många som bokat sig och om det finns lediga platser.
         /// </summary>
         /// <param name="aBookingTime"></param>
         /// <param name="bookingsPerSpecifiedDate"></param>
@@ -167,11 +166,9 @@ namespace Golf2
              */
         }
 
-
-
         /// <summary>
-        /// Lägger till visuell boknings-content till en HTML-div 
-        /// för en viss tidpunkt i det aktuella bokningsschemat
+        /// Skapar bokningsschemat som visar vilka tider som är
+        /// öppna att boka samt vilka som är fullbokade eller lediga.
         /// </summary>
         /// <param name="aBooking"></param>
         /// <param name="aBookingTime"></param>
@@ -182,7 +179,6 @@ namespace Golf2
             DateTime convTime = Convert.ToDateTime(aBookingTime);
             aBooking.Attributes.Add("id", "Booking "+ convTime.ToShortTimeString());
             // ############## Bootstrapkod för att trigga Modal (ej aBooking) 
-            //aBooking.Attributes.Add("class", "aBooking span4 proj-div");
             string classData = "span4 proj-div";
             aBooking.Attributes.Add("data-toggle", "modal");
             aBooking.Attributes.Add("data-target", "#"+ co.ToString());
@@ -213,6 +209,14 @@ namespace Golf2
             HtmlGenericControl textInfo = new HtmlGenericControl("p");
             textInfo.InnerText = convTime.ToShortTimeString();
             aBooking.Controls.Add(textInfo);
+
+            HtmlGenericControl aRow = new HtmlGenericControl("div");
+            aRow.Attributes.Add("class", "badgeRow");
+            HtmlGenericControl amountBooked = new HtmlGenericControl("span");
+            amountBooked.Attributes.Add("class", "badge");
+            amountBooked.InnerHtml = counter.ToString() + "/4";
+            aRow.Controls.Add(amountBooked);
+            aBooking.Controls.Add(aRow);
 
         }
 
