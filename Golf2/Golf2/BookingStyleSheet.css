@@ -39,7 +39,31 @@
     border-style: solid;
     border-width: thin;
     border-color: #969696;
-    margin-bottom: -4px;
+    margin-bottom: 2px;
+}
+
+.aBookingFull {
+    width: 8%;
+    height: 8%;
+    background-color: lightcoral;
+    margin: 1px;
+    display: inline-block;
+    border-style: solid;
+    border-width: thin;
+    border-color: #969696;
+    margin-bottom: 2px;
+}
+
+.aBookingSpotsLeft {
+    width: 8%;
+    height: 8%;
+    background-color: lightyellow;
+    margin: 1px;
+    display: inline-block;
+    border-style: solid;
+    border-width: thin;
+    border-color: #969696;
+    margin-bottom: 2px;
 }
 
 #ContentPlaceHolder1_DisplayChangeDay{
