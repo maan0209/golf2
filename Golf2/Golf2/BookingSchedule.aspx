@@ -6,6 +6,14 @@
     
     <div class="container">
         <h1>Bokningsschema</h1><br />
+        <div id="DisplayChangeDay" runat="server">
+
+            <asp:Button ID="Button1" runat="server" Text="<" OnClick="Button1_Click"/>
+
+            <asp:Button ID="Button2" runat="server" Text=">" OnClick="Button2_Click"/>
+            
+        </div>
+
         <!-- Bokningsschemat printas ut här-->
         <div id="DisplayBookingSchedule" runat="server">       
 

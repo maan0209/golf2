@@ -152,7 +152,7 @@
        <div class="col-md-4">
       <div class="portfolio-item">
         <a href="bilder/bild10.jpg" target="_blank">
-          <img src="bilder/bild11.jpg" alt="golf" style="width:100%">
+          <img src="bilder/bild11.jpg" alt="golf" style="width:100%"/>
 
         </a>
       </div>
@@ -161,7 +161,7 @@
        <div class="col-md-4">
       <div class="portfolio-item">
         <a href="bilder/bild11.jpg" target="_blank">
-          <img src="bilder/bild10.jpg" alt="golf" style="width:100%">
+          <img src="bilder/bild10.jpg" alt="golf" style="width:100%"/>
 
         </a>
       </div>

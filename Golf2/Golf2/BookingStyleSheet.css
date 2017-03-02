@@ -42,3 +42,35 @@
     margin-bottom: -4px;
 }
 
+#ContentPlaceHolder1_DisplayChangeDay{
+
+    background-color: darkseagreen;
+    width: 98%;
+    height: 10%; 
+}
+
+
+#ScheduelChangeDay{
+
+     width:15%;
+    height: 15%;
+    background-color: lightgray;
+}
+#ContentPlaceHolder1_Button1{
+       font-family: inherit;
+    font-size: 30px;
+    line-height: inherit;
+    width: 10%;
+    height: 35%;
+
+}
+#ContentPlaceHolder1_Button2{
+       font-family: inherit;
+    font-size: 30px;
+    line-height: inherit;
+    width: 10%;
+    height: 35%;
+    float: right;
+
+}
+ 
