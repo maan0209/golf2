@@ -81,14 +81,14 @@
   <div class="row text-center slideanim">
     <div class="col-sm-4">
       <div class="thumbnail">
-        <img src="bilder/nyhet1.JPG" alt="nyhet1" width="400" height="300">
+        <img src="bilder/nyhet1.jpg" alt="nyhet1" width="400" height="300">
         <p><strong>Sega Rundor</strong></p>
         <p>Här kommer det finnas lite text....</p>
       </div>
         </div>
     <div class="col-sm-4">
       <div class="thumbnail">
-        <img src="bilder/nyhet2.JPG" alt="nyhet2" width="400" height="300">
+        <img src="bilder/nyhet2.jpg" alt="nyhet2" width="400" height="300">
         <p><strong>Skräp på banan</strong></p>
         <p>Jag dricker gärna Öl men när min boll.....</p>
       </div>
@@ -151,8 +151,8 @@
       
        <div class="col-md-4">
       <div class="portfolio-item">
-        <a href="bilder/bild10.jpg" target="_blank">
-          <img src="bilder/bild11.jpg" alt="golf" style="width:100%">
+        <a href="/bilder/bild10.jpg" target="_blank">
+          <img src="/bilder/bild11.JPG" alt="golf" style="width:100%">
 
         </a>
       </div>
@@ -160,8 +160,8 @@
       
        <div class="col-md-4">
       <div class="portfolio-item">
-        <a href="bilder/bild11.jpg" target="_blank">
-          <img src="bilder/bild10.jpg" alt="golf" style="width:100%">
+        <a href="/bilder/bild11.jpg" target="_blank">
+          <img src="/bilder/bild10.jpg" alt="golf" style="width:100%">
 
         </a>
       </div>
