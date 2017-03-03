@@ -30,6 +30,7 @@ namespace Golf2
             {
                 Session["golfid"] = golf_id.Text;
                 Response.Redirect("Home.aspx");
+                Response.Write("<script>alert('Felaktigt användarnamn och lösenord')</script>");
             }
             else
             {

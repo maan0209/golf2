@@ -100,21 +100,43 @@ namespace Golf2
             int counter = 0;
             foreach (Booking item in bookingsPerSpecifiedDate)                                  // loopa genom de bokningar som finns för dagen
             {
+                
                 if (item.BookingTime.ToShortTimeString() == convTime.ToShortTimeString())       // reglerar att enbart aktuell tid (se aBookingTime) behandlas
                 {
                     counter++;
                     HtmlGenericControl lvl04_bodyText = new HtmlGenericControl("p");
-                    lvl04_bodyText.InnerHtml = "Bokningsdata här";
+                    string bookingInfo = "";
+                    bookingInfo += "Golf-id: " + item.GolfId + " - ";
+                    bookingInfo += "Kön: " + item.Gender + " - ";
+                    bookingInfo += "Hcp: " + item.Hcp.ToString();
+                    
+
+                    lvl04_bodyText.InnerHtml = bookingInfo;
+
                     lvl04_body.Controls.Add(lvl04_bodyText);
                 }
             }
-            if (counter == 0)
+            if (counter != 4)
             {
+
+                for (int i = 0; i < 4-counter; i++)
+                {
+                    HtmlGenericControl lvl04_openBooking = new HtmlGenericControl("div");
+                    HtmlGenericControl lvl04_bodyText = new HtmlGenericControl("p");
+                    lvl04_bodyText.InnerHtml = "Ledig plats";
+                    lvl04_openBooking.Controls.Add(lvl04_bodyText);
+
+                    Button lvl04_reserveFreeSpotButton = new Button();
+                    lvl04_reserveFreeSpotButton.Attributes.Add("class", "btn btn-primary reserveSpotButton");
+                    lvl04_reserveFreeSpotButton.Text = "Reservera";
+
+                    lvl04_openBooking.Controls.Add(lvl04_reserveFreeSpotButton);
+                    lvl04_body.Controls.Add(lvl04_openBooking);
+                }
                 // visa text att inget är bokat
-                HtmlGenericControl lvl04_bodyText = new HtmlGenericControl("p");
-                lvl04_bodyText.InnerHtml = "Inga bokningar";
-                lvl04_body.Controls.Add(lvl04_bodyText);
+                
             }
+
 
             HtmlGenericControl lvl04_footer = new HtmlGenericControl("div");
             lvl04_footer.Attributes.Add("class", "modal-footer");
