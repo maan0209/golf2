@@ -240,3 +240,15 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/WindowsFormsApplication1/WindowsFormsApplication1/App.config
+/WindowsFormsApplication1/WindowsFormsApplication1/Form1.cs
+/WindowsFormsApplication1/WindowsFormsApplication1/Form1.Designer.cs
+/WindowsFormsApplication1/WindowsFormsApplication1/Form1.resx
+/WindowsFormsApplication1/WindowsFormsApplication1/Properties/AssemblyInfo.cs
+/WindowsFormsApplication1/WindowsFormsApplication1/Program.cs
+/WindowsFormsApplication1/WindowsFormsApplication1/Properties/Resources.Designer.cs
+/WindowsFormsApplication1/WindowsFormsApplication1/Properties/Settings.Designer.cs
+/WindowsFormsApplication1/WindowsFormsApplication1/Properties/Settings.settings
+/WindowsFormsApplication1/WindowsFormsApplication1/WindowsFormsApplication1.csproj
+/WindowsFormsApplication1/WindowsFormsApplication1.sln
+/WindowsFormsApplication1/WindowsFormsApplication1/Properties/Resources.resx

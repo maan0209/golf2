@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.ComponentModel;
 using System.Web.UI.HtmlControls;
+using System.Data;
 
 namespace Golf2
 {
@@ -24,6 +25,7 @@ namespace Golf2
 
         #region ########## FIELDS ########## 
 
+        private DataTable table;
         private DateTime anyDate = DateTime.Now;
         int co = 0;
         #endregion
@@ -254,20 +256,22 @@ namespace Golf2
         /// <param name="hcp2"></param>
         /// <param name="hcp3"></param>
         /// <param name="hcp4"></param>
-        private void MemberFilters(DateTime bookingdate, int totalguests, double hcp, double hcp2, double hcp3, double hcp4)
+        private void MemberFilters(DateTime bookingdate, string golfid, int totalguests, double hcp, double hcp2, double hcp3, double hcp4)
         {
 
-            bool bookingvalid = BookingValid(bookingdate);
+            bool bookingvalid = BookingValidDate(bookingdate);
             bool bookinghcp = BookingHcp(hcp, hcp2, hcp3, hcp4);
             bool bookingguests = Guests(totalguests);
+            bool checkbooking = CheckBooking(golfid, bookingdate);
 
-            if (bookingvalid || bookinghcp || bookingguests == true)
+            if (bookingvalid || bookinghcp || bookingguests || checkbooking == true)
             {
                 //ingen bokning
             }
             else
             {
-                //boka tid
+                int timeid = GetTimeID(bookingdate);
+
             }
         }
 
@@ -276,7 +280,7 @@ namespace Golf2
         /// </summary>
         /// <param name="bookingdate"></param>
         /// <returns>true/false</returns>
-        private bool BookingValid(DateTime bookingdate)
+        private bool BookingValidDate(DateTime bookingdate)
         {
             DateTime bookingexpiry = bookingdate.AddDays(30);
 
@@ -335,6 +339,7 @@ namespace Golf2
 
             DisplayChangeDay.Controls.Add(ScheduelChangeDay);
         }
+
         //OnClickEvents för att byta till föregående dag
         protected void Button1_Click(object sender, EventArgs e)
         {
@@ -357,6 +362,7 @@ namespace Golf2
             //}
 
         }
+
         //OnClickEvents för att byta till nästkommande dag
         protected void Button2_Click(object sender, EventArgs e)
         {
@@ -370,33 +376,80 @@ namespace Golf2
        
 
         /// <summary>
-        /// Kontroll om någon av de anmälda redan har en tid anmäld idag
+        /// Hämtar namet utifrån angivet golfid i bokning
         /// </summary>
+        /// <param name="golfid"></param>
         /// <returns></returns>
-        //private bool AlreadyBooked(int golfids, int totalguests)
-        //{
-        //    BindingList<Person> persons = new BindingList<Person>();
-        //    //fyll listan från info från 
+        private string GetNameBooking(string golfid)
+        {
 
-        //    golfids = golfids - totalguests;
+            string sql = "SELECT firstname, surname, hcp FROM person WHERE golfid =" + golfid;
 
-        //    foreach (var golfid in persons)
-        //    {
+            table = new DataTable();                   
+            ToolBox.SQL_NonParam(sql, ref table);
+            Person person = new Person();
 
-        //        golfids--;
-        //    }
+            foreach (DataRow row in table.Rows)
+            {
 
+                person.FirstName = (string)row["firstname"];
+                person.SurName = (string)row["surname"];
+                person.Hcp = Math.Round(Convert.ToDouble(row["hcp"]), 1);
 
-        //    if (golfids != 0)
-        //    {
-        //        Session["error"] = "Någon i sällskapet har redan en bokning samma dag";
-        //        return false;
-        //    }
+            }
+                return person.FirstName + " " + person.SurName + ": HCP: " + person.Hcp;
+        }
 
-        //    return true;
+        /// <summary>
+        /// Kontrollerar om någon i sällskapet har en bokadtid samma dag
+        /// </summary>
+        /// <param name="golfid"></param>
+        /// <param name="bookingdate"></param>
+        /// <returns></returns>
+        private bool CheckBooking(string golfid, DateTime bookingdate)
+        {
+            string sql = "SELECT SELECT booking.bookingid, booking.bookingdate " +
+                        "FROM booking " +
+                        "INNER JOIN included ON included.bookingid = booking.bookingid " +
+                        "WHERE included.golfid =" + golfid;
 
+            table = new DataTable();
+            ToolBox.SQL_NonParam(sql, ref table);
+            Person person = new Person();
 
-        //}
+            string searchbooking = bookingdate.ToShortDateString();
+            bool contains = table.AsEnumerable().Any(row => searchbooking == row.Field<String>(searchbooking));
+
+            if (contains == true)
+            {
+                Session["error"] = "Denna person har redan en bokad tid idag!";
+                return true;
+            }
+            else {return false;}
+            
+        }
+
+        /// <summary>
+        /// Hämtar timeid från databsen utifrån time format (HH:MM:SS) i DateTime för vald bokningsdag 
+        /// </summary>
+        /// <param name="bookingdate"></param>
+        /// <returns></returns>
+        private int GetTimeID(DateTime bookingdate)
+        {
+
+            string timestring = bookingdate.ToLongTimeString();
+
+            string sql = "SELECT timeid FROM bookingtime WHERE time =" + timestring;
+
+            table = new DataTable();
+            ToolBox.SQL_NonParam(sql, ref table);
+
+            int timeid = (int)table.Rows[0]["timeid"];
+
+            return timeid;
+
+        }
+
 
     }
 }
