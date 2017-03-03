@@ -250,6 +250,18 @@ namespace Golf2
             {
                 int timeid = GetTimeID(bookingdate);
 
+                string sql = "INSERT INTO booking (bookingdate, courseid, timeid) " +
+                             "VALUES(@bookingdate, '1', @timeid) " +
+                             "RETURNING bookingid AS integer";
+
+                Postgress p = new Postgress();
+                int bookingid = p.SQLBooking(sql, timeid, bookingdate);
+
+                sql = "INSERT INTO included ";
+
+
+
+
             }
         }
 
