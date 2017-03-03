@@ -124,7 +124,7 @@ namespace Golf2
             Button lvl04_footerButton02 = new Button();
             lvl04_footerButton02.Attributes.Add("class", "btn btn-primary");
             lvl04_footerButton02.Text = "Bekräfta";
-            if (counter == 0)
+            if (counter == 4)
             {
                 lvl04_footerButton02.Enabled = false;
             }
