@@ -9,7 +9,7 @@
     margin-top: 60px;
     margin-left: auto;
     margin-right: auto;
-    width: 1200px;
+    width: 60%;
     height: 1200px;
 }
 
@@ -31,15 +31,44 @@
 
 /* Formaterar boxarna för bokningsbara tider*/
 .aBooking {
-    width: 8%;
-    height: 8%;
+    min-width: 70px;
+    min-height: 70px;
     background-color: lightgray;
     margin: 1px;
     display: inline-block;
     border-style: solid;
     border-width: thin;
     border-color: #969696;
-    margin-bottom: -4px;
+    margin-bottom: 2px;
+}
+
+.aBookingFull {
+    min-width: 70px;
+    min-height: 70px;
+    background-color: lightcoral;
+    margin: 1px;
+    display: inline-block;
+    border-style: solid;
+    border-width: thin;
+    border-color: #969696;
+    margin-bottom: 2px;
+}
+
+.aBookingSpotsLeft {
+    min-width: 70px;
+    min-height: 70px;
+    background-color: lightyellow;
+    margin: 1px;
+    display: inline-block;
+    border-style: solid;
+    border-width: thin;
+    border-color: #969696;
+    margin-bottom: 2px;
+}
+
+.badgeRow {
+    width:100%;
+    text-align: center;
 }
 
 #ContentPlaceHolder1_DisplayChangeDay{
