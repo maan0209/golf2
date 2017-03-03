@@ -10,7 +10,7 @@ public class Person
     public string Email { get; set; }
     public string Postalcode { get; set; }
     public string City { get; set; }
-    public int Hcp { get; set; }
+    public double Hcp { get; set; }
     public string Adress { get; set; }
 
     public int TypId { get; set; }

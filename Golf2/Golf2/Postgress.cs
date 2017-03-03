@@ -49,6 +49,26 @@ namespace Golf2
             return table;
         }
 
+        public int SQLBooking(string sql, int timeid, DateTime bookingdate)
+        {
+            cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("bookingdate", bookingdate);
+            cmd.Parameters.AddWithValue("courseid", "1");
+            cmd.Parameters.AddWithValue("timeid", timeid);
+
+            int bookingid = Convert.ToInt32(cmd.ExecuteScalar());
+
+            return bookingid;
+        }
+
+        public void SQLbooking2(string sql)
+        {
+
+            cmd = new NpgsqlCommand(sql, conn);
+            cmd.ExecuteNonQuery();
+
+        }
+
         //public DataTable getaccount(string user, string pass)
         //{
         //    string sql = "select * from account where golfid = '" + user + "' AND password = '" +pass+"'";
