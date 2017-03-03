@@ -117,7 +117,7 @@ namespace Golf2
             HtmlGenericControl lvl04_footer = new HtmlGenericControl("div");
             lvl04_footer.Attributes.Add("class", "modal-footer");
             Button lvl04_footerButton01 = new Button();
-            lvl04_footerButton01.Attributes.Add("class", "btn btn-default");
+            lvl04_footerButton01.Attributes.Add("class", "btn btn-primary");
             lvl04_footerButton01.Attributes.Add("data-dismiss", "modal");
             lvl04_footerButton01.Text = "Stäng";
 
