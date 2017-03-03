@@ -149,17 +149,39 @@ namespace Golf2
 
             DisplayChangeDay.Controls.Add(ScheduelChangeDay);
         }
-
+        //OnClickEvents för att byta till föregående dag
         protected void Button1_Click(object sender, EventArgs e)
         {
-            anyDate = DateTime.Now.AddDays(-1);
-          
-        }
+            anyDate = anyDate.AddDays(-1);
 
+            Session["LastDay"] = anyDate.ToString();
+            anyDate = Convert.ToDateTime(Session["LastDay"]);
+
+
+            //if (anyDate <= DateTime.Now)
+            //{
+            //    Button1.Visible = false;
+
+            //    //Button1.Style["visibility"] = "hidden";
+            //}
+            //else
+            //{
+            //    Button1.Visible = false;
+            //  //  Button1.Style["visibility"] = "show";
+            //}
+
+        }
+        //OnClickEvents för att byta till nästkommande dag
         protected void Button2_Click(object sender, EventArgs e)
         {
-            anyDate = DateTime.Now.AddDays(1);
+            anyDate = anyDate.AddDays(1);
+
+            Session["NextDay"] = anyDate.ToString();
+            anyDate = Convert.ToDateTime(Session["NextDay"]);
+
+            GenerateBookingSchedule();
         }
+       
 
         /// <summary>
         /// Kontroll om någon av de anmälda redan har en tid anmäld idag
