@@ -22,4 +22,14 @@
 
     </div>
     <div id ="hej" runat="server"></div>
+
+    <script type="text/javascript">
+        function reservera() {
+            
+        }
+
+    </script>
+    
 </asp:Content>
+
+

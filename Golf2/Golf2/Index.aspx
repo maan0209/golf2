@@ -65,7 +65,7 @@
                     <h2 class="section-heading">Kom och spela golf hos oss!</h2>                    
                     <hr class="small">
                     <p class="text-faded">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>                    
-                    <a href="#services" class="btn btn-default">Boka tid</a>
+                    <a href="/BookingSchedule.aspx" class="btn btn-default">Boka tid</a>
                 </div>
             </div>
         </div>

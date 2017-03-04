@@ -20,7 +20,7 @@ namespace Golf2
         protected void Page_Load(object sender, EventArgs e)
         {
             GenerateBookingSchedule();
-     
+
         }
 
         #region ########## FIELDS ########## 
@@ -129,6 +129,7 @@ namespace Golf2
                     Button lvl04_reserveFreeSpotButton = new Button();
                     lvl04_reserveFreeSpotButton.Attributes.Add("class", "btn btn-primary reserveSpotButton");
                     lvl04_reserveFreeSpotButton.Text = "Reservera";
+                    lvl04_reserveFreeSpotButton.OnClientClick = "reservera()";
 
                     lvl04_openBooking.Controls.Add(lvl04_reserveFreeSpotButton);
                     lvl04_body.Controls.Add(lvl04_openBooking);
@@ -246,7 +247,6 @@ namespace Golf2
 
 
 
-
         /// <summary>
         /// Filter för medlemsbokning
         /// </summary>
@@ -279,7 +279,7 @@ namespace Golf2
                 Postgress p = new Postgress();
                 int bookingid = p.SQLBooking(sql, timeid, bookingdate);
 
-                sql = "INSERT INTO included ";
+                sql = "INSERT INTO included";
 
 
 
