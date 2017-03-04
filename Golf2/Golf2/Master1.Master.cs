@@ -25,7 +25,7 @@ namespace Golf2
             p.cmd = new Npgsql.NpgsqlCommand("select count(*) from account where golfid = '" + golf_id.Text + "' AND password = '" + password.Text + "'", p.conn);
 
             p.cmd.Connection = p.conn;
-            int obj = Convert.ToInt32(p.cmd.ExecuteScalar());
+            int obj = Convert.ToInt32(p.cmd.ExecuteScalar());           /* vi måste även hantera kontonamn med bokstäver, med tanke på personalkonton om de ej ska listas som vanliga golfidn - Martin N*/
             if(obj > 0)
             {
                 Session["golfid"] = golf_id.Text;
