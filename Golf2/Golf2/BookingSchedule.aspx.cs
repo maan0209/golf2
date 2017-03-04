@@ -97,6 +97,17 @@ namespace Golf2
             HtmlGenericControl lvl04_body = new HtmlGenericControl("div");
             lvl04_body.Attributes.Add("class", "modal-body");
 
+            // läs ut lista med golfidn
+            List<string> golfIdList = new List<string>();
+            string sql = "SELECT golfid FROM person;";
+            table = new DataTable();
+            ToolBox.SQL_NonParam(sql, ref table);
+
+            foreach (DataRow item in table.Rows)
+            {
+                golfIdList.Add(item["golfid"].ToString());                                      // lista skapas med alla existerande golfidn i databas
+            }
+
             int counter = 0;
             foreach (Booking item in bookingsPerSpecifiedDate)                                  // loopa genom de bokningar som finns för dagen
             {
@@ -109,11 +120,11 @@ namespace Golf2
                     bookingInfo += "Golf-id: " + item.GolfId + " - ";
                     bookingInfo += "Kön: " + item.Gender + " - ";
                     bookingInfo += "Hcp: " + item.Hcp.ToString();
-                    
 
                     lvl04_bodyText.InnerHtml = bookingInfo;
 
                     lvl04_body.Controls.Add(lvl04_bodyText);
+                    golfIdList.Remove(item.GolfId);                                             // golfidt rensas från listan, så att man inte kan dubbelboka en person samma tid
                 }
             }
             if (counter != 4)
@@ -124,18 +135,33 @@ namespace Golf2
                     HtmlGenericControl lvl04_openBooking = new HtmlGenericControl("div");
                     HtmlGenericControl lvl04_bodyText = new HtmlGenericControl("p");
                     lvl04_bodyText.InnerHtml = "Ledig plats";
+                    lvl04_bodyText.Attributes.Add("class", "aBookableSpot");                    // för css-formatering
                     lvl04_openBooking.Controls.Add(lvl04_bodyText);
 
-                    Button lvl04_reserveFreeSpotButton = new Button();
+                    HtmlGenericControl lvl04_reserveFreeSpotButton = new HtmlGenericControl("input");
                     lvl04_reserveFreeSpotButton.Attributes.Add("class", "btn btn-primary reserveSpotButton");
-                    lvl04_reserveFreeSpotButton.Text = "Reservera";
-                    lvl04_reserveFreeSpotButton.OnClientClick = "reservera()";
+                    lvl04_reserveFreeSpotButton.Attributes.Add("type", "button");
+                    lvl04_reserveFreeSpotButton.Attributes.Add("value", "Reservera");
+                    lvl04_reserveFreeSpotButton.Attributes.Add("class", "aBookableSpot");       // för css-formatering
 
+                    // en sökbar lista skapas
+                    HtmlGenericControl searchGolfMember = new HtmlGenericControl("input");
+                    searchGolfMember.Attributes.Add("list", "ContentPlaceHolder1_" + convTime.ToShortTimeString() + "searchMembers");
+                    searchGolfMember.Attributes.Add("class", "aBookableSpot");                  // för css-formatering
+                    HtmlGenericControl golfMembersList = new HtmlGenericControl("datalist");
+                    golfMembersList.ID = convTime.ToShortTimeString() + "searchMembers";
+                    foreach (string item in golfIdList)
+                    {
+                        HtmlGenericControl searchOptionsInList = new HtmlGenericControl("option");
+                        searchOptionsInList.Attributes.Add("value", item.ToString());
+                        golfMembersList.Controls.Add(searchOptionsInList);
+                    }
+
+                    lvl04_openBooking.Controls.Add(searchGolfMember);
+                    lvl04_openBooking.Controls.Add(golfMembersList);
                     lvl04_openBooking.Controls.Add(lvl04_reserveFreeSpotButton);
                     lvl04_body.Controls.Add(lvl04_openBooking);
                 }
-                // visa text att inget är bokat
-                
             }
 
 
@@ -149,12 +175,13 @@ namespace Golf2
             Button lvl04_footerButton02 = new Button();
             lvl04_footerButton02.Attributes.Add("class", "btn btn-primary");
             lvl04_footerButton02.Text = "Bekräfta";
-            if (counter == 4)
-            {
-                lvl04_footerButton02.Enabled = false;
-            }
             lvl04_footer.Controls.Add(lvl04_footerButton01);
-            lvl04_footer.Controls.Add(lvl04_footerButton02);
+            if (counter != 4)
+            {
+                lvl04_footer.Controls.Add(lvl04_footerButton02);
+            }
+            
+            
 
             // bygg ihop alla huvudtaggar av strukturen
             lvl03.Controls.Add(lvl04_header);
