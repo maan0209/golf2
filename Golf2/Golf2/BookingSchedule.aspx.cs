@@ -68,6 +68,7 @@ namespace Golf2
         private void CreateModalPopups(string aBookingTime, List<Booking> bookingsPerSpecifiedDate, ref HtmlGenericControl newModals)
         {
             DateTime convTime = Convert.ToDateTime(aBookingTime);
+            double maxTotalHcpLimit = 120;
             
             // ############## Dynamiskt uppbyggd Bootstrapkod för vad som ska visas i Modal
             // ############## se "MODAL-KOD FÖR POPUP-FÖNSTRET" för kartläggning av alla controls
@@ -120,13 +121,15 @@ namespace Golf2
                     bookingInfo += "Golf-id: " + item.GolfId + " - ";
                     bookingInfo += "Kön: " + item.Gender + " - ";
                     bookingInfo += "Hcp: " + item.Hcp.ToString();
-
+                    maxTotalHcpLimit -= item.Hcp;                                               // spelarens hcp subtraheras från startbollens limit 
                     lvl04_bodyText.InnerHtml = bookingInfo;
 
                     lvl04_body.Controls.Add(lvl04_bodyText);
                     golfIdList.Remove(item.GolfId);                                             // golfidt rensas från listan, så att man inte kan dubbelboka en person samma tid
                 }
             }
+
+
             if (counter != 4)
             {
 
@@ -136,12 +139,15 @@ namespace Golf2
                     HtmlGenericControl lvl04_bodyText = new HtmlGenericControl("p");
                     lvl04_bodyText.InnerHtml = "Ledig plats";
                     lvl04_bodyText.Attributes.Add("class", "aBookableSpot");                    // för css-formatering
+                    lvl04_bodyText.Attributes.Add("id", convTime.ToShortTimeString() + i.ToString());
+                    lvl04_bodyText.Attributes.Add("isReserved", "false");
                     lvl04_openBooking.Controls.Add(lvl04_bodyText);
 
                     HtmlGenericControl lvl04_reserveFreeSpotButton = new HtmlGenericControl("input");
                     lvl04_reserveFreeSpotButton.Attributes.Add("class", "btn btn-primary reserveSpotButton");
                     lvl04_reserveFreeSpotButton.Attributes.Add("type", "button");
                     lvl04_reserveFreeSpotButton.Attributes.Add("value", "Reservera");
+                    lvl04_reserveFreeSpotButton.Attributes.Add("reservation", convTime.ToShortTimeString() + i.ToString());
                     lvl04_reserveFreeSpotButton.Attributes.Add("class", "aBookableSpot");       // för css-formatering
 
                     // en sökbar lista skapas
@@ -172,12 +178,32 @@ namespace Golf2
             lvl04_footerButton01.Attributes.Add("data-dismiss", "modal");
             lvl04_footerButton01.Text = "Stäng";
 
-            Button lvl04_footerButton02 = new Button();
-            lvl04_footerButton02.Attributes.Add("class", "btn btn-primary");
-            lvl04_footerButton02.Text = "Bekräfta";
+            // generera en tag som visar max tillåten hcp
+            HtmlGenericControl maxHcpAllowed = new HtmlGenericControl("p");
+            maxHcpAllowed.Attributes.Add("id", convTime.ToShortTimeString() + "maxhcp");
+            maxHcpAllowed.Attributes.Add("hcp", maxTotalHcpLimit.ToString());
+            double textHcpOutput = 0;
+            if (counter != 4)
+            {
+                if (maxTotalHcpLimit > 36)
+                {
+                    textHcpOutput = 36;
+                }
+                else
+                {
+                    textHcpOutput = maxTotalHcpLimit;
+                }
+                maxHcpAllowed.InnerHtml = "Max tillåten hcp: " + textHcpOutput.ToString();
+            }
+            lvl04_footer.Controls.Add(maxHcpAllowed);
+
             lvl04_footer.Controls.Add(lvl04_footerButton01);
             if (counter != 4)
             {
+                Button lvl04_footerButton02 = new Button();
+                lvl04_footerButton02.Attributes.Add("class", "btn btn-primary");
+                lvl04_footerButton02.Text = "Bekräfta";
+
                 lvl04_footer.Controls.Add(lvl04_footerButton02);
             }
             
