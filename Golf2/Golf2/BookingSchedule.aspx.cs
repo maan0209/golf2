@@ -150,19 +150,22 @@ namespace Golf2
                     lvl04_openBooking.Controls.Add(lvl04_bodyText);
 
                     HtmlGenericControl lvl04_reserveFreeSpotButton = new HtmlGenericControl("input");
+                    lvl04_reserveFreeSpotButton.Attributes.Add("id", convTime.ToShortTimeString() + "resereve" + i);
                     lvl04_reserveFreeSpotButton.Attributes.Add("class", "btn btn-primary reserveSpotButton");
                     lvl04_reserveFreeSpotButton.Attributes.Add("type", "button");
                     lvl04_reserveFreeSpotButton.Attributes.Add("value", "Reservera");
-                    //lvl04_reserveFreeSpotButton.Attributes.Add("reservation", convTime.ToShortTimeString() + i.ToString());
                     lvl04_reserveFreeSpotButton.Attributes.Add("class", "aBookableSpot");       // för css-formatering
-                    lvl04_reserveFreeSpotButton.Attributes.Add("onclick", "reservation(\'" + convTime.ToShortTimeString() + i.ToString() + "\')");
+                    lvl04_reserveFreeSpotButton.Attributes.Add("onclick", "reservation(\'" + convTime.ToShortTimeString() + i.ToString() + "\', \'" + convTime.ToShortTimeString() + "searchMembers" + i + "\', \'" + "Confirm" + convTime.ToShortTimeString() + "\', \'" + i + "\', \'"+ convTime.ToShortTimeString() + "resereve" + i + "\')");
 
                     // en sökbar lista skapas
                     HtmlGenericControl searchGolfMember = new HtmlGenericControl("input");
-                    searchGolfMember.Attributes.Add("list", "ContentPlaceHolder1_" + convTime.ToShortTimeString() + "searchMembers");
+                    searchGolfMember.Attributes.Add("id", convTime.ToShortTimeString() + "searchMembers" + i);
+                    searchGolfMember.Attributes.Add("type", "text");
+                    searchGolfMember.Attributes.Add("list", convTime.ToShortTimeString() + "searchMembersList" + i);
                     searchGolfMember.Attributes.Add("class", "aBookableSpot");                  // för css-formatering
+
                     HtmlGenericControl golfMembersList = new HtmlGenericControl("datalist");
-                    golfMembersList.ID = convTime.ToShortTimeString() + "searchMembers";
+                    golfMembersList.Attributes.Add("id", convTime.ToShortTimeString() + "searchMembersList" + i);
                     foreach (string item in golfIdList)
                     {
                         HtmlGenericControl searchOptionsInList = new HtmlGenericControl("option");
@@ -184,6 +187,7 @@ namespace Golf2
             lvl04_footerButton01.Attributes.Add("class", "btn btn-primary");
             lvl04_footerButton01.Attributes.Add("data-dismiss", "modal");
             lvl04_footerButton01.Text = "Stäng";
+            lvl04_footerButton01.Attributes.Add("onclick", "clearAllReservations(\'" + convTime.ToShortTimeString() + "\', \'" + convTime.ToShortTimeString() + "resereve" + "\', \'" + "Confirm" + convTime.ToShortTimeString() + "\')");  
 
             // generera en tag som visar max tillåten hcp
             HtmlGenericControl maxHcpAllowed = new HtmlGenericControl("p");
