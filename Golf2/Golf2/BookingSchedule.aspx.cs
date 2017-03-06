@@ -438,8 +438,8 @@ namespace Golf2
                 Button1.Visible = true;
             }
         }
-    
-       
+
+
 
         /// <summary>
         /// Hämtar namet utifrån angivet golfid i bokning
@@ -451,7 +451,7 @@ namespace Golf2
 
             string sql = "SELECT firstname, surname, hcp FROM person WHERE golfid =" + golfid;
 
-            table = new DataTable();                   
+            table = new DataTable();
             ToolBox.SQL_NonParam(sql, ref table);
             Person person = new Person();
 
@@ -463,7 +463,7 @@ namespace Golf2
                 person.Hcp = Math.Round(Convert.ToDouble(row["hcp"]), 1);
 
             }
-                return person.FirstName + " " + person.SurName + ": HCP: " + person.Hcp;
+            return person.FirstName + " " + person.SurName + ": HCP: " + person.Hcp;
         }
 
         /// <summary>
@@ -491,8 +491,8 @@ namespace Golf2
                 Session["error"] = "Denna person har redan en bokad tid idag!";
                 return true;
             }
-            else {return false;}
-            
+            else { return false; }
+
         }
 
         /// <summary>
@@ -518,3 +518,4 @@ namespace Golf2
 
 
     }
+}
