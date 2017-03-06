@@ -1,10 +1,8 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master1.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="Golf2.Home1" %>   
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master2_SignedIn.Master" AutoEventWireup="true" CodeBehind="inloggad.aspx.cs" Inherits="Golf2.inloggad" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
-
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-
+    
    
         <!-- Karusellen börjar här -->
     
@@ -173,5 +171,3 @@
     
 
 </asp:Content>
-
-

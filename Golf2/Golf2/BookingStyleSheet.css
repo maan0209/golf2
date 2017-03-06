@@ -29,6 +29,13 @@
     height: 100%;
 }
 
+/* Formaterar lediga bokningsbara platser i en modal */
+
+.aBookableSpot {
+    width:31%;
+    display: inline-block;
+}
+
 /* Formaterar boxarna för bokningsbara tider*/
 .aBooking {
     min-width: 70px;
@@ -70,6 +77,8 @@
     width:100%;
     text-align: center;
 }
+
+/* Övrigt */
 
 #ContentPlaceHolder1_DisplayChangeDay{
 

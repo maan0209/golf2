@@ -125,6 +125,7 @@
     <Content Include="BookingSchedule.aspx" />
     <Content Include="BookingStyleSheet.css" />
     <Content Include="Index.aspx" />
+    <Content Include="inloggad.aspx" />
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -167,6 +168,13 @@
     </Compile>
     <Compile Include="Index.aspx.designer.cs">
       <DependentUpon>Index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="inloggad.aspx.cs">
+      <DependentUpon>inloggad.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="inloggad.aspx.designer.cs">
+      <DependentUpon>inloggad.aspx</DependentUpon>
     </Compile>
     <Compile Include="Master1.Master.cs">
       <DependentUpon>Master1.Master</DependentUpon>
