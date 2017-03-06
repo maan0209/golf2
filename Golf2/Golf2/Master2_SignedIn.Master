@@ -42,17 +42,17 @@
             
 			<div id="navbar" class="navbar-collapse collapse">				
                 <ul class="nav navbar-nav">
-					<li class=""><a href="#about">Boka</a></li>
-					<li class=""><a href="#nyheter">Nyheter</a></li>
-					<li class=""><a href="#banan">Banan</a></li>
-                    <li class=""><a href="#">Om oss</a></li>
-                    <li class=""><a href="#">Kontakt</a></li>
+					<li class=""><a href="inloggad.aspx#about">Boka</a></li>
+					<li class=""><a href="inloggad.aspx#nyheter">Nyheter</a></li>
+					<li class=""><a href="inloggad.aspx#banan">Banan</a></li>
+                    <li class=""><a href="inloggad.aspx#">Om oss</a></li>
+                    <li class=""><a href="inloggad.aspx#">Kontakt</a></li>
 				</ul>
         
                 
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Inloggat golf-id: </b><asp:label ID="Inloggat_ID" class="user" runat="server"></asp:label>  <span class="caret"></span></a>   <!--/.Label för att visa vem som är inloggad -->
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Inloggat golf-id: </b><asp:label ID="Inloggat_ID" Cssclass="user" runat="server"></asp:label>  <span class="caret"></span></a>   <!--/.Label för att visa vem som är inloggad -->
 			<ul id="login-dp" class="dropdown-menu">
 				<li>
 					 <div class="row">
