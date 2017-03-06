@@ -30,11 +30,11 @@ namespace Golf2
             {
                 Session["golfid"] = golf_id.Text;
                 Response.Redirect("inloggad.aspx");
-                Response.Write("<script>alert('Felaktigt användarnamn och lösenord')</script>");
+                
             }
             else
             {
-                
+                Response.Write("<script>alert('Felaktigt användarnamn och lösenord')</script>");
             }
             p.conn.Close();
             
