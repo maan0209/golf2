@@ -147,8 +147,9 @@ namespace Golf2
                     lvl04_reserveFreeSpotButton.Attributes.Add("class", "btn btn-primary reserveSpotButton");
                     lvl04_reserveFreeSpotButton.Attributes.Add("type", "button");
                     lvl04_reserveFreeSpotButton.Attributes.Add("value", "Reservera");
-                    lvl04_reserveFreeSpotButton.Attributes.Add("reservation", convTime.ToShortTimeString() + i.ToString());
+                    //lvl04_reserveFreeSpotButton.Attributes.Add("reservation", convTime.ToShortTimeString() + i.ToString());
                     lvl04_reserveFreeSpotButton.Attributes.Add("class", "aBookableSpot");       // för css-formatering
+                    lvl04_reserveFreeSpotButton.Attributes.Add("onclick", "reservation(\'" + convTime.ToShortTimeString() + i.ToString() + "\')");
 
                     // en sökbar lista skapas
                     HtmlGenericControl searchGolfMember = new HtmlGenericControl("input");
