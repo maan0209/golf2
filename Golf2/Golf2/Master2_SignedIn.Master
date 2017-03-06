@@ -46,7 +46,7 @@
                 
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Inloggat golfid: </b><asp:label ID="Inloggat_ID" class="user" runat="server"></asp:label>  <span class="caret"></span></a>   <!--/.Label för att visa vem som är inloggad -->
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Inloggat golf-id: </b><asp:label ID="Inloggat_ID" class="user" runat="server"></asp:label>  <span class="caret"></span></a>   <!--/.Label för att visa vem som är inloggad -->
 			<ul id="login-dp" class="dropdown-menu">
 				<li>
 					 <div class="row">
@@ -57,8 +57,10 @@
 										</div>
                                      
                                            <hr class="small"/>
-										<div class="form-group" runat="server">
-											 <asp:Button ID="Log_out" runat="server" Cssclass="btn btn-primary btn-block glyphicon glyphicon-log-out" Onclick="Log_out_Click" Text="Logga ut"></asp:Button>
+										<div class="form-group">
+											 <asp:LinkButton ID="Log_out" runat="server" Cssclass="btn btn-primary btn-block" OnClick="Log_out_Click">
+                                                 <span class="glyphicon glyphicon-log-out" id=""></span> Logga ut
+											 </asp:LinkButton>
                                              
                                             
 										</div>
