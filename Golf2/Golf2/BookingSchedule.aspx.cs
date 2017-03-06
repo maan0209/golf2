@@ -17,8 +17,14 @@ namespace Golf2
         /// <param name="sender"></param>
         /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
-        {
-            GenerateBookingSchedule();
+        {          
+                Button1.Visible = false;
+            if (!IsPostBack)
+            {
+                GenerateBookingSchedule();
+
+            }   
+             
      
         }
 
@@ -306,45 +312,41 @@ namespace Golf2
         }
 
 
-        private void ChangeDay()
-        {
-            HtmlGenericControl ScheduelChangeDay = new HtmlGenericControl("div");
-            ScheduelChangeDay.Attributes.Add("id", "changeDay");
-
-            DisplayChangeDay.Controls.Add(ScheduelChangeDay);
-        }
         //OnClickEvents för att byta till föregående dag
         protected void Button1_Click(object sender, EventArgs e)
         {
-            anyDate = anyDate.AddDays(-1);
+            if (anyDate.ToShortTimeString()== DateTime.Now.ToShortTimeString())
+            {
+                Button1.Visible = false;
+                GenerateBookingSchedule();
+            }
 
-            Session["LastDay"] = anyDate.ToString();
-            anyDate = Convert.ToDateTime(Session["LastDay"]);
+            else if(anyDate > DateTime.Now)
+            {
+                anyDate = anyDate.AddDays(-1);
+                Session["LastDay"] = anyDate.ToString();
+                anyDate = Convert.ToDateTime(Session["LastDay"]);
+                GenerateBookingSchedule();
 
-
-            //if (anyDate <= DateTime.Now)
-            //{
-            //    Button1.Visible = false;
-
-            //    //Button1.Style["visibility"] = "hidden";
-            //}
-            //else
-            //{
-            //    Button1.Visible = false;
-            //  //  Button1.Style["visibility"] = "show";
-            //}
-
+            }
         }
+
         //OnClickEvents för att byta till nästkommande dag
         protected void Button2_Click(object sender, EventArgs e)
         {
-            anyDate = anyDate.AddDays(1);
+            anyDate = anyDate.AddDays(+1);
+            if (IsPostBack)
+            {
+               // anyDate = anyDate.AddDays(+1);
 
-            Session["NextDay"] = anyDate.ToString();
-            anyDate = Convert.ToDateTime(Session["NextDay"]);
+                Session["NextDay"] = anyDate.ToString();
+                anyDate = Convert.ToDateTime(Session["NextDay"]);
 
-            GenerateBookingSchedule();
+                GenerateBookingSchedule();
+                Button1.Visible = true;
+            }
         }
+    }
        
 
         /// <summary>
@@ -377,4 +379,3 @@ namespace Golf2
         //}
 
     }
-}
