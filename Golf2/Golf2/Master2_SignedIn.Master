@@ -26,6 +26,7 @@
 </head>
 
     <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="50">
+        <form id="inloggad" runat="server">
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
@@ -51,21 +52,23 @@
                 
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Inloggad:</b><label class="user"></label>  <span class="caret"></span></a>   <!--/.Label för att visa vem som är inloggad -->
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Inloggat golfid: </b><asp:label ID="Inloggat_ID" class="user" runat="server"></asp:label>  <span class="caret"></span></a>   <!--/.Label för att visa vem som är inloggad -->
 			<ul id="login-dp" class="dropdown-menu">
 				<li>
 					 <div class="row">
 							<div class="col-md-12">
-								 <form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
+								 <div class="form" role="form" id="login-nav">
                                      		<p>Ändra dina uppgifter:</p>								<div class="form-group">
                                          <button type="button"  class="btn btn-primary btn-block" id="settings"> <span class="glyphicon glyphicon-cog" id=""></span>  Inställningar</button>
 										</div>
                                      
-                                           <hr class="small">
-										<div class="form-group">
-											 <button type="submit" class="btn btn-primary btn-block"> <span class="glyphicon glyphicon-log-out"></span>  Logga ut</button>
+                                           <hr class="small"/>
+										<div class="form-group" runat="server">
+											 <asp:Button ID="Log_out" runat="server" Cssclass="btn btn-primary btn-block glyphicon glyphicon-log-out" Onclick="Log_out_Click" Text="Logga ut"></asp:Button>
+                                             
+                                            
 										</div>
-								 </form>
+								 </div>
 							</div>
 					 </div>
 				</li>

@@ -19,7 +19,13 @@ namespace Golf2
         /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
-            GenerateBookingSchedule();
+            Button1.Visible = false;
+            if (!IsPostBack)
+            {
+                GenerateBookingSchedule();
+
+            }
+
 
         }
 
@@ -69,7 +75,7 @@ namespace Golf2
         {
             DateTime convTime = Convert.ToDateTime(aBookingTime);
             double maxTotalHcpLimit = 120;
-            
+
             // ############## Dynamiskt uppbyggd Bootstrapkod för vad som ska visas i Modal
             // ############## se "MODAL-KOD FÖR POPUP-FÖNSTRET" för kartläggning av alla controls
             HtmlGenericControl lvl01 = new HtmlGenericControl("div");
@@ -79,7 +85,7 @@ namespace Golf2
             lvl01.Attributes.Add("role", "dialog");
             lvl01.Attributes.Add("aria-labelledby", "myModalLabel");
             lvl01.Attributes.Add("aria-hidden", "true");
-           
+
 
             HtmlGenericControl lvl02 = new HtmlGenericControl("div");
             lvl02.Attributes.Add("class", "modal-dialog");
@@ -112,7 +118,7 @@ namespace Golf2
             int counter = 0;
             foreach (Booking item in bookingsPerSpecifiedDate)                                  // loopa genom de bokningar som finns för dagen
             {
-                
+
                 if (item.BookingTime.ToShortTimeString() == convTime.ToShortTimeString())       // reglerar att enbart aktuell tid (se aBookingTime) behandlas
                 {
                     counter++;
@@ -133,7 +139,7 @@ namespace Golf2
             if (counter != 4)
             {
 
-                for (int i = 0; i < 4-counter; i++)
+                for (int i = 0; i < 4 - counter; i++)
                 {
                     HtmlGenericControl lvl04_openBooking = new HtmlGenericControl("div");
                     HtmlGenericControl lvl04_bodyText = new HtmlGenericControl("p");
@@ -207,8 +213,8 @@ namespace Golf2
 
                 lvl04_footer.Controls.Add(lvl04_footerButton02);
             }
-            
-            
+
+
 
             // bygg ihop alla huvudtaggar av strukturen
             lvl03.Controls.Add(lvl04_header);
@@ -256,11 +262,11 @@ namespace Golf2
         {
             co++;
             DateTime convTime = Convert.ToDateTime(aBookingTime);
-            aBooking.Attributes.Add("id", "Booking "+ convTime.ToShortTimeString());
+            aBooking.Attributes.Add("id", "Booking " + convTime.ToShortTimeString());
             // ############## Bootstrapkod för att trigga Modal (ej aBooking) 
             string classData = "span4 proj-div";
             aBooking.Attributes.Add("data-toggle", "modal");
-            aBooking.Attributes.Add("data-target", "#"+ co.ToString());
+            aBooking.Attributes.Add("data-target", "#" + co.ToString());
 
             int counter = 0;
             foreach (Booking item in bookingsPerSpecifiedDate)                                  // loopa genom de bokningar som finns för dagen
@@ -367,7 +373,7 @@ namespace Golf2
         /// <param name="hcp3"></param>
         /// <param name="hcp4"></param>
         /// <returns>true/false</returns>
-        private bool BookingHcp (double hcp, double hcp2, double hcp3, double hcp4)
+        private bool BookingHcp(double hcp, double hcp2, double hcp3, double hcp4)
         {
             int totalhcp = Convert.ToInt32(hcp + hcp2 + hcp3 + hcp4);
             int maxhcp = 120;
@@ -387,7 +393,7 @@ namespace Golf2
         /// <returns></returns>
         private bool Guests(int totalguests)
         {
-            
+
             if (totalguests > 1)
             {
                 Session["error"] = "Max 1 gäst per boll får anmälas";
@@ -398,47 +404,41 @@ namespace Golf2
         }
 
 
-        private void ChangeDay()
-        {
-            HtmlGenericControl ScheduelChangeDay = new HtmlGenericControl("div");
-            ScheduelChangeDay.Attributes.Add("id", "changeDay");
-
-            DisplayChangeDay.Controls.Add(ScheduelChangeDay);
-        }
-
         //OnClickEvents för att byta till föregående dag
         protected void Button1_Click(object sender, EventArgs e)
         {
-            anyDate = anyDate.AddDays(-1);
+            if (anyDate.ToShortTimeString() == DateTime.Now.ToShortTimeString())
+            {
+                Button1.Visible = false;
+                GenerateBookingSchedule();
+            }
 
-            Session["LastDay"] = anyDate.ToString();
-            anyDate = Convert.ToDateTime(Session["LastDay"]);
+            else if (anyDate > DateTime.Now)
+            {
+                anyDate = anyDate.AddDays(-1);
+                Session["LastDay"] = anyDate.ToString();
+                anyDate = Convert.ToDateTime(Session["LastDay"]);
+                GenerateBookingSchedule();
 
-
-            //if (anyDate <= DateTime.Now)
-            //{
-            //    Button1.Visible = false;
-
-            //    //Button1.Style["visibility"] = "hidden";
-            //}
-            //else
-            //{
-            //    Button1.Visible = false;
-            //  //  Button1.Style["visibility"] = "show";
-            //}
-
+            }
         }
 
         //OnClickEvents för att byta till nästkommande dag
         protected void Button2_Click(object sender, EventArgs e)
         {
-            anyDate = anyDate.AddDays(1);
+            anyDate = anyDate.AddDays(+1);
+            if (IsPostBack)
+            {
+                // anyDate = anyDate.AddDays(+1);
 
-            Session["NextDay"] = anyDate.ToString();
-            anyDate = Convert.ToDateTime(Session["NextDay"]);
+                Session["NextDay"] = anyDate.ToString();
+                anyDate = Convert.ToDateTime(Session["NextDay"]);
 
-            GenerateBookingSchedule();
+                GenerateBookingSchedule();
+                Button1.Visible = true;
+            }
         }
+    
        
 
         /// <summary>
@@ -518,4 +518,3 @@ namespace Golf2
 
 
     }
-}

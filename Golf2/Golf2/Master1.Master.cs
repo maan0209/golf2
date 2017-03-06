@@ -29,12 +29,12 @@ namespace Golf2
             if(obj > 0)
             {
                 Session["golfid"] = golf_id.Text;
-                Response.Redirect("Home.aspx");
-                Response.Write("<script>alert('Felaktigt användarnamn och lösenord')</script>");
+                Response.Redirect("inloggad.aspx");
+                
             }
             else
             {
-                
+                Response.Write("<script>alert('Felaktigt användarnamn och lösenord')</script>");
             }
             p.conn.Close();
             
