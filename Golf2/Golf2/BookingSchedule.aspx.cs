@@ -210,6 +210,12 @@ namespace Golf2
                 Button lvl04_footerButton02 = new Button();
                 lvl04_footerButton02.Attributes.Add("class", "btn btn-primary");
                 lvl04_footerButton02.Text = "Bekräfta";
+                lvl04_footerButton02.Attributes.Add("id", "Confirm" + convTime.ToShortTimeString());    // knappens id, för identifiering via javascript
+                lvl04_footerButton02.Attributes.Add("reservation0", "");                                // lagringsplats för reservationer
+                lvl04_footerButton02.Attributes.Add("reservation1", "");
+                lvl04_footerButton02.Attributes.Add("reservation2", "");
+                lvl04_footerButton02.Attributes.Add("reservation3", "");
+                lvl04_footerButton02.Attributes.Add("currBookingTime", convTime.ToShortTimeString());   // bokningstid. Behövs för att genomföra bokning, datum finns sparat i anyDate-variabeln
 
                 lvl04_footer.Controls.Add(lvl04_footerButton02);
             }

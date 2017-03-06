@@ -5,9 +5,13 @@ $(function () {
 
 });
 
-function reservation(elementName) {
-    alert(elementName);
+function reservation(elementName, golfid) {
     var whichElementToChange = document.getElementById(elementName);
-    whichElementToChange.innerHTML = 'Reserverad';
-}
+    if (whichElementToChange.innerHTML != 'Ledig plats') {
+        whichElementToChange.innerHTML = 'Ledig plats';
+    }
+    else {
+        whichElementToChange.innerHTML = 'Reserverad för: ' + golfid;
+    }
 
+}
