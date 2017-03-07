@@ -64,8 +64,9 @@
 				                        </div>
                                         
 										<div class="form-group" runat="server">
-                                            <asp:Button ID="Log_In" Cssclass="btn btn-primary btn-block glyphicon glyphicon-log-in" runat="server" Text="Logga in" OnClick="Log_In_Click"></asp:Button>
-											 
+                                            <asp:Button ID="Log_In" Cssclass="btn btn-primary btn-block" runat="server" Text="Logga in" OnClick="Log_In_Click"></asp:Button>
+                                            <asp:LinkButton ID="LinkButton1" runat="server">LinkButton</asp:LinkButton>
+
 										</div>
 								 </div>
 							</div>
