@@ -49,7 +49,7 @@ namespace Golf2
             return table;
         }
 
-        public int SQLBooking(string sql, int timeid, DateTime bookingdate)
+        public int SQLBooking(string sql, int timeid, string bookingdate)
         {
             cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("bookingdate", bookingdate);
@@ -61,12 +61,15 @@ namespace Golf2
             return bookingid;
         }
 
-        public void SQLbooking2(string sql)
+        public void SQLbooking2(string sql, string golfid, int bookingid)
         {
 
             cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("golfid", golfid);
+            cmd.Parameters.AddWithValue("bookingid", bookingid);
             cmd.ExecuteNonQuery();
 
+            
         }
 
         //public DataTable getaccount(string user, string pass)

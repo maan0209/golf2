@@ -1,9 +1,22 @@
 ﻿/* ALL JS-kod att läggas inom denna. Tvingar DOM:en att läses in före körning av någon kod */
 $(function () {
 
-
+    
 
 });
+
+// funktion för att lagra golfids som reserveras i bookingschedule
+function confirmbooking(elementName, confirmbutton)
+{
+    // Knappen
+    var button = document.getElementById();
+    // Hämta variabler
+    var golfid1 = button.getAttribute('reservation0');
+    var golfid2 = button.getAttribute('reservation1');
+    var golfid3 = button.getAttribute('reservation2');
+    var golfid4 = button.getAttribute('reservation3');
+    var bookingtime = button.getAttribute('bookingtime');
+}
 
 /* En reservation skapas för en ledig bokningsplats. Golfid anges */
 function reservation(elementName, golfidElementName, confirmButton, r, reservationButton) {
