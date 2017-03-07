@@ -1,7 +1,7 @@
 ﻿/* ALL JS-kod att läggas inom denna. Tvingar DOM:en att läses in före körning av någon kod */
 $(function () {
 
-    
+
 
 });
 
@@ -18,32 +18,46 @@ function confirmbooking(elementName, confirmbutton)
     var bookingtime = button.getAttribute('bookingtime');
 }
 
-/* En reservation skapas för en ledig bokningsplats. Golfid anges */
-function reservation(elementName, golfidElementName, confirmButton, r, reservationButton) {
-    var whichElementToChange = document.getElementById(elementName);
-    if (whichElementToChange.innerHTML != 'Ledig plats') {
+/* Används för att trigga en postback*/
+function fulfix(theTimeToBook) {
+    console.log('postback trigger');
+    document.getElementById('ContentPlaceHolder1_fakeSenderButton').setAttribute("currBookingTime", theTimeToBook);
+    $('#ContentPlaceHolder1_fakeSenderButton')[0].click();
+
+}
+
+    /* En reservation skapas för en ledig bokningsplats. Golfid anges */
+    function reservation(elementName, golfidElementName, confirmButton, r, reservationButton) {
+        var whichElementToChange = document.getElementById(elementName);
+        if (whichElementToChange.innerHTML != 'Ledig plats') {
         whichElementToChange.innerHTML = 'Ledig plats';
         var cButton = document.getElementById(confirmButton);
         cButton.attributes["reservation" + r].value = "";
         document.getElementById(reservationButton).value = "Reservera";
-    }
-    else {
+        }
+        else {
         var golfid = document.getElementById(golfidElementName).value;
         if (golfid != "") {
             whichElementToChange.innerHTML = 'Reserverad för: ' + golfid.toString();
             var cButton = document.getElementById(confirmButton);
             cButton.attributes["reservation" + r].value = golfid;
             document.getElementById(reservationButton).value = "Ångra";
+            document.getElementById(confirmButton).setAttribute("currBookingTime", "");
         }
-    }
+}
 }
 
-/* Trycker man på 'stäng' så rensas alla reserverationer - allt återställs */
-function clearAllReservations(elementName, reservationButton, confirmButton) {
-    for (var i = 0; i < 4; i++) {
+
+
+    /* Trycker man på 'stäng' så rensas alla reserverationer - allt återställs */
+    function clearAllReservations(elementName, reservationButton, confirmButton) {
+        for (var i = 0; i < 4; i++) {
         var whichElementToChange = document.getElementById(elementName + i);
         whichElementToChange.innerHTML = 'Ledig plats';
         document.getElementById(reservationButton + i).value = "Reservera";
         document.getElementById(confirmButton).setAttribute("reservation" + i, "");
-    }
+
+        }
+        document.getElementById(confirmButton).setAttribute("currBookingTime", "");
 }
+
