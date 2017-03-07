@@ -19,20 +19,36 @@ namespace Golf2
         /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
-            Button1.Visible = false;
-            if (!IsPostBack)
+            if (Session["NextDay"] == null)
             {
-                GenerateBookingSchedule();
-
+                Session["NextDay"] = DateTime.Now.ToShortDateString();
+            }
+            anyDate = Convert.ToDateTime(Session["NextDay"]);
+            if (anyDate == DateTime.Today)
+            {
+                Button1.Visible = false;
+            }
+            else
+            {
+                Button1.Visible = true;
             }
 
+            if (!IsPostBack)
+            {
+                GenerateBookingSchedule();   // aspx validation postback, server control <-- läs på
+            }
+
+            
+            
 
         }
 
         #region ########## FIELDS ########## 
 
         private DataTable table;
-        private DateTime anyDate = DateTime.Now;
+        private DateTime anyDate;
+
+
         int co = 0;
         #endregion
 
@@ -211,6 +227,7 @@ namespace Golf2
             lvl04_footer.Controls.Add(lvl04_footerButton01);
             if (counter != 4)
             {
+
                 Button lvl04_footerButton02 = new Button();
                 lvl04_footerButton02.Attributes.Add("class", "btn btn-primary");
                 lvl04_footerButton02.Text = "Bekräfta";
@@ -220,7 +237,8 @@ namespace Golf2
                 lvl04_footerButton02.Attributes.Add("reservation2", "");
                 lvl04_footerButton02.Attributes.Add("reservation3", "");
                 lvl04_footerButton02.Attributes.Add("currBookingTime", convTime.ToShortTimeString());   // bokningstid. Behövs för att genomföra bokning, datum finns sparat i anyDate-variabeln
-
+                lvl04_footerButton02.Attributes.Add("type", "submit");
+                lvl04_footerButton02.Click += new System.EventHandler(this.Confirmation_Click);
                 lvl04_footer.Controls.Add(lvl04_footerButton02);
             }
 
@@ -259,6 +277,16 @@ namespace Golf2
              * lvl01 ---> </div>
              *  Källa: http://stackoverflow.com/questions/20111219/bootstrap-modals-how-to-open-with-onclick
              */
+        }
+
+        protected void Confirmation_Click(object sender, EventArgs e)
+        {
+            Button bookingObject = sender as Button;
+            for (int i = 0; i < 5; i++)
+            {
+
+            }
+            
         }
 
         /// <summary>
@@ -426,8 +454,8 @@ namespace Golf2
             else if (anyDate > DateTime.Now)
             {
                 anyDate = anyDate.AddDays(-1);
-                Session["LastDay"] = anyDate.ToString();
-                anyDate = Convert.ToDateTime(Session["LastDay"]);
+                Session["NextDay"] = anyDate.ToString();
+                anyDate = Convert.ToDateTime(Session["NextDay"]);
                 GenerateBookingSchedule();
 
             }

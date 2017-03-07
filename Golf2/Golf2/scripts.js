@@ -23,10 +23,9 @@ function reservation(elementName, golfidElementName, confirmButton, r, reservati
             document.getElementById(reservationButton).value = "Ångra";
         }
     }
-
 }
 
-/* Trycker man på 'stäng' så rensas alla reserverationer */
+/* Trycker man på 'stäng' så rensas alla reserverationer - allt återställs */
 function clearAllReservations(elementName, reservationButton, confirmButton) {
     for (var i = 0; i < 4; i++) {
         var whichElementToChange = document.getElementById(elementName + i);
