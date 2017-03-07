@@ -236,7 +236,7 @@ namespace Golf2
                 lvl04_footerButton02.Attributes.Add("currBookingTime", convTime.ToShortTimeString());   // bokningstid. Behövs för att genomföra bokning, datum finns sparat i anyDate-variabeln
                 lvl04_footerButton02.Attributes.Add("type", "submit");
                 lvl04_footerButton02.Click += new System.EventHandler(this.Confirmation_Click);
-                lvl04_footer.Controls.Add(lvl04_footerButton02);
+                //lvl04_footer.Controls.Add(lvl04_footerButton02);
                 lvl04_footerButton02.Attributes.Add("onclick", "MemberFilters(\'" +
                                                      lvl04_footerButton02.Attributes["0"] + "\', \'" +
                                                      lvl04_footerButton02.Attributes["1"] + "\', \'" +
