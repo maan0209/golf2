@@ -33,16 +33,24 @@ namespace Golf2
 
         protected void setOpenClose_Click(object sender, EventArgs e)
         {
-            Postgress p = new Postgress();
-            string öppnar = openhour.SelectedValue.ToString();
-            string stänger = closehour.SelectedValue.ToString();
+            if (openhour.SelectedIndex > closehour.SelectedIndex)
+            {
+                Response.Write("<script>alert('Kontrollera tiderna, stängning kan ej ske innan öppning.')</script>");
+            }
+            else
 
-            string sql = "UPDATE bookingtime set active = 'f' WHERE time >= '00:00:00' AND time <= '23:50:00'";
-            p.sqlquestion(sql);
+            {
+                Postgress p = new Postgress();
+                string öppnar = openhour.SelectedValue.ToString();
+                string stänger = closehour.SelectedValue.ToString();
 
-            Postgress uppdatera = new Postgress();
-            string sqluppdatera = "UPDATE bookingtime set active = 't' WHERE time >= '" + öppnar + "' AND time <= '" + stänger + "'";
-            uppdatera.sqlquestion(sqluppdatera);
+                string sql = "UPDATE bookingtime set active = 'f' WHERE time >= '00:00:00' AND time <= '23:50:00'";
+                p.sqlquestion(sql);
+
+                Postgress uppdatera = new Postgress();
+                string sqluppdatera = "UPDATE bookingtime set active = 't' WHERE time >= '" + öppnar + "' AND time <= '" + stänger + "'";
+                uppdatera.sqlquestion(sqluppdatera);
+            }
         }
     }
 }
