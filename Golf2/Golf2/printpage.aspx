@@ -54,7 +54,7 @@
 
         <!--    Sätter öppettider för banan. I Page Load så läser sidan in från databasens tabell bookingtime till dropdownlist.
                 Vid knapptryck så hämtas selectedValue och skickas med som en update till databasen.
-                Felkontroll saknas-->
+                -->
         <asp:Label ID="open" runat="server" Text="Välj tid då banan öppnar"></asp:Label><br />
         <asp:DropDownList ID="openhour" runat="server"></asp:DropDownList>
     <br />
