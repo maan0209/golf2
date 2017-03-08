@@ -8,12 +8,18 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-    <script/ src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
 
     <link href="https://fonts.googleapis.com/css?family=Righteous|Roboto" rel="stylesheet"/>
     <link rel="stylesheet" href="stylesheet1.css"/>      
     <link rel="stylesheet" href="BookingStyleSheet.css"/>     
+
+    <script src="scripts.js"></script>
 
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
@@ -36,17 +42,17 @@
             
 			<div id="navbar" class="navbar-collapse collapse">				
                 <ul class="nav navbar-nav">
-					<li class=""><a href="#about">Boka</a></li>
-					<li class=""><a href="#nyheter">Nyheter</a></li>
-					<li class=""><a href="#banan">Banan</a></li>
-                    <li class=""><a href="#">Om oss</a></li>
-                    <li class=""><a href="#">Kontakt</a></li>
+					<li class=""><a href="inloggad.aspx#about">Boka</a></li>
+					<li class=""><a href="inloggad.aspx#nyheter">Nyheter</a></li>
+					<li class=""><a href="inloggad.aspx#banan">Banan</a></li>
+                    <li class=""><a href="inloggad.aspx#">Om oss</a></li>
+                    <li class=""><a href="inloggad.aspx#">Kontakt</a></li>
 				</ul>
         
                 
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Inloggat golfid: </b><asp:label ID="Inloggat_ID" class="user" runat="server"></asp:label>  <span class="caret"></span></a>   <!--/.Label för att visa vem som är inloggad -->
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Inloggat golf-id: </b><asp:label ID="Inloggat_ID" Cssclass="user" runat="server"></asp:label>  <span class="caret"></span></a>   <!--/.Label för att visa vem som är inloggad -->
 			<ul id="login-dp" class="dropdown-menu">
 				<li>
 					 <div class="row">
@@ -57,8 +63,10 @@
 										</div>
                                      
                                            <hr class="small"/>
-										<div class="form-group" runat="server">
-											 <asp:Button ID="Log_out" runat="server" Cssclass="btn btn-primary btn-block glyphicon glyphicon-log-out" Onclick="Log_out_Click" Text="Logga ut"></asp:Button>
+										<div class="form-group">
+											 <asp:LinkButton ID="Log_out" runat="server" Cssclass="btn btn-primary btn-block" OnClick="Log_out_Click">
+                                                 <span class="glyphicon glyphicon-log-out" id=""></span> Logga ut
+											 </asp:LinkButton>
                                              
                                             
 										</div>
@@ -73,21 +81,33 @@
 </div>
 </nav>
 
+  <script>
 
+    $(document).ready(function(){       
+   var scroll_start = 0;
+   var startchange = $('#myCarousel');
+   var offset = startchange.offset();
+    if (startchange.length){
+   $(document).scroll(function() { 
+      scroll_start = $(this).scrollTop();
+      if(scroll_start > offset.top) {
+          $(".navbar-inverse").css('background-color', 'rgb(34, 34, 34)');
+       } else {
+          $('.navbar-inverse').css('background-color', 'rgba(34, 34, 34, 0.81');
+       }
+   });
+    }
+});
 
+</script>  
 
-
-
-
-
-
-    
+ 
     <div>
 
         <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
         
         </asp:ContentPlaceHolder>
     </div>
-    </form>
+  </form>  
 </body>
 </html>

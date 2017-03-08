@@ -19,20 +19,33 @@ namespace Golf2
         /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
-            Button1.Visible = false;
-            if (!IsPostBack)
+            if (Session["NextDay"] == null)
             {
-                GenerateBookingSchedule();
-
+                Session["NextDay"] = DateTime.Now.ToShortDateString();
+            }
+            anyDate = Convert.ToDateTime(Session["NextDay"]);
+            if (anyDate == DateTime.Today)
+            {
+                Button1.Visible = false;
+            }
+            else
+            {
+                Button1.Visible = true;
             }
 
+            if (!IsPostBack)
+            {
+                GenerateBookingSchedule();   // aspx validation postback, server control <-- läs på
+            }
 
         }
 
         #region ########## FIELDS ########## 
 
         private DataTable table;
-        private DateTime anyDate = DateTime.Now;
+        private DateTime anyDate;
+
+
         int co = 0;
         #endregion
 
@@ -150,18 +163,22 @@ namespace Golf2
                     lvl04_openBooking.Controls.Add(lvl04_bodyText);
 
                     HtmlGenericControl lvl04_reserveFreeSpotButton = new HtmlGenericControl("input");
+                    lvl04_reserveFreeSpotButton.Attributes.Add("id", convTime.ToShortTimeString() + "resereve" + i);
                     lvl04_reserveFreeSpotButton.Attributes.Add("class", "btn btn-primary reserveSpotButton");
                     lvl04_reserveFreeSpotButton.Attributes.Add("type", "button");
                     lvl04_reserveFreeSpotButton.Attributes.Add("value", "Reservera");
-                    lvl04_reserveFreeSpotButton.Attributes.Add("reservation", convTime.ToShortTimeString() + i.ToString());
                     lvl04_reserveFreeSpotButton.Attributes.Add("class", "aBookableSpot");       // för css-formatering
+                    lvl04_reserveFreeSpotButton.Attributes.Add("onclick", "reservation(\'" + convTime.ToShortTimeString() + i.ToString() + "\', \'" + convTime.ToShortTimeString() + "searchMembers" + i + "\', \'" + "Confirm" + convTime.ToShortTimeString() + "\', \'" + i + "\', \'"+ convTime.ToShortTimeString() + "resereve" + i + "\')");
 
                     // en sökbar lista skapas
                     HtmlGenericControl searchGolfMember = new HtmlGenericControl("input");
-                    searchGolfMember.Attributes.Add("list", "ContentPlaceHolder1_" + convTime.ToShortTimeString() + "searchMembers");
+                    searchGolfMember.Attributes.Add("id", convTime.ToShortTimeString() + "searchMembers" + i);
+                    searchGolfMember.Attributes.Add("type", "text");
+                    searchGolfMember.Attributes.Add("list", convTime.ToShortTimeString() + "searchMembersList" + i);
                     searchGolfMember.Attributes.Add("class", "aBookableSpot");                  // för css-formatering
+
                     HtmlGenericControl golfMembersList = new HtmlGenericControl("datalist");
-                    golfMembersList.ID = convTime.ToShortTimeString() + "searchMembers";
+                    golfMembersList.Attributes.Add("id", convTime.ToShortTimeString() + "searchMembersList" + i);
                     foreach (string item in golfIdList)
                     {
                         HtmlGenericControl searchOptionsInList = new HtmlGenericControl("option");
@@ -183,6 +200,7 @@ namespace Golf2
             lvl04_footerButton01.Attributes.Add("class", "btn btn-primary");
             lvl04_footerButton01.Attributes.Add("data-dismiss", "modal");
             lvl04_footerButton01.Text = "Stäng";
+            lvl04_footerButton01.Attributes.Add("onclick", "clearAllReservations(\'" + convTime.ToShortTimeString() + "\', \'" + convTime.ToShortTimeString() + "resereve" + "\', \'" + "Confirm" + convTime.ToShortTimeString() + "\')");  
 
             // generera en tag som visar max tillåten hcp
             HtmlGenericControl maxHcpAllowed = new HtmlGenericControl("p");
@@ -206,11 +224,27 @@ namespace Golf2
             lvl04_footer.Controls.Add(lvl04_footerButton01);
             if (counter != 4)
             {
+
                 Button lvl04_footerButton02 = new Button();
                 lvl04_footerButton02.Attributes.Add("class", "btn btn-primary");
                 lvl04_footerButton02.Text = "Bekräfta";
-
-                lvl04_footer.Controls.Add(lvl04_footerButton02);
+                lvl04_footerButton02.Attributes.Add("id", "Confirm" + convTime.ToShortTimeString());    // knappens id, för identifiering via javascript
+                lvl04_footerButton02.Attributes.Add("reservation0", "");                                // lagringsplats för reservationer
+                lvl04_footerButton02.Attributes.Add("reservation1", "");
+                lvl04_footerButton02.Attributes.Add("reservation2", "");
+                lvl04_footerButton02.Attributes.Add("reservation3", "");
+                lvl04_footerButton02.Attributes.Add("currBookingTime", convTime.ToShortTimeString());   // bokningstid. Behövs för att genomföra bokning, datum finns sparat i anyDate-variabeln
+                lvl04_footerButton02.Attributes.Add("type", "submit");
+                lvl04_footerButton02.Click += new System.EventHandler(this.Confirmation_Click);
+                //lvl04_footer.Controls.Add(lvl04_footerButton02);
+                lvl04_footerButton02.Attributes.Add("onclick", "MemberFilters(\'" +
+                                                     lvl04_footerButton02.Attributes["0"] + "\', \'" +
+                                                     lvl04_footerButton02.Attributes["1"] + "\', \'" +
+                                                     lvl04_footerButton02.Attributes["2"] + "\', \'" +
+                                                     lvl04_footerButton02.Attributes["3"] + "\', \'" +
+                                                     convTime.ToShortTimeString() + "\')");
+                //lvl04_footerButton02.Attributes.Add("onserverclick", "confirmbooking(\'" + convTime.ToShortTimeString() + "\')");
+                lvl04_footer.Controls.Add(lvl04_footerButton02);                                                 
             }
 
 
@@ -248,6 +282,16 @@ namespace Golf2
              * lvl01 ---> </div>
              *  Källa: http://stackoverflow.com/questions/20111219/bootstrap-modals-how-to-open-with-onclick
              */
+        }
+
+        protected void Confirmation_Click(object sender, EventArgs e)
+        {
+            Button bookingObject = sender as Button;
+            for (int i = 0; i < 5; i++)
+            {
+
+            }
+            
         }
 
         /// <summary>
@@ -305,105 +349,6 @@ namespace Golf2
         }
 
 
-
-        /// <summary>
-        /// Filter för medlemsbokning
-        /// </summary>
-        /// <param name="bookingdate"></param>
-        /// <param name="totalguests"></param>
-        /// <param name="hcp"></param>
-        /// <param name="hcp2"></param>
-        /// <param name="hcp3"></param>
-        /// <param name="hcp4"></param>
-        private void MemberFilters(DateTime bookingdate, string golfid, int totalguests, double hcp, double hcp2, double hcp3, double hcp4)
-        {
-
-            bool bookingvalid = BookingValidDate(bookingdate);
-            bool bookinghcp = BookingHcp(hcp, hcp2, hcp3, hcp4);
-            bool bookingguests = Guests(totalguests);
-            bool checkbooking = CheckBooking(golfid, bookingdate);
-
-            if (bookingvalid || bookinghcp || bookingguests || checkbooking == true)
-            {
-                //ingen bokning
-            }
-            else
-            {
-                int timeid = GetTimeID(bookingdate);
-
-                string sql = "INSERT INTO booking (bookingdate, courseid, timeid) " +
-                             "VALUES(@bookingdate, '1', @timeid) " +
-                             "RETURNING bookingid AS integer";
-
-                Postgress p = new Postgress();
-                int bookingid = p.SQLBooking(sql, timeid, bookingdate);
-
-                sql = "INSERT INTO included";
-
-
-
-
-            }
-        }
-
-        /// <summary>
-        /// Kontroll om bokningen är inom en månad
-        /// </summary>
-        /// <param name="bookingdate"></param>
-        /// <returns>true/false</returns>
-        private bool BookingValidDate(DateTime bookingdate)
-        {
-            DateTime bookingexpiry = bookingdate.AddDays(30);
-
-            if (DateTime.Today > bookingexpiry.Date)
-            {
-                Session["error"] = "Tider får bokas max 30 dagar framåt";
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Kontroll om totalt handicap är under 120
-        /// </summary>
-        /// <param name="hcp"></param>
-        /// <param name="hcp2"></param>
-        /// <param name="hcp3"></param>
-        /// <param name="hcp4"></param>
-        /// <returns>true/false</returns>
-        private bool BookingHcp(double hcp, double hcp2, double hcp3, double hcp4)
-        {
-            int totalhcp = Convert.ToInt32(hcp + hcp2 + hcp3 + hcp4);
-            int maxhcp = 120;
-
-            if (totalhcp >= maxhcp)
-            {
-                Session["error"] = "För högt totalt Handicap (" + totalhcp + ")";
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Kontroll om det är fler än 1 gäst i bollen
-        /// </summary>
-        /// <returns></returns>
-        private bool Guests(int totalguests)
-        {
-
-            if (totalguests > 1)
-            {
-                Session["error"] = "Max 1 gäst per boll får anmälas";
-                return false;
-            }
-
-            return true;
-        }
-
-
-        //OnClickEvents för att byta till föregående dag
         protected void Button1_Click(object sender, EventArgs e)
         {
             if (anyDate.ToShortTimeString() == DateTime.Now.ToShortTimeString())
@@ -415,8 +360,8 @@ namespace Golf2
             else if (anyDate > DateTime.Now)
             {
                 anyDate = anyDate.AddDays(-1);
-                Session["LastDay"] = anyDate.ToString();
-                anyDate = Convert.ToDateTime(Session["LastDay"]);
+                Session["NextDay"] = anyDate.ToString();
+                anyDate = Convert.ToDateTime(Session["NextDay"]);
                 GenerateBookingSchedule();
 
             }
@@ -437,42 +382,88 @@ namespace Golf2
                 Button1.Visible = true;
             }
         }
-    
-       
+
 
         /// <summary>
-        /// Hämtar namet utifrån angivet golfid i bokning
+        /// Filter för medlemsbokning
         /// </summary>
-        /// <param name="golfid"></param>
-        /// <returns></returns>
-        private string GetNameBooking(string golfid)
+        /// <param name="bookingdate"></param>
+        /// <param name="totalguests"></param>
+        /// <param name="hcp"></param>
+        /// <param name="hcp2"></param>
+        /// <param name="hcp3"></param>
+        /// <param name="hcp4"></param>
+        private void ConfirmBooking(BindingList<string> cb, string time)
         {
 
-            string sql = "SELECT firstname, surname, hcp FROM person WHERE golfid =" + golfid;
+            bool bookingvalid = BookingValidDate();
+            //bool bookinghcp = BookingHcp(hcp, hcp2, hcp3, hcp4);
+            //bool bookingguests = Guests(totalguests);
+            bool checkbooking = false;
 
-            table = new DataTable();                   
-            ToolBox.SQL_NonParam(sql, ref table);
-            Person person = new Person();
+            foreach (string item in cb)
+            {
+                checkbooking = CheckBooking(item);
+            }
 
-            foreach (DataRow row in table.Rows)
+            if (bookingvalid || /*bookinghcp || bookingguests ||*/ checkbooking == true)
+            {
+                //ingen bokning
+            }
+            else
             {
 
-                person.FirstName = (string)row["firstname"];
-                person.SurName = (string)row["surname"];
-                person.Hcp = Math.Round(Convert.ToDouble(row["hcp"]), 1);
+                int timeid = GetTimeID(Convert.ToDateTime(Session["NextDay"]));
+                DateTime bd = Convert.ToDateTime(Session["NextDay"]);
+                string shortbd = bd.ToShortDateString();
 
+                string sql = "INSERT INTO booking (shortbd, courseid, timeid) " +
+                            "VALUES(@bookingdate, '1', @timeid) " +
+                            "RETURNING bookingid AS integer";
+
+                Postgress p = new Postgress();
+                int bookingid = p.SQLBooking(sql, timeid, shortbd);
+
+                foreach (string item in cb)
+                {
+                    sql = "INSERT INTO included (bookingid, golfid) " +
+                          "VALUES (@bookingid, @golfid)";
+
+                    p.SQLbooking2(sql, item, bookingid);
+                }
             }
-                return person.FirstName + " " + person.SurName + ": HCP: " + person.Hcp;
         }
 
         /// <summary>
-        /// Kontrollerar om någon i sällskapet har en bokadtid samma dag
+        /// Kontroll om bokningen är inom en månad
+        /// </summary>
+        /// <param name="bookingdate"></param>
+        /// <returns>true/false</returns>
+        private bool BookingValidDate()
+        {
+            DateTime bookingdate = Convert.ToDateTime(Session["NextDate"]);
+
+            DateTime bookingexpiry = bookingdate.AddDays(30);
+
+            if (DateTime.Today > bookingexpiry.Date)
+            {
+                Session["error"] = "Tider får bokas max 30 dagar framåt";
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Kontrollerar om någon i sällskapet har en bokad tid samma dag
         /// </summary>
         /// <param name="golfid"></param>
         /// <param name="bookingdate"></param>
         /// <returns></returns>
-        private bool CheckBooking(string golfid, DateTime bookingdate)
+        private bool CheckBooking(string golfid)
         {
+
+
             string sql = "SELECT SELECT booking.bookingid, booking.bookingdate " +
                         "FROM booking " +
                         "INNER JOIN included ON included.bookingid = booking.bookingid " +
@@ -482,7 +473,7 @@ namespace Golf2
             ToolBox.SQL_NonParam(sql, ref table);
             Person person = new Person();
 
-            string searchbooking = bookingdate.ToShortDateString();
+            string searchbooking = Convert.ToString(Session["NextDate"]);
             bool contains = table.AsEnumerable().Any(row => searchbooking == row.Field<String>(searchbooking));
 
             if (contains == true)
@@ -490,8 +481,8 @@ namespace Golf2
                 Session["error"] = "Denna person har redan en bokad tid idag!";
                 return true;
             }
-            else {return false;}
-            
+            else { return false; }
+
         }
 
         /// <summary>
@@ -515,5 +506,70 @@ namespace Golf2
 
         }
 
+        /// <summary>
+        /// Kontroll om totalt handicap är under 120 (HANTERAS I UI?)
+        /// </summary>
+        /// <param name="hcp"></param>
+        /// <param name="hcp2"></param>
+        /// <param name="hcp3"></param>
+        /// <param name="hcp4"></param>
+        /// <returns>true/false</returns>
+        //private bool BookingHcp(double hcp, double hcp2, double hcp3, double hcp4)
+        //{
+        //    int totalhcp = Convert.ToInt32(hcp + hcp2 + hcp3 + hcp4);
+        //    int maxhcp = 120;
 
+        //    if (totalhcp >= maxhcp)
+        //    {
+        //        Session["error"] = "För högt totalt Handicap (" + totalhcp + ")";
+        //        return false;
+        //    }
+
+        //    return true;
+        //}
+
+        /// <summary>
+        /// Kontroll om det är fler än 1 gäst i bollen (HANTERAS I UI?)
+        /// </summary>
+        /// <returns></returns>
+        //private bool Guests(int totalguests)
+        //{
+
+        //    if (totalguests > 1)
+        //    {
+        //        Session["error"] = "Max 1 gäst per boll får anmälas";
+        //        return false;
+        //    }
+
+        //    return true;
+        //}
+
+
+        //OnClickEvents för att byta till föregående dag
+
+        /// <summary>
+        /// Hämtar namet utifrån angivet golfid i bokning (HANTERAS I UI?)
+        /// </summary>
+        /// <param name="golfid"></param>
+        /// <returns></returns>
+        //private string GetNameBooking(string golfid)
+        //{
+
+        //    string sql = "SELECT firstname, surname, hcp FROM person WHERE golfid =" + golfid;
+
+        //    table = new DataTable();
+        //    ToolBox.SQL_NonParam(sql, ref table);
+        //    Person person = new Person();
+
+        //    foreach (DataRow row in table.Rows)
+        //    {
+
+        //        person.FirstName = (string)row["firstname"];
+        //        person.SurName = (string)row["surname"];
+        //        person.Hcp = Math.Round(Convert.ToDouble(row["hcp"]), 1);
+
+        //    }
+        //    return person.FirstName + " " + person.SurName + ": HCP: " + person.Hcp;
+        //}
     }
+}
