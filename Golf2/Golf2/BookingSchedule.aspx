@@ -20,7 +20,7 @@
             </div>
             <!-- Bokningsschemat printas ut här-->
     </div>
-    <asp:Button ID="fakeSenderButton" runat="server" OnCommand="fakeSenderButton_Command" CommandArgument="hej hej" text="fake-knapp" reservation0="" reservation1="" reservation2="" reservation3="" currBookingTime=""/>
+    <asp:Button ID="fakeSenderButton" runat="server" OnCommand="fakeSenderButton_Command" CommandArgument="" text="fake-knapp" reservation0="" reservation1="" reservation2="" reservation3="" currBookingTime=""/>
 
 </asp:Content>
 

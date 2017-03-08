@@ -21,8 +21,29 @@ function confirmbooking(elementName, confirmbutton)
 /* Används för att trigga en postback*/
 function fulfix(theTimeToBook) {
     console.log('postback trigger');
-    document.getElementById('ContentPlaceHolder1_fakeSenderButton').setAttribute("currBookingTime", theTimeToBook);
-    $('#ContentPlaceHolder1_fakeSenderButton')[0].click();
+    var fakeButton = document.getElementById('ContentPlaceHolder1_fakeSenderButton');
+    fakeButton.setAttribute("currBookingTime", theTimeToBook);
+    var concatenateAString = "";
+    for (var i = 0; i < 4; i++) { 
+        var bookingValue = fakeButton.getAttribute("reservation" + i);
+        if (bookingValue != "") {
+            if (concatenateAString != "") {
+                concatenateAString += "#" + bookingValue.toString();
+            }
+            else {
+                concatenateAString = bookingValue.toString();
+            }
+        }
+    }
+    if (concatenateAString = "") {
+        return;
+    }
+    else {
+        concatenateAString += "#" + fakeButton.getAttribute("currBookingTime");
+    }
+    fakeButton.setAttribute("CommandArgument", concatenateAString);
+    
+    $('#ContentPlaceHolder1_fakeSenderButton')[0].click();  
 
 }
 
