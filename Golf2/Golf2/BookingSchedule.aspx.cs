@@ -32,21 +32,18 @@ namespace Golf2
             {
                 Button1.Visible = true;
             }
-
             if (!IsPostBack)
             {
                 GenerateBookingSchedule();   // aspx validation postback, server control <-- läs på
             }
-
         }
 
         #region ########## FIELDS ########## 
 
         private DataTable table;
         private DateTime anyDate;
-
-
         int co = 0;
+
         #endregion
 
         /// <summary>
@@ -168,7 +165,8 @@ namespace Golf2
                     lvl04_reserveFreeSpotButton.Attributes.Add("type", "button");
                     lvl04_reserveFreeSpotButton.Attributes.Add("value", "Reservera");
                     lvl04_reserveFreeSpotButton.Attributes.Add("class", "aBookableSpot");       // för css-formatering
-                    lvl04_reserveFreeSpotButton.Attributes.Add("onclick", "reservation(\'" + convTime.ToShortTimeString() + i.ToString() + "\', \'" + convTime.ToShortTimeString() + "searchMembers" + i + "\', \'" + "Confirm" + convTime.ToShortTimeString() + "\', \'" + i + "\', \'"+ convTime.ToShortTimeString() + "resereve" + i + "\')");
+                    //lvl04_reserveFreeSpotButton.Attributes.Add("onclick", "reservation(\'" + convTime.ToShortTimeString() + i.ToString() + "\', \'" + convTime.ToShortTimeString() + "searchMembers" + i + "\', \'" + "Confirm" + convTime.ToShortTimeString() + "\', \'" + i + "\', \'"+ convTime.ToShortTimeString() + "resereve" + i + "\')");
+                    lvl04_reserveFreeSpotButton.Attributes.Add("onclick", "reservation(\'" + convTime.ToShortTimeString() + i.ToString() + "\', \'" + convTime.ToShortTimeString() + "searchMembers" + i + "\', \'" + "ContentPlaceHolder1_fakeSenderButton" + "\', \'" + i + "\', \'" + convTime.ToShortTimeString() + "resereve" + i + "\')");
 
                     // en sökbar lista skapas
                     HtmlGenericControl searchGolfMember = new HtmlGenericControl("input");
@@ -197,10 +195,10 @@ namespace Golf2
             HtmlGenericControl lvl04_footer = new HtmlGenericControl("div");
             lvl04_footer.Attributes.Add("class", "modal-footer");
             Button lvl04_footerButton01 = new Button();
-            lvl04_footerButton01.Attributes.Add("class", "btn btn-primary");
+            //lvl04_footerButton01.Attributes.Add("class", "btn");
             lvl04_footerButton01.Attributes.Add("data-dismiss", "modal");
             lvl04_footerButton01.Text = "Stäng";
-            lvl04_footerButton01.Attributes.Add("onclick", "clearAllReservations(\'" + convTime.ToShortTimeString() + "\', \'" + convTime.ToShortTimeString() + "resereve" + "\', \'" + "Confirm" + convTime.ToShortTimeString() + "\')");  
+            lvl04_footerButton01.Attributes.Add("onclick", "clearAllReservations(\'" + convTime.ToShortTimeString() + "\', \'" + convTime.ToShortTimeString() + "resereve" + "\', \'" + "ContentPlaceHolder1_fakeSenderButton" + "\')");  
 
             // generera en tag som visar max tillåten hcp
             HtmlGenericControl maxHcpAllowed = new HtmlGenericControl("p");
@@ -225,25 +223,27 @@ namespace Golf2
             if (counter != 4)
             {
 
-                Button lvl04_footerButton02 = new Button();
-                lvl04_footerButton02.Attributes.Add("class", "btn btn-primary");
-                lvl04_footerButton02.Text = "Bekräfta";
+                //Button lvl04_footerButton02 = new Button();
+                HtmlGenericControl lvl04_footerButton02 = new HtmlGenericControl("input");
+                //lvl04_footerButton02.Attributes.Add("class", "btn");
+                lvl04_footerButton02.InnerHtml = "Bekräfta";
                 lvl04_footerButton02.Attributes.Add("id", "Confirm" + convTime.ToShortTimeString());    // knappens id, för identifiering via javascript
-                lvl04_footerButton02.Attributes.Add("reservation0", "");                                // lagringsplats för reservationer
-                lvl04_footerButton02.Attributes.Add("reservation1", "");
-                lvl04_footerButton02.Attributes.Add("reservation2", "");
-                lvl04_footerButton02.Attributes.Add("reservation3", "");
+                //lvl04_footerButton02.Attributes.Add("reservation0", "");                                // lagringsplats för reservationer
+                //lvl04_footerButton02.Attributes.Add("reservation1", "");
+                //lvl04_footerButton02.Attributes.Add("reservation2", "");
+                //lvl04_footerButton02.Attributes.Add("reservation3", "");
                 lvl04_footerButton02.Attributes.Add("currBookingTime", convTime.ToShortTimeString());   // bokningstid. Behövs för att genomföra bokning, datum finns sparat i anyDate-variabeln
-                lvl04_footerButton02.Attributes.Add("type", "submit");
-                lvl04_footerButton02.Click += new System.EventHandler(this.Confirmation_Click);
+                //lvl04_footerButton02.Click += new System.EventHandler(this.Confirmation_Click);
                 //lvl04_footer.Controls.Add(lvl04_footerButton02);
-                lvl04_footerButton02.Attributes.Add("onclick", "MemberFilters(\'" +
-                                                     lvl04_footerButton02.Attributes["0"] + "\', \'" +
-                                                     lvl04_footerButton02.Attributes["1"] + "\', \'" +
-                                                     lvl04_footerButton02.Attributes["2"] + "\', \'" +
-                                                     lvl04_footerButton02.Attributes["3"] + "\', \'" +
-                                                     convTime.ToShortTimeString() + "\')");
+                lvl04_footerButton02.Attributes.Add("type", "button");
+                //lvl04_footerButton02.Attributes.Add("onclick", "MemberFilters(\'" +
+                //                                     lvl04_footerButton02.Attributes["0"] + "\', \'" +
+                //                                     lvl04_footerButton02.Attributes["1"] + "\', \'" +
+                //                                     lvl04_footerButton02.Attributes["2"] + "\', \'" +
+                //                                     lvl04_footerButton02.Attributes["3"] + "\', \'" +
+                //                                     convTime.ToShortTimeString() + "\')");
                 //lvl04_footerButton02.Attributes.Add("onserverclick", "confirmbooking(\'" + convTime.ToShortTimeString() + "\')");
+                lvl04_footerButton02.Attributes.Add("onclick", "fulfix(\'"+ convTime.ToShortTimeString() + "\')");
                 lvl04_footer.Controls.Add(lvl04_footerButton02);                                                 
             }
 
@@ -284,16 +284,19 @@ namespace Golf2
              */
         }
 
-        protected void Confirmation_Click(object sender, EventArgs e)
+
+        protected void fakeSenderButton_Command(object sender, CommandEventArgs e)
         {
             Button bookingObject = sender as Button;
-            for (int i = 0; i < 5; i++)
-            {
-
-            }
-            
+            string a = bookingObject.Attributes["reservation0"].ToString();
+            string b = bookingObject.Attributes["reservation1"].ToString();
+            string c = bookingObject.Attributes["reservation2"].ToString();
+            string d = bookingObject.Attributes["reservation3"].ToString();
+            string f = bookingObject.Attributes["currBookingTime"].ToString();
+            a = e.CommandArgument.ToString();           // commandargument tar emot data
         }
 
+   
         /// <summary>
         /// Skapar bokningsschemat som visar vilka tider som är
         /// öppna att boka samt vilka som är fullbokade eller lediga.
@@ -351,41 +354,52 @@ namespace Golf2
 
         protected void Button1_Click(object sender, EventArgs e)
         {
-            if (anyDate.ToShortTimeString() == DateTime.Now.ToShortTimeString())
-            {
-                Button1.Visible = false;
-                GenerateBookingSchedule();
-            }
-
-            else if (anyDate > DateTime.Now)
+            anyDate = Convert.ToDateTime(Session["NextDay"]);
+            if (anyDate != DateTime.Today)
             {
                 anyDate = anyDate.AddDays(-1);
-                Session["NextDay"] = anyDate.ToString();
-                anyDate = Convert.ToDateTime(Session["NextDay"]);
-                GenerateBookingSchedule();
-
+                Session["NextDay"] = anyDate.ToShortDateString();
             }
+            GenerateBookingSchedule();
+            //if (anyDate.ToShortTimeString() == DateTime.Now.ToShortTimeString())
+            //{
+            //    Button1.Visible = false;
+            //    GenerateBookingSchedule();
+            //}
+
+            //else if (anyDate > DateTime.Now)
+            //{
+            //    anyDate = anyDate.AddDays(-1);
+            //    Session["NextDay"] = anyDate.ToString();
+            //    anyDate = Convert.ToDateTime(Session["NextDay"]);
+            //    GenerateBookingSchedule();
+
+            //}
         }
 
         //OnClickEvents för att byta till nästkommande dag
         protected void Button2_Click(object sender, EventArgs e)
         {
+            anyDate = Convert.ToDateTime(Session["NextDay"]);
             anyDate = anyDate.AddDays(+1);
-            if (IsPostBack)
-            {
-                // anyDate = anyDate.AddDays(+1);
+            Session["NextDay"] = anyDate.ToShortDateString();
+            GenerateBookingSchedule();
+            //anyDate = anyDate.AddDays(+1);
+            //if (IsPostBack)
+            //{
+            //    // anyDate = anyDate.AddDays(+1);
 
-                Session["NextDay"] = anyDate.ToString();
-                anyDate = Convert.ToDateTime(Session["NextDay"]);
+            //    Session["NextDay"] = anyDate.ToString();
+            //    anyDate = Convert.ToDateTime(Session["NextDay"]);
 
-                GenerateBookingSchedule();
-                Button1.Visible = true;
-            }
+            //    GenerateBookingSchedule();
+            //    Button1.Visible = true;
+            //}
         }
 
 
         /// <summary>
-        /// Filter för medlemsbokning
+        /// Metod för att kontrollera och lägga in spelare i databasen, med filter (för admin gäller ej filter)
         /// </summary>
         /// <param name="bookingdate"></param>
         /// <param name="totalguests"></param>
@@ -395,42 +409,72 @@ namespace Golf2
         /// <param name="hcp4"></param>
         private void ConfirmBooking(BindingList<string> cb, string time)
         {
-
-            bool bookingvalid = BookingValidDate();
-            //bool bookinghcp = BookingHcp(hcp, hcp2, hcp3, hcp4);
-            //bool bookingguests = Guests(totalguests);
-            bool checkbooking = false;
-
-            foreach (string item in cb)
+            Postgress p = new Postgress();
+            bool isadmin = false;
+            if ((int)Session["golfid"] <= 999)
             {
-                checkbooking = CheckBooking(item);
+                isadmin = true;
             }
 
-            if (bookingvalid || /*bookinghcp || bookingguests ||*/ checkbooking == true)
+            bool bookingvalid = BookingValidDate();
+            //bool bookinghcp = BookingHcp(hcp, hcp2, hcp3, hcp4); //beräkna handikapp hanteras i gränssnittet
+            //bool bookingguests = Guests(totalguests); // gäster hanteras för närvarande inte
+            bool checkbooking = false;
+            bool doublecheck = false;
+
+
+            foreach (string item in cb) //Loopa igenom listan med golfids och sätt true om personen finns
+                                        //doublecheck för att värdet inte ska skrivas över i loopen
             {
-                //ingen bokning
+                checkbooking = CheckBooking(item);
+
+                if (checkbooking == true)
+                {
+                    doublecheck = true;
+                }
+            }
+
+            if (isadmin == true) // om adminstatus finns, hoppa över filter
+            {
+                bookingvalid = false;
+                checkbooking = false; 
+            }
+
+            if (bookingvalid || /*bookinghcp || bookingguests ||*/ doublecheck == true)
+            {
+                    //ingen bokning
             }
             else
             {
-
                 int timeid = GetTimeID(Convert.ToDateTime(Session["NextDay"]));
                 DateTime bd = Convert.ToDateTime(Session["NextDay"]);
                 string shortbd = bd.ToShortDateString();
+                int bookingid = 0;
 
-                string sql = "INSERT INTO booking (shortbd, courseid, timeid) " +
-                            "VALUES(@bookingdate, '1', @timeid) " +
-                            "RETURNING bookingid AS integer";
+                string sql ="SELECT bookingid " +
+                            "FROM booking " +
+                            "WHERE booking.bookingdate = @bookingdate AND booking.timeid = @timeid";
 
-                Postgress p = new Postgress();
-                int bookingid = p.SQLBooking(sql, timeid, shortbd);
+                int exists = 0;
+                exists = p.SQLCheckDateAndTime(sql, shortbd, timeid);
 
-                foreach (string item in cb)
+                if (exists == 0) // om det inte redan finns bokade på samma tid samma dag
                 {
-                    sql = "INSERT INTO included (bookingid, golfid) " +
-                          "VALUES (@bookingid, @golfid)";
+                    sql = "INSERT INTO booking (shortbd, courseid, timeid) " +
+                        "VALUES(@bookingdate, '1', @timeid) " +
+                        "RETURNING bookingid AS integer";
+
+                    bookingid = p.SQLBooking(sql, timeid, shortbd);
+                }
+
+                foreach (string item in cb) //loopa igenom listan med golfids och lägg till givet bookingid
+                {
+                    sql ="INSERT INTO included (bookingid, golfid) " +
+                         "VALUES (@bookingid, @golfid)";
 
                     p.SQLbooking2(sql, item, bookingid);
                 }
+
             }
         }
 
@@ -462,7 +506,6 @@ namespace Golf2
         /// <returns></returns>
         private bool CheckBooking(string golfid)
         {
-
 
             string sql = "SELECT SELECT booking.bookingid, booking.bookingdate " +
                         "FROM booking " +
@@ -505,6 +548,7 @@ namespace Golf2
             return timeid;
 
         }
+
 
         /// <summary>
         /// Kontroll om totalt handicap är under 120 (HANTERAS I UI?)

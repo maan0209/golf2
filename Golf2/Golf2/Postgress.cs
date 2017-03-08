@@ -49,6 +49,13 @@ namespace Golf2
             return table;
         }
 
+        /// <summary>
+        /// Lägg till tidsbokning för boll, returnera bokningsid
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="timeid"></param>
+        /// <param name="bookingdate"></param>
+        /// <returns></returns>
         public int SQLBooking(string sql, int timeid, string bookingdate)
         {
             cmd = new NpgsqlCommand(sql, conn);
@@ -61,6 +68,12 @@ namespace Golf2
             return bookingid;
         }
 
+        /// <summary>
+        /// Lägg in golfidn kopplade till bokningsid från SQLBooking
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="golfid"></param>
+        /// <param name="bookingid"></param>
         public void SQLbooking2(string sql, string golfid, int bookingid)
         {
 
@@ -71,6 +84,27 @@ namespace Golf2
 
             
         }
+
+        /// <summary>
+        /// Kontrollera om timeid redan finns för givet datum, för att avgöra INSERT eller UPDATE
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="bookingdate"></param>
+        /// <param name="timeid"></param>
+        /// <returns></returns>
+        public int SQLCheckDateAndTime(string sql, string bookingdate, int timeid)
+        {
+            cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("bookingdate", bookingdate);
+            cmd.Parameters.AddWithValue("timeid", timeid);
+
+            int exists = (int)(cmd.ExecuteScalar());
+
+            return exists;
+        }
+
+
+
 
         //public DataTable getaccount(string user, string pass)
         //{
