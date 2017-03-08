@@ -22,14 +22,19 @@ function fulfix(theTimeToBook) {
             }
         }
     }
-    if (concatenateAString = "") {
+    if (concatenateAString == "") {
         return;
     }
     else {
         concatenateAString += "#" + fakeButton.getAttribute("currBookingTime");
     }
-    fakeButton.setAttribute("CommandArgument", concatenateAString);
+    for (var i = 0; i < 50; i++) {
+        console.log(concatenateAString.toString());
+    }
     
+    fakeButton.setAttribute("CommandArgument", concatenateAString);
+    var hdnfldVariable = document.getElementById('ContentPlaceHolder1_hdnfldVariable');
+    hdnfldVariable.value = concatenateAString;
     $('#ContentPlaceHolder1_fakeSenderButton')[0].click();  
 
 }

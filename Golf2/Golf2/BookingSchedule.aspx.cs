@@ -284,17 +284,7 @@ namespace Golf2
              */
         }
 
-
-        protected void fakeSenderButton_Command(object sender, CommandEventArgs e)
-        {
-            Button bookingObject = sender as Button;
-            string a = bookingObject.Attributes["reservation0"].ToString();
-            string b = bookingObject.Attributes["reservation1"].ToString();
-            string c = bookingObject.Attributes["reservation2"].ToString();
-            string d = bookingObject.Attributes["reservation3"].ToString();
-            string f = bookingObject.Attributes["currBookingTime"].ToString();
-            a = e.CommandArgument.ToString();           // commandargument tar emot data
-        }
+        
 
    
         /// <summary>
@@ -615,5 +605,48 @@ namespace Golf2
         //    }
         //    return person.FirstName + " " + person.SurName + ": HCP: " + person.Hcp;
         //}
+
+        #region ############ EVENT HANDLERS HÄR ############ 
+        /// <summary>
+        /// Eventhandler som hämtar bokningsdata
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void fakeSenderButton_Command(object sender, CommandEventArgs e)
+        {
+            string bookingContent = hdnfldVariable.Value;
+            List<string> booking = new List<string>();
+            string tmp = "";
+            foreach (char c in bookingContent)
+            {
+                if (c == Convert.ToChar("#"))
+                {
+                    booking.Add(tmp);
+                    tmp = "";
+                }
+                else
+                {
+                    tmp += c.ToString();
+                }
+            }
+            booking.Add(tmp);
+
+
+            /* Dokumentation för användning:
+             * booking-listvariabeln kan skickas vidare till den metod som hanterar bokningen.
+             * Denna lista kan max innehålla 4 golfidn + 1 bokningstid
+             * datumet finns sparat i sessionsvariabeln session["NextDay"]
+            */
+        }
+
+
+
+
+
+
+
+        #endregion
+
+
     }
 }
