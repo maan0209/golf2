@@ -16,8 +16,7 @@
     
 
     <link href="https://fonts.googleapis.com/css?family=Righteous|Roboto" rel="stylesheet"/>
-    <link rel="stylesheet" href="stylesheet1.css"/>      
-    <link rel="stylesheet" href="BookingStyleSheet.css"/>     
+    <link rel="stylesheet" href="stylesheet1.css"/>         
 
     <script src="scripts.js"></script>
 
