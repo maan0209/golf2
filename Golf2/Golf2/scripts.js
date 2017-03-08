@@ -5,19 +5,6 @@ $(function () {
 
 });
 
-// funktion för att lagra golfids som reserveras i bookingschedule
-function confirmbooking(elementName, confirmbutton)
-{
-    // Knappen
-    var button = document.getElementById();
-    // Hämta variabler
-    var golfid1 = button.getAttribute('reservation0');
-    var golfid2 = button.getAttribute('reservation1');
-    var golfid3 = button.getAttribute('reservation2');
-    var golfid4 = button.getAttribute('reservation3');
-    var bookingtime = button.getAttribute('bookingtime');
-}
-
 /* Används för att trigga en postback*/
 function fulfix(theTimeToBook) {
     console.log('postback trigger');

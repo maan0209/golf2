@@ -399,7 +399,7 @@ namespace Golf2
 
 
         /// <summary>
-        /// Filter för medlemsbokning
+        /// Metod för att kontrollera och lägga in spelare i databasen, med filter (för admin gäller ej filter)
         /// </summary>
         /// <param name="bookingdate"></param>
         /// <param name="totalguests"></param>
@@ -409,42 +409,72 @@ namespace Golf2
         /// <param name="hcp4"></param>
         private void ConfirmBooking(BindingList<string> cb, string time)
         {
-
-            bool bookingvalid = BookingValidDate();
-            //bool bookinghcp = BookingHcp(hcp, hcp2, hcp3, hcp4);
-            //bool bookingguests = Guests(totalguests);
-            bool checkbooking = false;
-
-            foreach (string item in cb)
+            Postgress p = new Postgress();
+            bool isadmin = false;
+            if ((int)Session["golfid"] <= 999)
             {
-                checkbooking = CheckBooking(item);
+                isadmin = true;
             }
 
-            if (bookingvalid || /*bookinghcp || bookingguests ||*/ checkbooking == true)
+            bool bookingvalid = BookingValidDate();
+            //bool bookinghcp = BookingHcp(hcp, hcp2, hcp3, hcp4); //beräkna handikapp hanteras i gränssnittet
+            //bool bookingguests = Guests(totalguests); // gäster hanteras för närvarande inte
+            bool checkbooking = false;
+            bool doublecheck = false;
+
+
+            foreach (string item in cb) //Loopa igenom listan med golfids och sätt true om personen finns
+                                        //doublecheck för att värdet inte ska skrivas över i loopen
             {
-                //ingen bokning
+                checkbooking = CheckBooking(item);
+
+                if (checkbooking == true)
+                {
+                    doublecheck = true;
+                }
+            }
+
+            if (isadmin == true) // om adminstatus finns, hoppa över filter
+            {
+                bookingvalid = false;
+                checkbooking = false; 
+            }
+
+            if (bookingvalid || /*bookinghcp || bookingguests ||*/ doublecheck == true)
+            {
+                    //ingen bokning
             }
             else
             {
-
                 int timeid = GetTimeID(Convert.ToDateTime(Session["NextDay"]));
                 DateTime bd = Convert.ToDateTime(Session["NextDay"]);
                 string shortbd = bd.ToShortDateString();
+                int bookingid = 0;
 
-                string sql = "INSERT INTO booking (shortbd, courseid, timeid) " +
-                            "VALUES(@bookingdate, '1', @timeid) " +
-                            "RETURNING bookingid AS integer";
+                string sql ="SELECT bookingid " +
+                            "FROM booking " +
+                            "WHERE booking.bookingdate = @bookingdate AND booking.timeid = @timeid";
 
-                Postgress p = new Postgress();
-                int bookingid = p.SQLBooking(sql, timeid, shortbd);
+                int exists = 0;
+                exists = p.SQLCheckDateAndTime(sql, shortbd, timeid);
 
-                foreach (string item in cb)
+                if (exists == 0) // om det inte redan finns bokade på samma tid samma dag
                 {
-                    sql = "INSERT INTO included (bookingid, golfid) " +
-                          "VALUES (@bookingid, @golfid)";
+                    sql = "INSERT INTO booking (shortbd, courseid, timeid) " +
+                        "VALUES(@bookingdate, '1', @timeid) " +
+                        "RETURNING bookingid AS integer";
+
+                    bookingid = p.SQLBooking(sql, timeid, shortbd);
+                }
+
+                foreach (string item in cb) //loopa igenom listan med golfids och lägg till givet bookingid
+                {
+                    sql ="INSERT INTO included (bookingid, golfid) " +
+                         "VALUES (@bookingid, @golfid)";
 
                     p.SQLbooking2(sql, item, bookingid);
                 }
+
             }
         }
 
@@ -476,7 +506,6 @@ namespace Golf2
         /// <returns></returns>
         private bool CheckBooking(string golfid)
         {
-
 
             string sql = "SELECT SELECT booking.bookingid, booking.bookingdate " +
                         "FROM booking " +
