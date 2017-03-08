@@ -194,4 +194,61 @@ box-shadow:         1px 0px 30px 0px rgba(0, 0, 0, 0.17);
 }
 
 
+/*Admin-sektion*/ 
+
+#season{
+    margin-top:50px;
+    float:none;
+}
+
+#openclose{
+    background-color: #fafafa;
+    height:300px;
+    color: rgb(34, 34, 34);
+    margin-bottom: 10px;
+}
+
+#openclose h2{
+    font-size: 28px;
+    padding-top: 45px;
+    padding-bottom: 10px;
+    font-family:roboto;
+    font-weight: bold;
+    text-shadow: 0px 3px 14px rgba(0, 0, 0, 0.32);
+
+}
+
+#openclose p{
+    padding-top:10px;
+    padding-bottom: 10px;
+    font-family:roboto;
+    text-align:center;
+
+}
+
+.btnadmin{
+    margin-top:10px;
+    background-color: #fafafa;
+    border: 1px solid rgb(34, 34, 34);
+    color: rgb(34, 34, 34);
+    font-size:15px;
+    font-family:roboto;
+    padding:4px 4px;
+    border-radius:3px;
+}
+
+.btnadmin:hover{
+    background-color: rgb(34, 34, 34);
+    border: 1px solid rgb(34, 34, 34);
+    color: #fafafa;
+}
+
+#kalendersektion{
+    margin-bottom:20px;
+}
+
+
+
+
+/*Admin-sektion ----- SLUT */ 
 

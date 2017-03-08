@@ -122,6 +122,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Admin.aspx" />
     <Content Include="BookingSchedule.aspx" />
     <Content Include="BookingStyleSheet.css" />
     <Content Include="Index.aspx" />
@@ -132,6 +133,7 @@
     </Content>
     <Content Include="Master1.Master" />
     <Content Include="Master2_SignedIn.Master" />
+    <Content Include="Master3_Admin.Master" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -147,6 +149,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admin.aspx.cs">
+      <DependentUpon>Admin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin.aspx.designer.cs">
+      <DependentUpon>Admin.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Booking.cs" />
     <Compile Include="BookingSchedule.aspx.cs">
       <DependentUpon>BookingSchedule.aspx</DependentUpon>
@@ -191,6 +200,13 @@
     </Compile>
     <Compile Include="Master2_SignedIn.Master.designer.cs">
       <DependentUpon>Master2_SignedIn.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Master3_Admin.Master.cs">
+      <DependentUpon>Master3_Admin.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Master3_Admin.Master.designer.cs">
+      <DependentUpon>Master3_Admin.Master</DependentUpon>
     </Compile>
     <Compile Include="person.cs" />
     <Compile Include="Postgress.cs" />

@@ -10,34 +10,52 @@
 namespace Golf2 {
     
     
-    public partial class printpage {
+    public partial class Admin {
         
         /// <summary>
-        /// form1 control.
+        /// Calendar1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.WebControls.Calendar Calendar1;
         
         /// <summary>
-        /// Scorecard control.
+        /// valtStartdatum control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel Scorecard;
+        protected global::System.Web.UI.WebControls.Label valtStartdatum;
         
         /// <summary>
-        /// printScorecard control.
+        /// Calendar2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button printScorecard;
+        protected global::System.Web.UI.WebControls.Calendar Calendar2;
+        
+        /// <summary>
+        /// valtSlutdatum control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label valtSlutdatum;
+        
+        /// <summary>
+        /// saveSeason control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton saveSeason;
         
         /// <summary>
         /// open control.
@@ -76,12 +94,12 @@ namespace Golf2 {
         protected global::System.Web.UI.WebControls.DropDownList closehour;
         
         /// <summary>
-        /// setOpenClose control.
+        /// LinkButton1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button setOpenClose;
+        protected global::System.Web.UI.WebControls.LinkButton LinkButton1;
     }
 }
