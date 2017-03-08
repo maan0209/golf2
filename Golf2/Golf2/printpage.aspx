@@ -50,7 +50,24 @@
         
         <!-- Knapp som anropar funktionen printpage() i scriptet för att skriva ut det som finns i panelen. -->
         <asp:Button ID="printScorecard" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/>
-    
+    <br />
+
+        <!--    Sätter öppettider för banan. I Page Load så läser sidan in från databasens tabell bookingtime till dropdownlist.
+                Vid knapptryck så hämtas selectedValue och skickas med som en update till databasen.
+                Felkontroll saknas-->
+        <asp:Label ID="open" runat="server" Text="Välj tid då banan öppnar"></asp:Label><br />
+        <asp:DropDownList ID="openhour" runat="server"></asp:DropDownList>
+    <br />
+        <asp:Label ID="close" runat="server" Text="Välj tid då banan stänger"></asp:Label><br />
+        <asp:DropDownList ID="closehour" runat="server"></asp:DropDownList>
+        <p>
+
+        </p>
+        <asp:Button ID="setOpenClose" runat="server" Text="Ange öppettider" OnClick="setOpenClose_Click" />
+
+
+
+
     </form>
 </body>
 </html>
