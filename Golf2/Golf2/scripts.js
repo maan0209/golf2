@@ -1,13 +1,66 @@
-﻿/* ALL JS-kod att läggas inom denna. Tvingar DOM:en att läses in före körning av någon kod */
+﻿/* ALL automatiserad JS-kod att läggas inom denna. Tvingar DOM:en att läses in före körning av någon kod */
 $(function () {
 
+    /* Håller datumet uppdaterat i bokningsschemats header                                              */
+    /*Källa: http://stackoverflow.com/questions/1309452/how-to-replace-innerhtml-of-a-div-using-jquery  */
+    $(function () {
+            if (sessionStorage.getItem("currDate") == null) {
+                        var todaysDate = new Date();
+                        sessionStorage.setItem("currDate", todaysDate)
+                        
+            }
+            
+            var anyDate = new Date(sessionStorage.getItem("currDate"));
+            var processedDate = formatTheDate(anyDate);
+            var updateDate = document.getElementById('cdate');
+            updateDate.innerHTML = processedDate;
+    });
 
+    /* Ändrar datumet en dag bakåt i tiden */
+    $('#ContentPlaceHolder1_Button1').click(function () {
+        var goForwards = "False";
+        pickAnotherDay(goForwards);
+    });
+
+    /* Ändrar datumet en dag framåt i tiden */
+    $('#ContentPlaceHolder1_Button2').click(function () {
+        var goForwards = "True";
+        pickAnotherDay(goForwards);
+    });
+
+    /* Tar emot en BOOL och ändrar datumet antingen en dag framåt eller bakåt */
+    function pickAnotherDay(goForwards) {
+        
+        var changeTheDate = new Date(sessionStorage.getItem("currDate"));
+
+        if (goForwards == 'True') {
+            changeTheDate.setDate(changeTheDate.getDate() + 1);
+        }
+        else {
+            changeTheDate.setDate(changeTheDate.getDate() - 1);
+        }
+
+        sessionStorage.setItem("currDate", changeTheDate);
+        var HiddenChangeDateVariable = document.getElementById('ContentPlaceHolder1_HiddenChangeDateVariable');
+        HiddenChangeDateVariable.value = formatTheDate(changeTheDate);
+    }
+
+    /* En lite trevligare formatering av javascript-datum*/
+    function formatTheDate(dateIn) {
+        var d = new Date();
+        d = d.setDate = dateIn;
+        var yyyymmdd;
+        var year = d.getFullYear();
+        var month = (d.getMonth() + 101).toString().slice(-2);
+        var dateOfMonth = (d.getDate() + 100).toString().slice(-2);
+        yyyymmdd = year.toString() + "-" + month.toString() + "-" + dateOfMonth.toString();
+        return yyyymmdd;
+    };
 
 });
 
 /* Används för att trigga en postback*/
 function fulfix(theTimeToBook) {
-    console.log('postback trigger');
     var fakeButton = document.getElementById('ContentPlaceHolder1_fakeSenderButton');
     fakeButton.setAttribute("currBookingTime", theTimeToBook);
     var concatenateAString = "";
@@ -39,16 +92,16 @@ function fulfix(theTimeToBook) {
 
 }
 
-    /* En reservation skapas för en ledig bokningsplats. Golfid anges */
-    function reservation(elementName, golfidElementName, confirmButton, r, reservationButton) {
-        var whichElementToChange = document.getElementById(elementName);
-        if (whichElementToChange.innerHTML != 'Ledig plats') {
+/* En reservation skapas för en ledig bokningsplats. Golfid anges */
+function reservation(elementName, golfidElementName, confirmButton, r, reservationButton) {
+    var whichElementToChange = document.getElementById(elementName);
+    if (whichElementToChange.innerHTML != 'Ledig plats') {
         whichElementToChange.innerHTML = 'Ledig plats';
         var cButton = document.getElementById(confirmButton);
         cButton.attributes["reservation" + r].value = "";
         document.getElementById(reservationButton).value = "Reservera";
-        }
-        else {
+    }
+    else {
         var golfid = document.getElementById(golfidElementName).value;
         if (golfid != "") {
             whichElementToChange.innerHTML = 'Reserverad för: ' + golfid.toString();
@@ -57,20 +110,19 @@ function fulfix(theTimeToBook) {
             document.getElementById(reservationButton).value = "Ångra";
             document.getElementById(confirmButton).setAttribute("currBookingTime", "");
         }
-}
-}
+    }
+};
 
 
 
     /* Trycker man på 'stäng' så rensas alla reserverationer - allt återställs */
-    function clearAllReservations(elementName, reservationButton, confirmButton) {
-        for (var i = 0; i < 4; i++) {
+function clearAllReservations(elementName, reservationButton, confirmButton) {
+    for (var i = 0; i < 4; i++) {
         var whichElementToChange = document.getElementById(elementName + i);
         whichElementToChange.innerHTML = 'Ledig plats';
         document.getElementById(reservationButton + i).value = "Reservera";
         document.getElementById(confirmButton).setAttribute("reservation" + i, "");
-
-        }
-        document.getElementById(confirmButton).setAttribute("currBookingTime", "");
-}
+    };
+    document.getElementById(confirmButton).setAttribute("currBookingTime", "");
+};
 

@@ -19,6 +19,11 @@ namespace Golf2
         /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (HiddenChangeDateVariable.Value != "")
+            {
+                string clientSideChangeOfDate = HiddenChangeDateVariable.Value.ToString();
+                Session["NextDay"] = clientSideChangeOfDate;
+            }
             if (Session["NextDay"] == null)
             {
                 Session["NextDay"] = DateTime.Now.ToShortDateString();
@@ -32,10 +37,8 @@ namespace Golf2
             {
                 Button1.Visible = true;
             }
-            if (!IsPostBack)
-            {
+
                 GenerateBookingSchedule();   // aspx validation postback, server control <-- läs på
-            }
         }
 
         #region ########## FIELDS ########## 
@@ -341,53 +344,6 @@ namespace Golf2
 
         }
 
-
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            anyDate = Convert.ToDateTime(Session["NextDay"]);
-            if (anyDate != DateTime.Today)
-            {
-                anyDate = anyDate.AddDays(-1);
-                Session["NextDay"] = anyDate.ToShortDateString();
-            }
-            GenerateBookingSchedule();
-            //if (anyDate.ToShortTimeString() == DateTime.Now.ToShortTimeString())
-            //{
-            //    Button1.Visible = false;
-            //    GenerateBookingSchedule();
-            //}
-
-            //else if (anyDate > DateTime.Now)
-            //{
-            //    anyDate = anyDate.AddDays(-1);
-            //    Session["NextDay"] = anyDate.ToString();
-            //    anyDate = Convert.ToDateTime(Session["NextDay"]);
-            //    GenerateBookingSchedule();
-
-            //}
-        }
-
-        //OnClickEvents för att byta till nästkommande dag
-        protected void Button2_Click(object sender, EventArgs e)
-        {
-            anyDate = Convert.ToDateTime(Session["NextDay"]);
-            anyDate = anyDate.AddDays(+1);
-            Session["NextDay"] = anyDate.ToShortDateString();
-            GenerateBookingSchedule();
-            //anyDate = anyDate.AddDays(+1);
-            //if (IsPostBack)
-            //{
-            //    // anyDate = anyDate.AddDays(+1);
-
-            //    Session["NextDay"] = anyDate.ToString();
-            //    anyDate = Convert.ToDateTime(Session["NextDay"]);
-
-            //    GenerateBookingSchedule();
-            //    Button1.Visible = true;
-            //}
-        }
-
-
         /// <summary>
         /// Metod för att kontrollera och lägga in spelare i databasen, med filter (för admin gäller ej filter)
         /// </summary>
@@ -640,6 +596,71 @@ namespace Golf2
         }
 
 
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+
+            // ####### 170308: ALL KOD FÖR ATT ÄNDRA DATUM HANTERAS ISTÄLLET PÅ CLIENT SIDE OCH FÅNGAS UPP I PAGE_LOAD
+
+
+
+            //anyDate = Convert.ToDateTime(Session["NextDay"]);
+            //if (anyDate != DateTime.Today)
+            //{
+            //    anyDate = anyDate.AddDays(-1);
+            //    Session["NextDay"] = anyDate.ToShortDateString();
+            //}
+            //GenerateBookingSchedule();
+
+
+
+            //if (anyDate.ToShortTimeString() == DateTime.Now.ToShortTimeString())
+            //{
+            //    Button1.Visible = false;
+            //    GenerateBookingSchedule();
+            //}
+
+            //else if (anyDate > DateTime.Now)
+            //{
+            //    anyDate = anyDate.AddDays(-1);
+            //    Session["NextDay"] = anyDate.ToString();
+            //    anyDate = Convert.ToDateTime(Session["NextDay"]);
+            //    GenerateBookingSchedule();
+
+            //}
+        }
+
+        //OnClickEvents för att byta till nästkommande dag
+        protected void Button2_Click(object sender, EventArgs e)
+        {
+            
+            
+            // ####### 170308: ALL KOD FÖR ATT ÄNDRA DATUM HANTERAS ISTÄLLET PÅ CLIENT SIDE OCH FÅNGAS UPP I PAGE_LOAD
+
+
+
+
+            //anyDate = Convert.ToDateTime(Session["NextDay"]);
+            //anyDate = anyDate.AddDays(+1);
+            //Session["NextDay"] = anyDate.ToShortDateString();
+            //GenerateBookingSchedule();
+            //string clientSideChangeOfDate = HiddenChangeDateVariable.Value.ToString();
+
+            //Session["NextDay"] = clientSideChangeOfDate;
+
+
+            //anyDate = anyDate.AddDays(+1);
+            //if (IsPostBack)
+            //{
+            //    // anyDate = anyDate.AddDays(+1);
+
+            //    Session["NextDay"] = anyDate.ToString();
+            //    anyDate = Convert.ToDateTime(Session["NextDay"]);
+
+            //    GenerateBookingSchedule();
+            //    Button1.Visible = true;
+            //}
+        }
 
 
 
