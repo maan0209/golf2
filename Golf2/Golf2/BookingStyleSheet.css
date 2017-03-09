@@ -62,6 +62,27 @@
     display: inline-block;
 }
 
+.aBookableSpotInput {
+    width:41%;
+    display: inline-block;
+}
+
+.aBookableSpotReserve {
+    width:21%;
+    display: inline-block;
+}
+
+.autoReservationLoggedInUser {
+    background-color:aquamarine;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: thin;
+}
+
+.autoReservationLoggedInUser, p {
+    text-align:center;
+}
+
 /* Formaterar boxarna för bokningsbara tider*/
 .aBooking {
     min-width: 70px;
