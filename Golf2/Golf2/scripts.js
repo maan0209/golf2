@@ -135,8 +135,22 @@ function Table2() {
     });
 
 };
-
+// Hitta positon för där ny tee läggs till och lägger till ny kolumn i Scorekortet + sparar hur många kolumner som lagts till 
 function Table3() {
+
+    var varde;
+
+    if (sessionStorage.getItem("kolumn") == null || sessionStorage.getItem("kolumn") == 0) {
+        sessionStorage.setItem("kolumn", 1);
+        varde = sessionStorage.getItem("kolumn");
+        var hamtaknapp = document.getElementById('deleteknapp')
+        hamtaknapp.disabled = false;
+    }
+    else {
+        varde = sessionStorage.getItem("kolumn");
+        varde++;
+        sessionStorage.setItem("kolumn", varde);
+    }
 
     var t = $('#Tee').attr("colspan");
     t++;
@@ -155,3 +169,39 @@ function Table4() {
     });
 };
 
+// Tar bort Tees om man ångrat sig 
+
+function Delete() {
+
+    var t = $('#Tee').attr("colspan");
+    t--;
+
+    $('#Tee').attr("colspan", t);
+    $('#Table2').find('tr').eq(1).find('td').eq(1).remove();
+
+    $('#Table4').find('tr').each(function () {
+        $(this).find('td').eq(2).remove()
+    });
+
+    var varde = sessionStorage.getItem("kolumn");
+    varde--;
+    sessionStorage.setItem("kolumn", varde);
+
+    if (sessionStorage.getItem("kolumn") == 0) {
+        var hamtaknapp = document.getElementById('deleteknapp')
+        hamtaknapp.disabled = true
+    }
+
+    Delete2();
+};
+
+
+
+
+function Delete2() {
+
+    $('#Table3').find('tr').each(function () {
+        $(this).find('td').eq(2).remove()
+
+    });
+};

@@ -141,6 +141,7 @@
 	
 </table>
       <!-- Tabell huvudet del 2r -->
+   
 <table id="Table2" width="1100" border="1">
 	<tr>
 	<td rowspan="2" id ="Hål">Hål</td>
@@ -654,7 +655,7 @@
 
 </div>
 <p>
-<input type="button" value="Lägg till ny Tee" onclick="Table3()" />
+<input type="button" value="Lägg till ny Tee" onclick="Table3()" /> <button id="deleteknapp" disabled="true" type="button" onclick="Delete()">Ta bort Tee</button>
 </p>
 
 
