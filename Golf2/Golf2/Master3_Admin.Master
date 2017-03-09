@@ -44,9 +44,9 @@
             
 			<div id="navbar" class="navbar-collapse collapse">				
                 <ul class="nav navbar-nav">
-					<li class=""><a href="#about">Boka</a></li>
-					<li class=""><a href="#nyheter">Nyheter</a></li>
-					<li class=""><a href="#banan">Banan</a></li>
+					<li class=""><a href="inloggad.aspx#about">Boka</a></li>
+					<li class=""><a href="inloggad.aspx#nyheter">Nyheter</a></li>
+					<li class=""><a href="inloggad.aspx#banan">Banan</a></li>
                     <li class=""><a href="#">Om oss</a></li>
                     <li class=""><a href="#">Kontakt</a></li>
 				</ul>
@@ -54,7 +54,7 @@
                 
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Admin:</b><label class="user"></label>  <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Admin: </b><asp:label ID="Inloggat_ID" Cssclass="user" runat="server"></asp:label>  <span class="caret"></span></a>
 			<ul id="login-dp" class="dropdown-menu">
 				<li>
 					 <div class="row">

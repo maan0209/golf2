@@ -55,7 +55,8 @@
 							<div class="col-md-12">
 								 <div class="form" role="form" id="login-nav">
                                      		<p>Ändra dina uppgifter:</p>								<div class="form-group">
-                                         <button type="button"  class="btn btn-primary btn-block" id="settings"> <span class="glyphicon glyphicon-cog" id=""></span>  Inställningar</button>
+                                         <%--<button type="button"  class="btn btn-primary btn-block" id="settings"> <span class="glyphicon glyphicon-cog" id=""></span>  Inställningar</button>--%>
+                                        <asp:Button ID="settings" runat="server" OnClick="settings_Click" CssClass="btn btn-primary btn-block glyphicon glyphicon-cog" Text="Inställningar"></asp:Button>
 										</div>
                                      
                                            <hr class="small"/>
