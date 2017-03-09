@@ -42,7 +42,7 @@ namespace Golf2
         /// <param name="date"></param>
         private void GetTodaysBookingTimes()
         {
-            string sql = "SELECT time from bookingtime WHERE active = 'true';";
+            string sql = "SELECT time from bookingtime WHERE active = 'true' ORDER BY time ASC;";
             table = new DataTable();                    // skapar ny instans av table eftersom den används flera ggr i denna klass
             ToolBox.SQL_NonParam(sql, ref table);       // metoden i ToolBox uppdaterar variabeln table direkt.
 

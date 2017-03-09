@@ -78,6 +78,17 @@
     text-align: center;
 }
 
+/* Formaterar knapparna för byte av dag samt datumtexten*/
+.changeDayButton {
+    width: 33%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#cdate {
+    text-align: center;
+}
+
 /* Övrigt */
 
 #ContentPlaceHolder1_DisplayChangeDay{
