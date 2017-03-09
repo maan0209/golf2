@@ -38,7 +38,34 @@ namespace Golf2
                 Button1.Visible = true;
             }
 
-            GenerateBookingSchedule();   // aspx validation postback, server control <-- läs på
+            bool isCourseClosed = GenerateBookingSchedule();   // aspx validation postback, server control <-- läs på
+            if (isCourseClosed)
+            {
+                GenerateCourseIsClosed();
+            }
+            
+
+        }
+
+        /// <summary>
+        /// Genererar output på webbsidan att banan är stängd
+        /// </summary>
+        private void GenerateCourseIsClosed()
+        {
+            //< div class="closedCourse">
+            //    <p class="courseIsClosed">Banan är stängd</p>
+            //</div>
+            HtmlGenericControl containerDiv = new HtmlGenericControl("div");
+            containerDiv.Attributes.Add("class", "closedCourse");
+            HtmlGenericControl containerDiv2 = new HtmlGenericControl("div");
+            containerDiv2.Attributes.Add("class", "centerTheText");
+            HtmlGenericControl closedCourseParagraph = new HtmlGenericControl("p");
+            closedCourseParagraph.Attributes.Add("class", "courseIsClosed");
+            closedCourseParagraph.InnerHtml =  "Detta datum är banan stängd";
+
+            containerDiv2.Controls.Add(closedCourseParagraph);
+            containerDiv.Controls.Add(containerDiv2);
+            DisplayBookingSchedule.Controls.Add(containerDiv);
 
         }
 
@@ -53,12 +80,20 @@ namespace Golf2
         /// <summary>
         /// Bygger upp och printar ut bokningsschemat till sidan
         /// </summary>
-        private void GenerateBookingSchedule()
+        private bool GenerateBookingSchedule()
         {
+            DailyBookings ShowBookings = new DailyBookings(anyDate);                // "dagens" bokningar + bokningsbara tider hämtas
+
+            // Kontrollerar om listan med möjliga tider att boka är tom eller ej. 
+            // Tom innebär att aktuella datumet ligger utanför banans start/slutdatum för öppna dagar
+            bool isCourseClosed = (ShowBookings.AvailableBookingTimes.Count == 0) ? true : false;
+            if (isCourseClosed)
+            {
+                return isCourseClosed;                                              // returnerar att banan är stängd
+            }
+
             HtmlGenericControl Schedule = new HtmlGenericControl("div");            // behållare för schema-content skapas här
             Schedule.Attributes.Add("id", "schedule");
-
-            DailyBookings ShowBookings = new DailyBookings(anyDate);                // "dagens" bokningar + bokningsbara tider hämtas
 
             HtmlGenericControl newModals = new HtmlGenericControl("div");
             newModals.Attributes.Add("id", "newModals");
@@ -76,6 +111,8 @@ namespace Golf2
 
             DisplayBookingSchedule.Controls.Add(Schedule);                          // den ihopbyggda HTML-strukturen läggs in i sidan
             DisplayBookingSchedule.Controls.Add(newModals);
+
+            return isCourseClosed;                                                  // returnerar att banan är öppen
         }
 
 
