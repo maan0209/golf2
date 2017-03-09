@@ -349,15 +349,11 @@ namespace Golf2
 
         }
 
+
         /// <summary>
         /// Metod för att kontrollera och lägga in spelare i databasen, med filter (för admin gäller ej filter)
         /// </summary>
-        /// <param name="bookingdate"></param>
-        /// <param name="totalguests"></param>
-        /// <param name="hcp"></param>
-        /// <param name="hcp2"></param>
-        /// <param name="hcp3"></param>
-        /// <param name="hcp4"></param>
+        /// <param name="cb"></param>
         private void ConfirmBooking(BindingList<string> cb)
         {
 
@@ -437,7 +433,6 @@ namespace Golf2
         /// <summary>
         /// Kontroll om bokningen är inom en månad
         /// </summary>
-        /// <param name="bookingdate"></param>
         /// <returns>true/false</returns>
         private bool BookingValidDate()
         {
@@ -458,7 +453,6 @@ namespace Golf2
         /// Kontrollerar om någon i sällskapet har en bokad tid samma dag
         /// </summary>
         /// <param name="golfid"></param>
-        /// <param name="bookingdate"></param>
         /// <returns></returns>
         private bool CheckBooking(string golfid)
         {
@@ -492,7 +486,7 @@ namespace Golf2
         /// <summary>
         /// Hämtar timeid från databsen utifrån time format (HH:MM:SS) i DateTime för vald bokningsdag 
         /// </summary>
-        /// <param name="bookingdate"></param>
+        /// <param name="bookingtime"></param>
         /// <returns></returns>
         private int GetTimeID(string bookingtime)
         {
