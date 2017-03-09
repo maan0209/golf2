@@ -55,8 +55,11 @@
     </div>  
   </div>
 
-    <asp:LinkButton ID="LinkButton1" CssClass="btnadmin" Font-Underline="false" runat="server">Spara öppetider</asp:LinkButton>
+    <asp:LinkButton ID="setOpenClose" OnClick="setOpenClose_Click" CssClass="btnadmin" Font-Underline="false" runat="server">Spara öppetider</asp:LinkButton>
         
+        
+
+    
 <%--        //Din knapp Martin--%>
 <%--    <asp:Button ID="setOpenClose" runat="server" Text="Ange öppettider" OnClick="setOpenClose_Click" />--%>
 
