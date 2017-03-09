@@ -144,6 +144,7 @@
   <ItemGroup>
     <Content Include="Home.aspx" />
     <Content Include="printpage.aspx" />
+    <Content Include="Scorekort.css" />
     <Content Include="scripts.js" />
     <Content Include="StyleSheet1.css" />
     <Content Include="Web.config" />

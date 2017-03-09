@@ -78,6 +78,10 @@ namespace Golf2
             DisplayBookingSchedule.Controls.Add(newModals);
         }
 
+
+
+
+
         /// <summary>
         /// Skapar modals popuper och dess innehåll.
         /// Visar mer detaljerad status för bokningstiden om hur
@@ -354,15 +358,20 @@ namespace Golf2
         /// <param name="hcp2"></param>
         /// <param name="hcp3"></param>
         /// <param name="hcp4"></param>
-        private void ConfirmBooking(BindingList<string> cb, string time)
+        private void ConfirmBooking(BindingList<string> cb)
         {
-            Postgress p = new Postgress();
-            bool isadmin = false;
-            if ((int)Session["golfid"] <= 999)
-            {
-                isadmin = true;
-            }
 
+            //spara och ta bort sista elementet (time) ur listan från "Bekräfta"-knappen
+            string timeHHMM = cb.Last();
+            cb.RemoveAt(cb.Count - 1);
+
+            Postgress p = new Postgress();
+            bool isadmin = true;
+            if (Convert.ToString(Session["golfid"]).Contains("_"))
+            {
+                isadmin = false;
+            }
+            
             bool bookingvalid = BookingValidDate();
             //bool bookinghcp = BookingHcp(hcp, hcp2, hcp3, hcp4); //beräkna handikapp hanteras i gränssnittet
             //bool bookingguests = Guests(totalguests); // gäster hanteras för närvarande inte
@@ -381,6 +390,7 @@ namespace Golf2
                 }
             }
 
+            
             if (isadmin == true) // om adminstatus finns, hoppa över filter
             {
                 bookingvalid = false;
@@ -393,9 +403,8 @@ namespace Golf2
             }
             else
             {
-                int timeid = GetTimeID(Convert.ToDateTime(Session["NextDay"]));
-                DateTime bd = Convert.ToDateTime(Session["NextDay"]);
-                string shortbd = bd.ToShortDateString();
+                int timeid = Convert.ToInt32(GetTimeID(timeHHMM));
+                DateTime dt = Convert.ToDateTime(Session["NextDay"]);
                 int bookingid = 0;
 
                 string sql ="SELECT bookingid " +
@@ -403,15 +412,15 @@ namespace Golf2
                             "WHERE booking.bookingdate = @bookingdate AND booking.timeid = @timeid";
 
                 int exists = 0;
-                exists = p.SQLCheckDateAndTime(sql, shortbd, timeid);
+                exists = p.SQLCheckDateAndTime(sql, dt, timeid);
 
                 if (exists == 0) // om det inte redan finns bokade på samma tid samma dag
                 {
-                    sql = "INSERT INTO booking (shortbd, courseid, timeid) " +
+                    sql = "INSERT INTO booking (bookingdate, courseid, timeid) " +
                         "VALUES(@bookingdate, '1', @timeid) " +
                         "RETURNING bookingid AS integer";
 
-                    bookingid = p.SQLBooking(sql, timeid, shortbd);
+                    bookingid = p.SQLBooking(sql, timeid, dt);
                 }
 
                 foreach (string item in cb) //loopa igenom listan med golfids och lägg till givet bookingid
@@ -432,7 +441,7 @@ namespace Golf2
         /// <returns>true/false</returns>
         private bool BookingValidDate()
         {
-            DateTime bookingdate = Convert.ToDateTime(Session["NextDate"]);
+            DateTime bookingdate = Convert.ToDateTime(Session["NextDay"]);
 
             DateTime bookingexpiry = bookingdate.AddDays(30);
 
@@ -454,17 +463,22 @@ namespace Golf2
         private bool CheckBooking(string golfid)
         {
 
-            string sql = "SELECT SELECT booking.bookingid, booking.bookingdate " +
+            string sql = "SELECT booking.bookingid, booking.bookingdate " +
                         "FROM booking " +
                         "INNER JOIN included ON included.bookingid = booking.bookingid " +
                         "WHERE included.golfid =" + golfid;
 
             table = new DataTable();
             ToolBox.SQL_NonParam(sql, ref table);
-            Person person = new Person();
 
-            string searchbooking = Convert.ToString(Session["NextDate"]);
-            bool contains = table.AsEnumerable().Any(row => searchbooking == row.Field<String>(searchbooking));
+            string searchbooking = Convert.ToString(Session["NextDay"]);
+            bool contains = false;
+
+            if (searchbooking != "")
+            {
+                contains = table.AsEnumerable().Any(row => searchbooking == row.Field<String>(searchbooking));
+            }
+
 
             if (contains == true)
             {
@@ -480,18 +494,22 @@ namespace Golf2
         /// </summary>
         /// <param name="bookingdate"></param>
         /// <returns></returns>
-        private int GetTimeID(DateTime bookingdate)
+        private int GetTimeID(string bookingtime)
         {
 
-            string timestring = bookingdate.ToLongTimeString();
+            TimeSpan bt = TimeSpan.Parse(bookingtime += ":00");
 
-            string sql = "SELECT timeid FROM bookingtime WHERE time =" + timestring;
+            string sql = "SELECT timeid FROM bookingtime WHERE time = '" + bt + "'";
 
-            table = new DataTable();
+            DataTable table = new DataTable();
             ToolBox.SQL_NonParam(sql, ref table);
+            int timeid = 0;
 
-            int timeid = (int)table.Rows[0]["timeid"];
-
+            if (table.Rows[0] != null)
+            {
+                timeid = Convert.ToInt32(table.Rows[0]["timeid"]);
+            }
+            
             return timeid;
 
         }
@@ -572,7 +590,7 @@ namespace Golf2
         protected void fakeSenderButton_Command(object sender, CommandEventArgs e)
         {
             string bookingContent = hdnfldVariable.Value;
-            List<string> booking = new List<string>();
+            BindingList<string> booking = new BindingList<string>();
             string tmp = "";
             foreach (char c in bookingContent)
             {
@@ -588,6 +606,7 @@ namespace Golf2
             }
             booking.Add(tmp);
 
+            ConfirmBooking(booking);
 
             /* Dokumentation för användning:
              * booking-listvariabeln kan skickas vidare till den metod som hanterar bokningen.

@@ -42,9 +42,29 @@ namespace Golf2
         //Metod för sql fråga
         public DataTable sqlquestion(string sql)
         {
-            cmd = new NpgsqlCommand(sql, conn);
-            dr = cmd.ExecuteReader();
-            table.Load(dr);
+
+            try
+            {
+                cmd = new NpgsqlCommand(sql, conn);
+                dr = cmd.ExecuteReader();
+                table.Load(dr);
+            }
+            catch (NpgsqlException ex)
+            {
+                //DataColumn c1 = new DataColumn("Error");
+                //DataColumn c2 = new DataColumn("ErrorMessage");
+
+                //c1.DataType = Type.GetType("System.Boolean");
+                //c2.DataType = Type.GetType("System.String");
+
+                //table.Columns.Add(c1);
+                //table.Columns.Add(c2);
+
+                //DataRow rad = table.NewRow();
+                //rad[c1] = true;
+                //rad[c2] = ex.Message;
+                //table.Rows.Add(rad);
+            }
             conn.Close();
             return table;
         }
@@ -56,16 +76,28 @@ namespace Golf2
         /// <param name="timeid"></param>
         /// <param name="bookingdate"></param>
         /// <returns></returns>
-        public int SQLBooking(string sql, int timeid, string bookingdate)
+        public int SQLBooking(string sql, int timeid, DateTime bookingdate)
         {
-            cmd = new NpgsqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("bookingdate", bookingdate);
-            cmd.Parameters.AddWithValue("courseid", "1");
-            cmd.Parameters.AddWithValue("timeid", timeid);
+            try
+            {
+                conn.Open();
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("bookingdate", bookingdate);
+                cmd.Parameters.AddWithValue("courseid", "'1'");
+                cmd.Parameters.AddWithValue("timeid", timeid);
 
-            int bookingid = Convert.ToInt32(cmd.ExecuteScalar());
-
-            return bookingid;
+                int bookingid = Convert.ToInt32(cmd.ExecuteScalar());
+                conn.Close();
+                return bookingid;
+            }
+            catch (NpgsqlException ex)
+            {
+                return 0;
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         /// <summary>
@@ -76,12 +108,22 @@ namespace Golf2
         /// <param name="bookingid"></param>
         public void SQLbooking2(string sql, string golfid, int bookingid)
         {
-
-            cmd = new NpgsqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("golfid", golfid);
-            cmd.Parameters.AddWithValue("bookingid", bookingid);
-            cmd.ExecuteNonQuery();
-
+            try
+            {
+                conn.Open();
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("golfid", golfid);
+                cmd.Parameters.AddWithValue("bookingid", bookingid);
+                cmd.ExecuteNonQuery();
+            }
+            catch (NpgsqlException ex)
+            {
+            
+            }
+            finally
+            {
+                conn.Close();
+            }
             
         }
 
@@ -92,15 +134,28 @@ namespace Golf2
         /// <param name="bookingdate"></param>
         /// <param name="timeid"></param>
         /// <returns></returns>
-        public int SQLCheckDateAndTime(string sql, string bookingdate, int timeid)
+        public int SQLCheckDateAndTime(string sql, DateTime dt, int timeid)
         {
-            cmd = new NpgsqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("bookingdate", bookingdate);
-            cmd.Parameters.AddWithValue("timeid", timeid);
+            try
+            {
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("bookingdate", dt);
+                cmd.Parameters.AddWithValue("timeid", timeid);
 
-            int exists = (int)(cmd.ExecuteScalar());
+                int exists = Convert.ToInt32((cmd.ExecuteScalar()));
 
-            return exists;
+                return exists;
+            }
+            catch (NpgsqlException ex)
+            {
+                return 2;
+            }
+            finally
+            {
+                
+                conn.Close();
+            }
+            
         }
 
 
