@@ -193,7 +193,13 @@ namespace Golf2
             {
                 HtmlGenericControl lvl04_autoReservation = new HtmlGenericControl("div");
 
-                if ((4-counter) == 1)
+                string golfid = Session["golfid"].ToString();
+
+                bool isadmin = false;
+                checkIfUserIsAdmin(ref isadmin);
+
+
+                if ((4-counter) == 1 && !isadmin)
                 {
                     // Här skapas visuell konfirmering om att den sista platsen automatiskt reserverats på reservation0 för bokaren
                     CreateAutomaticBookingForBooker(ref lvl04_autoReservation);
@@ -201,11 +207,17 @@ namespace Golf2
                 }
                 else
                 {
-                    // Här skapas visuell konfirmering om att den första platsen automatiskt reserverats på reservation0 för bokaren
-                    CreateAutomaticBookingForBooker(ref lvl04_autoReservation);
-                    lvl04_body.Controls.Add(lvl04_autoReservation);
+                    int startingPoint = 0;
+                    if (!isadmin)
+                    {
+                        startingPoint = 1;
+                        // Här skapas visuell konfirmering om att den första platsen automatiskt reserverats på reservation0 för bokaren
+                        CreateAutomaticBookingForBooker(ref lvl04_autoReservation);
+                        lvl04_body.Controls.Add(lvl04_autoReservation);
+                    }
+                    
 
-                    for (int i = 1; i < 4 - counter; i++)   // reservation1, reservation2 och reservation3 kan endast bokas för andra
+                    for (int i = startingPoint; i < 4 - counter; i++)   // reservation1, reservation2 och reservation3 kan endast bokas för andra
                     {
                         HtmlGenericControl lvl04_openBooking = new HtmlGenericControl("div");
                         HtmlGenericControl lvl04_bodyText = new HtmlGenericControl("p");
@@ -412,11 +424,10 @@ namespace Golf2
             cb.RemoveAt(cb.Count - 1);
 
             Postgress p = new Postgress();
-            bool isadmin = true;
-            if (Convert.ToString(Session["golfid"]).Contains("_"))
-            {
-                isadmin = false;
-            }
+            bool isadmin = false;
+            checkIfUserIsAdmin(ref isadmin);
+            
+            
             
             bool bookingvalid = BookingValidDate();
             //bool bookinghcp = BookingHcp(hcp, hcp2, hcp3, hcp4); //beräkna handikapp hanteras i gränssnittet
@@ -477,6 +488,22 @@ namespace Golf2
                     p.SQLbooking2(sql, item, bookingid);
                 }
 
+            }
+        }
+
+        /// <summary>
+        /// kontrollerar om inloggad användare är en admin
+        /// </summary>
+        /// <param name="isadmin"></param>
+        private void checkIfUserIsAdmin(ref bool isadmin)
+        {
+            if (Convert.ToString(Session["golfid"]).Contains("_"))
+            {
+                isadmin = false;
+            }
+            else
+            {
+                isadmin = true;
             }
         }
 
