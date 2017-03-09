@@ -38,7 +38,8 @@ namespace Golf2
                 Button1.Visible = true;
             }
 
-                GenerateBookingSchedule();   // aspx validation postback, server control <-- läs på
+            GenerateBookingSchedule();   // aspx validation postback, server control <-- läs på
+
         }
 
         #region ########## FIELDS ########## 
