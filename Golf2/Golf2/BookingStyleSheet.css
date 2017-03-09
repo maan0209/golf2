@@ -29,6 +29,24 @@
     height: 100%;
 }
 
+/* Formaterar visning av om banan är stängd */
+.closedCourse {
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-top: 10%;
+    background-color: firebrick;
+    color: white;
+    height: 10%;
+    border-radius: 10px;
+}
+
+.courseIsClosed {
+    text-align: center;
+}
+
+
 /* Formaterar lediga bokningsbara platser i en modal */
 
 .aBookableSpot {
