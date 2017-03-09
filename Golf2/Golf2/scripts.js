@@ -126,3 +126,32 @@ function clearAllReservations(elementName, reservationButton, confirmButton) {
     document.getElementById(confirmButton).setAttribute("currBookingTime", "");
 };
 
+//Hitta positon för där ny tee läggs till och lägger till ny kolumn i Scorekortet 
+
+function Table2() {
+
+    $('#Table3').find('tr').each(function () {
+        $(this).find('td').eq(1).after('<td>cell 1a</td>')
+    });
+
+};
+
+function Table3() {
+
+    var t = $('#Tee').attr("colspan");
+    t++;
+
+    $('#Tee').attr("colspan", t)
+    $('#Table2').find('tr').eq(1).find('td').eq(0).after('<td>cell 1a</td>');
+    Table2();
+    Table4();
+};
+
+
+function Table4() {
+
+    $('#Table4').find('tr').each(function () {
+        $(this).find('td').eq(1).after('<td>cell 1a</td>')
+    });
+};
+
