@@ -52,9 +52,7 @@ namespace Golf2
         /// </summary>
         private void GenerateCourseIsClosed()
         {
-            //< div class="closedCourse">
-            //    <p class="courseIsClosed">Banan är stängd</p>
-            //</div>
+
             HtmlGenericControl containerDiv = new HtmlGenericControl("div");
             containerDiv.Attributes.Add("class", "closedCourse");
             HtmlGenericControl containerDiv2 = new HtmlGenericControl("div");
@@ -210,7 +208,6 @@ namespace Golf2
                     lvl04_reserveFreeSpotButton.Attributes.Add("type", "button");
                     lvl04_reserveFreeSpotButton.Attributes.Add("value", "Reservera");
                     lvl04_reserveFreeSpotButton.Attributes.Add("class", "aBookableSpot");       // för css-formatering
-                    //lvl04_reserveFreeSpotButton.Attributes.Add("onclick", "reservation(\'" + convTime.ToShortTimeString() + i.ToString() + "\', \'" + convTime.ToShortTimeString() + "searchMembers" + i + "\', \'" + "Confirm" + convTime.ToShortTimeString() + "\', \'" + i + "\', \'"+ convTime.ToShortTimeString() + "resereve" + i + "\')");
                     lvl04_reserveFreeSpotButton.Attributes.Add("onclick", "reservation(\'" + convTime.ToShortTimeString() + i.ToString() + "\', \'" + convTime.ToShortTimeString() + "searchMembers" + i + "\', \'" + "ContentPlaceHolder1_fakeSenderButton" + "\', \'" + i + "\', \'" + convTime.ToShortTimeString() + "resereve" + i + "\')");
 
                     // en sökbar lista skapas
@@ -239,8 +236,9 @@ namespace Golf2
 
             HtmlGenericControl lvl04_footer = new HtmlGenericControl("div");
             lvl04_footer.Attributes.Add("class", "modal-footer");
+
             Button lvl04_footerButton01 = new Button();
-            //lvl04_footerButton01.Attributes.Add("class", "btn");
+            lvl04_footerButton01.Attributes.Add("class", "btn btn-primary");
             lvl04_footerButton01.Attributes.Add("data-dismiss", "modal");
             lvl04_footerButton01.Text = "Stäng";
             lvl04_footerButton01.Attributes.Add("onclick", "clearAllReservations(\'" + convTime.ToShortTimeString() + "\', \'" + convTime.ToShortTimeString() + "resereve" + "\', \'" + "ContentPlaceHolder1_fakeSenderButton" + "\')");  
@@ -268,26 +266,13 @@ namespace Golf2
             if (counter != 4)
             {
 
-                //Button lvl04_footerButton02 = new Button();
                 HtmlGenericControl lvl04_footerButton02 = new HtmlGenericControl("input");
-                //lvl04_footerButton02.Attributes.Add("class", "btn");
-                lvl04_footerButton02.InnerHtml = "Bekräfta";
+                lvl04_footerButton02.Attributes.Add("class", "btn btn-primary");
+                //lvl04_footerButton02.InnerHtml = "Bekräfta";
+                lvl04_footerButton02.Attributes.Add("Value", "Bekräfta");
                 lvl04_footerButton02.Attributes.Add("id", "Confirm" + convTime.ToShortTimeString());    // knappens id, för identifiering via javascript
-                //lvl04_footerButton02.Attributes.Add("reservation0", "");                                // lagringsplats för reservationer
-                //lvl04_footerButton02.Attributes.Add("reservation1", "");
-                //lvl04_footerButton02.Attributes.Add("reservation2", "");
-                //lvl04_footerButton02.Attributes.Add("reservation3", "");
                 lvl04_footerButton02.Attributes.Add("currBookingTime", convTime.ToShortTimeString());   // bokningstid. Behövs för att genomföra bokning, datum finns sparat i anyDate-variabeln
-                //lvl04_footerButton02.Click += new System.EventHandler(this.Confirmation_Click);
-                //lvl04_footer.Controls.Add(lvl04_footerButton02);
                 lvl04_footerButton02.Attributes.Add("type", "button");
-                //lvl04_footerButton02.Attributes.Add("onclick", "MemberFilters(\'" +
-                //                                     lvl04_footerButton02.Attributes["0"] + "\', \'" +
-                //                                     lvl04_footerButton02.Attributes["1"] + "\', \'" +
-                //                                     lvl04_footerButton02.Attributes["2"] + "\', \'" +
-                //                                     lvl04_footerButton02.Attributes["3"] + "\', \'" +
-                //                                     convTime.ToShortTimeString() + "\')");
-                //lvl04_footerButton02.Attributes.Add("onserverclick", "confirmbooking(\'" + convTime.ToShortTimeString() + "\')");
                 lvl04_footerButton02.Attributes.Add("onclick", "fulfix(\'"+ convTime.ToShortTimeString() + "\')");
                 lvl04_footer.Controls.Add(lvl04_footerButton02);                                                 
             }
