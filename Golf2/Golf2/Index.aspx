@@ -633,6 +633,7 @@
 </table> 
 
   <!-- Scorekort footern   -->
+    <div id="left">
 <table id="Table5" width="1100" border="1"> 
 <tr>
 <td id="hej">Spelhandicap</td>
@@ -644,6 +645,7 @@
 
 </tr>
 </table>
+        </div>
      
 <table id="Table6" width="1100" border="1"> 
 <tr>
@@ -654,9 +656,7 @@
 </table>
 
 </div>
-<p>
-<input type="button" value="Lägg till ny Tee" onclick="Table3()" /> <button id="deleteknapp" disabled="true" type="button" onclick="Delete()">Ta bort Tee</button>
-</p>
+
 
 
  <p class="stars"><span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> </p>
