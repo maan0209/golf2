@@ -178,18 +178,43 @@ namespace Golf2
                 {
                     counter++;                                                                  // räknar hur många som redan är bokade
                     golfIdList.Remove(item.GolfId);                                             // golfidt rensas från listan, så att man inte kan dubbelboka en person samma tid
-                    
+                    userIsAlreadyBookedThisTime = (item.GolfId == Session["golfid"].ToString()) ? true : false;
+
+                    HtmlGenericControl lvl04_bodyTextDiv = new HtmlGenericControl("div");
                     HtmlGenericControl lvl04_bodyText = new HtmlGenericControl("p");
                     string bookingInfo = "";
-                    bookingInfo += "Golf-id: " + item.GolfId + " - ";
-                    bookingInfo += "Kön: " + item.Gender + " - ";
-                    bookingInfo += "Hcp: " + item.Hcp.ToString();
-                    maxTotalHcpLimit -= item.Hcp;                                               // spelarens hcp subtraheras från startbollens limit 
+                    // för css-formatering
+                    if (userIsAlreadyBookedThisTime)
+                    {
+                        bookingInfo = "Du är inbokad på denna plats";
+                        lvl04_bodyTextDiv.Attributes.Add("class", "aBookableSpot autoReservationLoggedInUser");                 
+                    }
+                    else
+                    {
+                        bookingInfo += "Golf-id: " + item.GolfId + " - ";
+                        bookingInfo += "Kön: " + item.Gender + " - ";
+                        bookingInfo += "Hcp: " + item.Hcp.ToString();
+                        maxTotalHcpLimit -= item.Hcp;                                               // spelarens hcp subtraheras från startbollens limit 
+                        lvl04_bodyTextDiv.Attributes.Add("class", "aBookableSpot bookedSpot");             
+                    }
                     lvl04_bodyText.InnerHtml = bookingInfo;
-                    lvl04_bodyText.Attributes.Add("class", "aBookableSpot");                    // för css-formatering
-                    lvl04_body.Controls.Add(lvl04_bodyText);
 
-                    userIsAlreadyBookedThisTime = (item.GolfId == Session["golfid"].ToString()) ? true : false;
+
+
+
+
+                    lvl04_bodyTextDiv.Controls.Add(lvl04_bodyText);
+                    lvl04_body.Controls.Add(lvl04_bodyTextDiv);
+
+                    HtmlGenericControl lvl04_bodyTextInputDiv = new HtmlGenericControl("div");
+                    lvl04_bodyTextInputDiv.Attributes.Add("class", "aBookableSpotInput");
+                    HtmlGenericControl lvl04_bodyTextReserveDiv = new HtmlGenericControl("div");
+                    lvl04_bodyTextReserveDiv.Attributes.Add("class", "aBookableSpotReserve");
+
+                    lvl04_body.Controls.Add(lvl04_bodyTextInputDiv);
+                    lvl04_body.Controls.Add(lvl04_bodyTextReserveDiv);
+                    
+                    
                 }
             }
 
@@ -238,6 +263,9 @@ namespace Golf2
                         lvl04_reserveFreeSpotButton.Attributes.Add("value", "Reservera");
                         lvl04_reserveFreeSpotButton.Attributes.Add("class", "aBookableSpotReserve");       // för css-formatering
                         lvl04_reserveFreeSpotButton.Attributes.Add("onclick", "reservation(\'" + convTime.ToShortTimeString() + i.ToString() + "\', \'" + convTime.ToShortTimeString() + "searchMembers" + i + "\', \'" + "ContentPlaceHolder1_fakeSenderButton" + "\', \'" + i + "\', \'" + convTime.ToShortTimeString() + "resereve" + i + "\')");
+
+                        // ####### LÄGG IN PLATS FÖR GÄSTBOKNING HÄR
+
 
                         // en sökbar lista skapas
                         HtmlGenericControl searchGolfMember = new HtmlGenericControl("input");

@@ -2,7 +2,23 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    
+
+<script>
+        function printpage() {
+            var getpanel = document.getElementById("<%= Scorecard.ClientID%>");
+            var MainWindow = window.open('', '', 'height=850,width=1000');
+            MainWindow.document.write('<html><head><link type="text/css" rel="stylesheet" href="Scorekort.css"/><title>Print Page</title>');
+            MainWindow.document.write('</head><body>');
+            MainWindow.document.write(getpanel.innerHTML);
+            MainWindow.document.write('</body></html>');
+            
+            MainWindow.document.close();
+            setTimeout(function(){
+                MainWindow.print();
+            }, 500);
+            return false;
+        }
+</script>
    
         <!-- Karusellen börjar här -->
     
@@ -108,7 +124,9 @@
 <div id="banan"> 
   <h2>Upplev vår bana i världsklass</h2>
    
-    
+   
+  <!--Här börjar scorekortet och alla tabeller-->
+<asp:Panel ID="Scorecard" runat="server"> 
    <div id="div">
 
       <!-- Tabell Huvet-->  
@@ -651,8 +669,9 @@
 </table>
 
 </div>
+</asp:Panel>
 <p>
-<input type="button" value="Lägg till ny Tee" onclick="Table3()" /> <button id="deleteknapp" disabled="true" type="button" onclick="Delete()">Ta bort Tee</button>
+<input type="button" value="Lägg till ny Tee" onclick="Table3()" /> <button id="deleteknapp" disabled="true" type="button" onclick="Delete()">Ta bort Tee</button><asp:Button ID="printScorecard" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/>
 </p>
    
      

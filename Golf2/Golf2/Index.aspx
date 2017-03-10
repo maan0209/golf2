@@ -671,6 +671,8 @@
 
 </table>
 
+
+    <asp:Button ID="printScorecard" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/>
 </div>
 </asp:Panel>
 
