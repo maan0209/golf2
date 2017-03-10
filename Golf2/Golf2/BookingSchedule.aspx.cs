@@ -197,8 +197,7 @@ namespace Golf2
                 string golfid = Session["golfid"].ToString();
 
                 bool isadmin = false;
-                checkIfUserIsAdmin(ref isadmin);
-
+                ToolBox.checkIfUserIsAdmin(ref isadmin, golfid);
 
                 if ((4-counter) == 1 && !isadmin)
                 {
@@ -426,7 +425,7 @@ namespace Golf2
 
             Postgress p = new Postgress();
             bool isadmin = false;
-            checkIfUserIsAdmin(ref isadmin);
+            ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
             
             
             
@@ -504,21 +503,6 @@ namespace Golf2
             }
         }
 
-        /// <summary>
-        /// kontrollerar om inloggad användare är en admin
-        /// </summary>
-        /// <param name="isadmin"></param>
-        private void checkIfUserIsAdmin(ref bool isadmin)
-        {
-            if (Convert.ToString(Session["golfid"]).Contains("_"))
-            {
-                isadmin = false;
-            }
-            else
-            {
-                isadmin = true;
-            }
-        }
 
         /// <summary>
         /// Kontroll om bokningen är inom en månad

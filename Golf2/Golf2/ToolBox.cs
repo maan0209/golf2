@@ -29,5 +29,25 @@ namespace Golf2
             answerTable = newPostgress.sqlquestion(sql);
         }
         #endregion
+
+        #region ############### SQL OPERATIONS ###############
+        /// <summary>
+        /// Tar emot ett golfid och kontrollerar om den är en admin. 
+        /// 1. Returnerar false om det inte är en admin 
+        /// 2. Returnerar true om det är en admin
+        /// </summary>
+        /// <param name="isadmin"></param>
+        public static void checkIfUserIsAdmin(ref bool isadmin, string golfid)
+        {
+            if (golfid.Contains("_"))
+            {
+                isadmin = false;
+            }
+            else
+            {
+                isadmin = true;
+            }
+        }
+        #endregion
     }
 }
