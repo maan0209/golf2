@@ -671,11 +671,11 @@
 
 </table>
 
+
+    <asp:Button ID="printScorecard" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/>
 </div>
 </asp:Panel>
-<p>
-<input type="button" value="Lägg till ny Tee" onclick="Table3()" /> <button id="deleteknapp" disabled="true" type="button" onclick="Delete()">Ta bort Tee</button><asp:Button ID="printScorecard" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/>
-</p>
+
 
 
  <p class="stars"><span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> </p>
