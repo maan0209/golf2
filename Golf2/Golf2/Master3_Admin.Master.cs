@@ -11,7 +11,12 @@ namespace Golf2
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (Session["golfid"] == Session[""])
+            {
+                Response.Redirect("index.aspx");
+            }
+            else
+                Inloggat_ID.Text = Session["golfid"].ToString();
         }
     }
 }

@@ -4,13 +4,13 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title></title>
+    <title>Hålslaget GK</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+        <link rel="stylesheet" type="text/css" href="Scorekort.css" />
     <link href="https://fonts.googleapis.com/css?family=Righteous|Roboto" rel="stylesheet"/>
     <link rel="stylesheet" href="stylesheet1.css"/>      
     <link rel="stylesheet" href="BookingStyleSheet.css"/>     
@@ -55,7 +55,8 @@
 							<div class="col-md-12">
 								 <div class="form" role="form" id="login-nav">
                                      		<p>Ändra dina uppgifter:</p>								<div class="form-group">
-                                         <button type="button"  class="btn btn-primary btn-block" id="settings"> <span class="glyphicon glyphicon-cog" id=""></span>  Inställningar</button>
+                                         <%--<button type="button"  class="btn btn-primary btn-block" id="settings"> <span class="glyphicon glyphicon-cog" id=""></span>  Inställningar</button>--%>
+                                        <asp:Button ID="settings" runat="server" OnClick="settings_Click" CssClass="btn btn-primary btn-block glyphicon glyphicon-cog" Text="Inställningar"></asp:Button>
 										</div>
                                      
                                            <hr class="small"/>

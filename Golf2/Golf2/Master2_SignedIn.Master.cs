@@ -25,5 +25,13 @@ namespace Golf2
             Session["golfid"] = Session[""];
             Response.Redirect("index.aspx");
         }
+
+        protected void settings_Click(object sender, EventArgs e)
+        {
+            if (!Convert.ToString(Session["golfid"]).Contains("_"))
+            {
+                Response.Redirect("Admin.aspx");
+            }
+        }
     }
 }

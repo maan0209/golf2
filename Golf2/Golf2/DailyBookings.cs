@@ -17,7 +17,7 @@ namespace Golf2
         /// </summary>
         public DailyBookings(DateTime date)
         {
-            GetTodaysBookingTimes();
+            GetTodaysBookingTimes(date);
             GetTodaysBookings(date);
         }
 
@@ -33,22 +33,40 @@ namespace Golf2
 
         /// <summary>
         /// Hämtar alla tider ifrån databasen som är möjliga att boka
-        /// utifrån ett angivet datum. Skapar en lista med dessa tider
-        /// i publika listvariabeln AvailableBookingTimes.
+        /// utifrån ett angivet datum samt om det ligger inom ramen för när banan är öppen/stängd. 
+        /// Skapar en lista med dessa tider i publika listvariabeln AvailableBookingTimes.
+        /// 
+        /// Är det angivna datumet utanför ramen av öppen/stängd bana blir listan tom.
         /// 
         /// ########## OBS!! INJECTION EJ FIXAT ########## 
         /// 
         /// </summary>
         /// <param name="date"></param>
-        private void GetTodaysBookingTimes()
+        private void GetTodaysBookingTimes(DateTime date)
         {
-            string sql = "SELECT time from bookingtime WHERE active = 'true' ORDER BY time ASC;";
+            string sql1 = "SELECT startdate, enddate FROM course WHERE courseid = '1'";
             table = new DataTable();                    // skapar ny instans av table eftersom den används flera ggr i denna klass
-            ToolBox.SQL_NonParam(sql, ref table);       // metoden i ToolBox uppdaterar variabeln table direkt.
-
-            foreach (DataRow row in table.Rows)
+            ToolBox.SQL_NonParam(sql1, ref table);       // metoden i ToolBox uppdaterar variabeln table direkt.
+            
+            if (table.Rows.Count != 0)
             {
-                AvailableBookingTimes.Add(Convert.ToString(row["time"]));
+                DateTime startDate = Convert.ToDateTime(table.Rows[0]["startdate"]);
+                DateTime endDate = Convert.ToDateTime(table.Rows[0]["startdate"]);
+                if (date >= startDate && date <= endDate)
+                {
+                    string sql2 = "SELECT time from bookingtime WHERE active = 'true' ORDER BY time ASC;";
+                    table = new DataTable();                    // skapar ny instans av table eftersom den används flera ggr i denna klass
+                    ToolBox.SQL_NonParam(sql2, ref table);       // metoden i ToolBox uppdaterar variabeln table direkt.
+
+                    // hantera tom tabell
+                    if (table.Rows.Count != 0)
+                    {
+                        foreach (DataRow row in table.Rows)
+                        {
+                            AvailableBookingTimes.Add(Convert.ToString(row["time"]));
+                        }
+                    }
+                }
             }
         }
 
@@ -63,7 +81,7 @@ namespace Golf2
         /// <param name="date"></param>
         private void GetTodaysBookings(DateTime date)
         {
-            string sql = "SELECT booking.bookingid, course.coursename, booking.bookingdate, bookingtime.time, person.golfid, person.hcp, person.gender, person.firstname, person.surname FROM PERSON ";
+            string sql = "SELECT booking.owner, booking.bookingid, course.coursename, booking.bookingdate, bookingtime.time, person.golfid, person.hcp, person.gender, person.firstname, person.surname FROM PERSON ";
             sql += "RIGHT JOIN included ON person.golfid = included.golfid ";
             sql += "JOIN booking ON included.bookingid = booking.bookingid ";
             sql += "JOIN course ON booking.courseid = booking.courseid ";
@@ -77,6 +95,7 @@ namespace Golf2
             {
                 newBooking = new Booking();
 
+                newBooking.Owner = row["owner"].ToString();
                 newBooking.BookingId = (int)row["bookingid"];
                 newBooking.CourseName = (string)row["coursename"];
                 newBooking.BookingDate = Convert.ToDateTime(row["bookingdate"]); 

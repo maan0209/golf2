@@ -127,6 +127,7 @@
     <Content Include="BookingStyleSheet.css" />
     <Content Include="Index.aspx" />
     <Content Include="inloggad.aspx" />
+    <Content Include="Mail.aspx" />
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -144,6 +145,7 @@
   <ItemGroup>
     <Content Include="Home.aspx" />
     <Content Include="printpage.aspx" />
+    <Content Include="Scorekort.css" />
     <Content Include="scripts.js" />
     <Content Include="StyleSheet1.css" />
     <Content Include="Web.config" />
@@ -186,6 +188,13 @@
     </Compile>
     <Compile Include="inloggad.aspx.designer.cs">
       <DependentUpon>inloggad.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Mail.aspx.cs">
+      <DependentUpon>Mail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Mail.aspx.designer.cs">
+      <DependentUpon>Mail.aspx</DependentUpon>
     </Compile>
     <Compile Include="Master1.Master.cs">
       <DependentUpon>Master1.Master</DependentUpon>

@@ -29,11 +29,65 @@
     height: 100%;
 }
 
+/* Formaterar visning av om banan är stängd */
+.closedCourse {
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-top: 10%;
+    background-color: firebrick;
+    color: white;
+    height: 10%;
+    border-radius: 10px;
+}
+
+.courseIsClosed {
+    text-align: center;
+}
+
+.centerTheText {
+    height: 30%;
+    width: 70%;
+    display: inline-block;
+    margin-top: 15%;
+    margin-bottom: auto;
+}
+
+
 /* Formaterar lediga bokningsbara platser i en modal */
 
 .aBookableSpot {
     width:31%;
     display: inline-block;
+}
+
+.aBookableSpotInput {
+    width:41%;
+    display: inline-block;
+}
+
+.aBookableSpotReserve {
+    width:21%;
+    display: inline-block;
+}
+
+.autoReservationLoggedInUser {
+    background-color:aquamarine;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: thin;
+}
+
+.bookedSpot {
+    background-color:lightcyan;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: thin;
+}
+
+.autoReservationLoggedInUser, p {
+    text-align:center;
 }
 
 /* Formaterar boxarna för bokningsbara tider*/

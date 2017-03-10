@@ -76,7 +76,7 @@ namespace Golf2
         /// <param name="timeid"></param>
         /// <param name="bookingdate"></param>
         /// <returns></returns>
-        public int SQLBooking(string sql, int timeid, DateTime bookingdate)
+        public int SQLBooking(string sql, int timeid, DateTime bookingdate, string owner)
         {
             try
             {
@@ -85,6 +85,7 @@ namespace Golf2
                 cmd.Parameters.AddWithValue("bookingdate", bookingdate);
                 cmd.Parameters.AddWithValue("courseid", "'1'");
                 cmd.Parameters.AddWithValue("timeid", timeid);
+                cmd.Parameters.AddWithValue("owner", owner);
 
                 int bookingid = Convert.ToInt32(cmd.ExecuteScalar());
                 conn.Close();

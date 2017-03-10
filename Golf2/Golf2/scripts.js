@@ -14,6 +14,7 @@ $(function () {
             var processedDate = formatTheDate(anyDate);
             var updateDate = document.getElementById('cdate');
             updateDate.innerHTML = processedDate;
+       
     });
 
     /* Ändrar datumet en dag bakåt i tiden */
@@ -115,9 +116,9 @@ function reservation(elementName, golfidElementName, confirmButton, r, reservati
 
 
 
-    /* Trycker man på 'stäng' så rensas alla reserverationer - allt återställs */
+    /* Trycker man på 'stäng' så rensas alla reserverationer - förutom den som automatiskt bokas för den inloggade */
 function clearAllReservations(elementName, reservationButton, confirmButton) {
-    for (var i = 0; i < 4; i++) {
+    for (var i = 1; i < 4; i++) {
         var whichElementToChange = document.getElementById(elementName + i);
         whichElementToChange.innerHTML = 'Ledig plats';
         document.getElementById(reservationButton + i).value = "Reservera";
@@ -125,4 +126,85 @@ function clearAllReservations(elementName, reservationButton, confirmButton) {
     };
     document.getElementById(confirmButton).setAttribute("currBookingTime", "");
 };
+
+//Hitta positon för där ny tee läggs till och lägger till ny kolumn i Scorekortet 
+
+function Table2() {
+
+    $('#Table3').find('tr').each(function () {
+        $(this).find('td').eq(1).after('<td>cell 1a</td>')
+    });
+
+};
+// Hitta positon för där ny tee läggs till och lägger till ny kolumn i Scorekortet + sparar hur många kolumner som lagts till 
+function Table3() {
+
+    var varde;
+
+    if (sessionStorage.getItem("kolumn") == null || sessionStorage.getItem("kolumn") == 0) {
+        sessionStorage.setItem("kolumn", 1);
+        varde = sessionStorage.getItem("kolumn");
+        var hamtaknapp = document.getElementById('deleteknapp')
+        hamtaknapp.disabled = false;
+    }
+    else {
+        varde = sessionStorage.getItem("kolumn");
+        varde++;
+        sessionStorage.setItem("kolumn", varde);
+    }
+
+    var t = $('#Tee').attr("colspan");
+    t++;
+
+    $('#Tee').attr("colspan", t)
+    $('#Table2').find('tr').eq(1).find('td').eq(0).after('<td>cell 1a</td>');
+    Table2();
+    Table4();
+};
+
+
+function Table4() {
+
+    $('#Table4').find('tr').each(function () {
+        $(this).find('td').eq(1).after('<td>cell 1a</td>')
+    });
+};
+
+// Tar bort Tees om man ångrat sig 
+
+function Delete() {
+
+    var t = $('#Tee').attr("colspan");
+    t--;
+
+    $('#Tee').attr("colspan", t);
+    $('#Table2').find('tr').eq(1).find('td').eq(1).remove();
+
+    $('#Table4').find('tr').each(function () {
+        $(this).find('td').eq(2).remove()
+    });
+
+    var varde = sessionStorage.getItem("kolumn");
+    varde--;
+    sessionStorage.setItem("kolumn", varde);
+
+    if (sessionStorage.getItem("kolumn") == 0) {
+        var hamtaknapp = document.getElementById('deleteknapp')
+        hamtaknapp.disabled = true
+    }
+
+    Delete2();
+};
+
+
+
+
+function Delete2() {
+
+    $('#Table3').find('tr').each(function () {
+        $(this).find('td').eq(2).remove()
+
+    });
+};
+
 

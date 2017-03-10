@@ -1,0 +1,77 @@
+﻿#div{
+
+display: block;
+    margin: auto;
+    width: 58%;
+}
+
+#Hål{
+	text-align:center;	
+	width: 5%;
+}
+
+#Gul{
+	text-align:center;
+	background: yellow;
+	width: 5%;
+}
+
+#Röd{
+	text-align:center;
+	background: red;
+	width: 5%;
+}
+
+#Par{
+	text-align:center;
+	width: 5%;
+}
+
+#Index{
+	text-align:center;
+
+	width: 5%;
+}
+#l{
+	width: 50.5%;
+}
+#r{
+	width: 25%;
+}
+#t{
+	width: 25%;
+}
+#Score{
+	width: 4%;
+}
+
+#Erh{
+	width: 4%;
+	
+}
+#Gir{
+	width: 4%;
+}	
+#Putt{
+	width: 4%;
+		
+}
+#Fw{
+	width: 4%;
+	
+}
+
+#Resultat{
+	width: 30%;
+    text-align:left;
+}
+
+#hej{
+
+      text-align:left;
+}
+
+#left{
+
+          text-align:left;
+}

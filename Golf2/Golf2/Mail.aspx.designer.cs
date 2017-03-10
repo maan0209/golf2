@@ -10,69 +10,69 @@
 namespace Golf2 {
     
     
-    public partial class Master1 {
+    public partial class Mail {
         
         /// <summary>
-        /// head control.
+        /// form1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder head;
+        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// myPage control.
+        /// toTbx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl myPage;
+        protected global::System.Web.UI.WebControls.TextBox toTbx;
         
         /// <summary>
-        /// test control.
+        /// fromTbx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm test;
+        protected global::System.Web.UI.WebControls.TextBox fromTbx;
         
         /// <summary>
-        /// golf_id control.
+        /// subjectTbx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox golf_id;
+        protected global::System.Web.UI.WebControls.TextBox subjectTbx;
         
         /// <summary>
-        /// password control.
+        /// bodyTbx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox password;
+        protected global::System.Web.UI.WebControls.TextBox bodyTbx;
         
         /// <summary>
-        /// Log_In control.
+        /// sendBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton Log_In;
+        protected global::System.Web.UI.WebControls.Button sendBtn;
         
         /// <summary>
-        /// ContentPlaceHolder1 control.
+        /// Status control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder ContentPlaceHolder1;
+        protected global::System.Web.UI.WebControls.Label Status;
     }
 }
