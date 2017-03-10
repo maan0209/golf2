@@ -481,7 +481,7 @@ namespace Golf2
                 }
             }
 
-            bool isUnique = IsGolfidUnique(cb, guestcount);
+            bool isUnique = IsGolfidUnique(cb, guestcount, isadmin);
             
             if (guestcount > 1 && isadmin == false) 
             {
@@ -498,7 +498,8 @@ namespace Golf2
 
             if (validdate == false || moreguests == true || doublecheck == true || isUnique == false)
             {
-                Response.Write("<script>alert('" + Convert.ToString(Session["error"]) + "')</script>");
+                bookingAlertFail.Visible = true;
+                bookingAlertFail.InnerText = Session["error"].ToString();
             }
             else
             {
@@ -531,7 +532,8 @@ namespace Golf2
                     p.SQLbooking2(sql, item, bookingid);
                 }
 
-                Response.Write("<script>alert('Bokningen lyckades. Golf's up')</script>");
+                bookingAlertsuccess.Visible = true;
+                bookingAlertsuccess.InnerText = "Bokningen lyckades!";
             }
         }
 
@@ -615,7 +617,7 @@ namespace Golf2
         /// </summary>
         /// <param name="cb"></param>
         /// <returns></returns>
-        private bool IsGolfidUnique(BindingList<string> cb, int guestcount)
+        private bool IsGolfidUnique(BindingList<string> cb, int guestcount, bool isadmin)
         {
 
             if (guestcount <= 1)
@@ -635,7 +637,7 @@ namespace Golf2
             else
             {
                 int distinct = cb.Count() - cb.Distinct().Count();
-                if (guestcount == distinct)
+                if (guestcount == distinct || isadmin == true)
                 {
                     return true;
                 }

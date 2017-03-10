@@ -4,6 +4,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     
+
     <div class="container">
             <h1>Bokningsschema</h1><br />
             <div id="DisplayChangeDay" runat="server">
@@ -19,6 +20,9 @@
                 </div>
             
             </div>
+            
+        <div id="bookingAlertFail" runat="server" class="alert alert-danger text-center" visible="false" role="alert"></div>
+        <div id="bookingAlertsuccess" runat="server" class="alert alert-success text-center" visible="false" role="alert"></div>
 
             <!-- Bokningsschemat printas ut här-->
             <div id="DisplayBookingSchedule" runat="server">       
