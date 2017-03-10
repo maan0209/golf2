@@ -58,6 +58,12 @@ $(function () {
         return yyyymmdd;
     };
 
+    $("button span").each(function () {
+        if (this.Text === 'Ångra') {
+            $(this).css("background-color", "red")
+            $(this).css("color", "white")
+        }
+    });
 });
 
 /* Används för att trigga en postback*/
@@ -101,6 +107,11 @@ function reservation(elementName, golfidElementName, confirmButton, r, reservati
         var cButton = document.getElementById(confirmButton);
         cButton.attributes["reservation" + r].value = "";
         document.getElementById(reservationButton).value = "Reservera";
+        var buttonID = elementName.toString() + "guestButton" + r.toString();
+        document.getElementById(buttonID).disabled = false;
+        document.getElementById(buttonID).style.color = 'black'
+
+        
     }
     else {
         var golfid = document.getElementById(golfidElementName).value;
@@ -110,11 +121,46 @@ function reservation(elementName, golfidElementName, confirmButton, r, reservati
             cButton.attributes["reservation" + r].value = golfid;
             document.getElementById(reservationButton).value = "Ångra";
             document.getElementById(confirmButton).setAttribute("currBookingTime", "");
+            var buttonID = elementName.toString() + "guestButton" + r.toString();
+            var b = document.getElementById(buttonID);
+            document.getElementById(buttonID).disabled = true;
+            document.getElementById(buttonID).style.color = 'lightgray'
+
         }
     }
 };
 
-
+/* reserverar en plats för en gäst */
+/* reservationGuest(<id <p>-tag i modal>, <fakebuttonknappens id>, <index för rad i modal>, <id för reserveringsknapp>) */
+function reservationGuest(elementName, fakeSenderButton, r, reservationButton) {
+    var whichElementToChange = document.getElementById(elementName);
+    whichElementToChange.innerHTML = 'Reserverad för gäst';
+    var cButton = document.getElementById(fakeSenderButton);
+    cButton.attributes["reservation" + r].value = "000";
+    document.getElementById(reservationButton).value = "Ångra";
+    var buttonID = elementName.toString() + "guestButton" + r.toString();
+    document.getElementById(buttonID).disabled = true;
+    document.getElementById(buttonID).style.color = 'lightgray'
+    
+    
+    /*
+    if (whichElementToChange.innerHTML != 'Ledig plats') {
+        whichElementToChange.innerHTML = 'Ledig plats';
+        var cButton = document.getElementById(fakeSenderButton);
+        cButton.attributes["reservation" + r].value = "";
+        document.getElementById(reservationButton).value = "Reservera";
+    }
+    else {
+        var golfid = document.getElementById(golfidElementName).value;
+        if (golfid != "") {
+            whichElementToChange.innerHTML = 'Reserverad för: ' + golfid.toString();
+            var cButton = document.getElementById(fakeSenderButton);
+            cButton.attributes["reservation" + r].value = golfid;
+            document.getElementById(reservationButton).value = "Ångra";
+            document.getElementById(fakeSenderButton).setAttribute("currBookingTime", "");
+        }
+    }*/
+};
 
     /* Trycker man på 'stäng' så rensas alla reserverationer - förutom den som automatiskt bokas för den inloggade */
 function clearAllReservations(elementName, reservationButton, confirmButton) {
@@ -126,6 +172,11 @@ function clearAllReservations(elementName, reservationButton, confirmButton) {
     };
     document.getElementById(confirmButton).setAttribute("currBookingTime", "");
 };
+
+
+
+
+
 
 //Hitta positon för där ny tee läggs till och lägger till ny kolumn i Scorekortet 
 
