@@ -79,6 +79,13 @@
     border-width: thin;
 }
 
+.bookedSpot {
+    background-color:lightcyan;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: thin;
+}
+
 .autoReservationLoggedInUser, p {
     text-align:center;
 }
