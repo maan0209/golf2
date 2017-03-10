@@ -43,7 +43,8 @@ namespace Golf2
             {
                 GenerateCourseIsClosed();
             }
-            
+
+
 
         }
 
@@ -379,9 +380,9 @@ namespace Golf2
         private void ConfirmBooking(BindingList<string> cb)
         {
 
-            //spara och ta bort sista elementet (time) ur listan från "Bekräfta"-knappen
-            string timeHHMM = cb.Last();
+            string timeHHMM = cb.Last();    //spara och ta bort sista elementet (time) ur listan från "Bekräfta"-knappen
             cb.RemoveAt(cb.Count - 1);
+
 
             Postgress p = new Postgress();
             bool isadmin = true;
@@ -390,16 +391,18 @@ namespace Golf2
                 isadmin = false;
             }
             
-            bool bookingvalid = BookingValidDate();
-            //bool bookinghcp = BookingHcp(hcp, hcp2, hcp3, hcp4); //beräkna handikapp hanteras i gränssnittet
-            //bool bookingguests = Guests(totalguests); // gäster hanteras för närvarande inte
+            bool validdate = BookingValidDate();
             bool checkbooking = false;
             bool doublecheck = false;
+            bool moreguests = false;
+            int guestcount = 0;
 
-
-            foreach (string item in cb) //Loopa igenom listan med golfids och sätt true om personen finns
-                                        //doublecheck för att värdet inte ska skrivas över i loopen
-            {
+            foreach (string item in cb) //Loopa igenom listan med golfids och sätt true om personen finns, 
+            {                           //doublecheck för att värdet inte ska skrivas över i loopen
+                if (item == "Gäst")     //kontrollerar antal gäster
+                {
+                    guestcount++;
+                }
                 checkbooking = CheckBooking(item);
 
                 if (checkbooking == true)
@@ -408,21 +411,30 @@ namespace Golf2
                 }
             }
 
+            bool isUnique = IsGolfidUnique(cb, guestcount);
             
-            if (isadmin == true) // om adminstatus finns, hoppa över filter
+            if (guestcount > 1 && isadmin == false) 
             {
-                bookingvalid = false;
-                checkbooking = false; 
+                moreguests = true;
+                Session["error"] = "Bokningen är inte genomförd. Max 1 gäst per boll får anmälas";
             }
 
-            if (bookingvalid || /*bookinghcp || bookingguests ||*/ doublecheck == true)
+
+            if (isadmin == true) // om adminstatus finns, hoppa över filter
             {
-                    //ingen bokning
+                validdate = true;
+                doublecheck = false;
+            }
+
+            if (validdate == false || moreguests == true || doublecheck == true || isUnique == false)
+            {
+                Response.Write("<script>alert('" + Convert.ToString(Session["error"]) + "')</script>");
             }
             else
             {
                 int timeid = Convert.ToInt32(GetTimeID(timeHHMM));
                 DateTime dt = Convert.ToDateTime(Session["NextDay"]);
+                string owner = Convert.ToString(Session["golfid"]);
                 int bookingid = 0;
 
                 string sql ="SELECT bookingid " +
@@ -434,11 +446,11 @@ namespace Golf2
 
                 if (exists == 0) // om det inte redan finns bokade på samma tid samma dag
                 {
-                    sql = "INSERT INTO booking (bookingdate, courseid, timeid) " +
-                        "VALUES(@bookingdate, '1', @timeid) " +
+                    sql = "INSERT INTO booking (bookingdate, courseid, timeid, owner) " +
+                        "VALUES(@bookingdate, '1', @timeid, @owner) " +
                         "RETURNING bookingid AS integer";
 
-                    bookingid = p.SQLBooking(sql, timeid, dt);
+                    bookingid = p.SQLBooking(sql, timeid, dt, owner);
                 }
 
                 foreach (string item in cb) //loopa igenom listan med golfids och lägg till givet bookingid
@@ -449,6 +461,7 @@ namespace Golf2
                     p.SQLbooking2(sql, item, bookingid);
                 }
 
+                Response.Write("<script>alert('Bokningen lyckades. Golf's up')</script>");
             }
         }
 
@@ -464,7 +477,7 @@ namespace Golf2
 
             if (DateTime.Today > bookingexpiry.Date)
             {
-                Session["error"] = "Tider får bokas max 30 dagar framåt";
+                Session["error"] = "Bokningen är inte genomförd. Tider får bokas max 30 dagar framåt";
                 return false;
             }
 
@@ -478,7 +491,6 @@ namespace Golf2
         /// <returns></returns>
         private bool CheckBooking(string golfid)
         {
-
             string sql = "SELECT booking.bookingid, booking.bookingdate " +
                         "FROM booking " +
                         "INNER JOIN included ON included.bookingid = booking.bookingid " +
@@ -498,11 +510,10 @@ namespace Golf2
 
             if (contains == true)
             {
-                Session["error"] = "Denna person har redan en bokad tid idag!";
+                Session["error"] = "Bokningen är inte genomförd. En person i bollen har redan en bokad tid samma dag!";
                 return true;
             }
             else { return false; }
-
         }
 
         /// <summary>
@@ -512,7 +523,6 @@ namespace Golf2
         /// <returns></returns>
         private int GetTimeID(string bookingtime)
         {
-
             TimeSpan bt = TimeSpan.Parse(bookingtime += ":00");
 
             string sql = "SELECT timeid FROM bookingtime WHERE time = '" + bt + "'";
@@ -527,75 +537,43 @@ namespace Golf2
             }
             
             return timeid;
-
         }
 
-
         /// <summary>
-        /// Kontroll om totalt handicap är under 120 (HANTERAS I UI?)
+        /// Kontrollerar att inte samma golfid har angivits flera gånger i samma boll vid bokning
         /// </summary>
-        /// <param name="hcp"></param>
-        /// <param name="hcp2"></param>
-        /// <param name="hcp3"></param>
-        /// <param name="hcp4"></param>
-        /// <returns>true/false</returns>
-        //private bool BookingHcp(double hcp, double hcp2, double hcp3, double hcp4)
-        //{
-        //    int totalhcp = Convert.ToInt32(hcp + hcp2 + hcp3 + hcp4);
-        //    int maxhcp = 120;
-
-        //    if (totalhcp >= maxhcp)
-        //    {
-        //        Session["error"] = "För högt totalt Handicap (" + totalhcp + ")";
-        //        return false;
-        //    }
-
-        //    return true;
-        //}
-
-        /// <summary>
-        /// Kontroll om det är fler än 1 gäst i bollen (HANTERAS I UI?)
-        /// </summary>
+        /// <param name="cb"></param>
         /// <returns></returns>
-        //private bool Guests(int totalguests)
-        //{
+        private bool IsGolfidUnique(BindingList<string> cb, int guestcount)
+        {
 
-        //    if (totalguests > 1)
-        //    {
-        //        Session["error"] = "Max 1 gäst per boll får anmälas";
-        //        return false;
-        //    }
+            if (guestcount <= 1)
+            {
+                if (cb.Distinct().Count() == cb.Count())
+                {
 
-        //    return true;
-        //}
+                    return true;
+                }
+                else
+                {
+                    Session["error"] = "Bokningen är inte genomförd. Golfid kan endast anmälas en gång per dag";
+                    return false;
+                }
 
+            }
+            else
+            {
+                int distinct = cb.Count() - cb.Distinct().Count();
+                if (guestcount == distinct)
+                {
+                    return true;
+                }
+                Session["error"] = "Bokningen är inte genomförd. Antalet gäster stämmer inte";
+                return false;
+            }
+        }
+        
 
-        //OnClickEvents för att byta till föregående dag
-
-        /// <summary>
-        /// Hämtar namet utifrån angivet golfid i bokning (HANTERAS I UI?)
-        /// </summary>
-        /// <param name="golfid"></param>
-        /// <returns></returns>
-        //private string GetNameBooking(string golfid)
-        //{
-
-        //    string sql = "SELECT firstname, surname, hcp FROM person WHERE golfid =" + golfid;
-
-        //    table = new DataTable();
-        //    ToolBox.SQL_NonParam(sql, ref table);
-        //    Person person = new Person();
-
-        //    foreach (DataRow row in table.Rows)
-        //    {
-
-        //        person.FirstName = (string)row["firstname"];
-        //        person.SurName = (string)row["surname"];
-        //        person.Hcp = Math.Round(Convert.ToDouble(row["hcp"]), 1);
-
-        //    }
-        //    return person.FirstName + " " + person.SurName + ": HCP: " + person.Hcp;
-        //}
 
         #region ############ EVENT HANDLERS HÄR ############ 
         /// <summary>
