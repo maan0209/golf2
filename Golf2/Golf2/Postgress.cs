@@ -161,6 +161,49 @@ namespace Golf2
 
 
 
+
+        public void SQLUpdateSeasonDates(DateTime Startdate, DateTime Enddate)
+        {
+            try {
+                string sql = "UPDATE course SET startdate = @Startdate, enddate = @Enddate";
+
+            cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("Startdate", Startdate);
+            cmd.Parameters.AddWithValue("Enddate", Enddate);
+            cmd.ExecuteNonQuery();
+            }
+            catch(NpgsqlException ex)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+
+        public void SQLInsertSeasonDates (DateTime Startdate, DateTime Enddate)
+        {
+            try
+            {
+            string sql = "INSERT INTO course(startdate, enddate) VALUES (@Startdate, @Enddate)";
+
+            cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("Startdate", Startdate);
+            cmd.Parameters.AddWithValue("Enddate", Enddate);
+            }
+            catch(NpgsqlException ex)
+            {
+
+            }
+            finally
+            {
+            conn.Close();
+            }
+        }
+
+
         //public DataTable getaccount(string user, string pass)
         //{
         //    string sql = "select * from account where golfid = '" + user + "' AND password = '" +pass+"'";
@@ -169,10 +212,10 @@ namespace Golf2
         //    dr = cmd.ExecuteReader();
 
         //    return table;
-            
-           
-            
-           
+
+
+
+
 
 
         //}

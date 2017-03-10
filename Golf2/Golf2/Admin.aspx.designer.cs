@@ -22,13 +22,13 @@ namespace Golf2 {
         protected global::System.Web.UI.WebControls.Calendar Calendar1;
         
         /// <summary>
-        /// valtStartdatum control.
+        /// lblStartdatum control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label valtStartdatum;
+        protected global::System.Web.UI.WebControls.Label lblStartdatum;
         
         /// <summary>
         /// Calendar2 control.
@@ -40,13 +40,13 @@ namespace Golf2 {
         protected global::System.Web.UI.WebControls.Calendar Calendar2;
         
         /// <summary>
-        /// valtSlutdatum control.
+        /// lblSlutdatum control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label valtSlutdatum;
+        protected global::System.Web.UI.WebControls.Label lblSlutdatum;
         
         /// <summary>
         /// saveSeason control.

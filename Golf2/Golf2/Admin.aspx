@@ -12,22 +12,22 @@
 
     <div class="col-sm-4" id="kalendersektion">
         <p>Säsongsstart:</p>
-     <asp:Calendar ID="Calendar1" runat="server" Height="100%" Width="100%"></asp:Calendar>
+     <asp:Calendar ID="Calendar1" runat="server" OnSelectionChanged="Calendar1_SelectionChanged" Height="100%" Width="100%"></asp:Calendar>
         <p>Valt datum:</p>
-        <asp:Label ID="valtStartdatum" runat="server" Text="Label"></asp:Label>
+        <asp:Label ID="lblStartdatum" runat="server" Text="Label"></asp:Label>
 
     </div>
 
     <div class="col-sm-4" id="kalendersektion">
         <p>Säsongsslut:</p>
-        <asp:Calendar ID="Calendar2" runat="server" Height="100%" Width="100%"></asp:Calendar>
+        <asp:Calendar ID="Calendar2" runat="server" OnSelectionChanged="Calendar2_SelectionChanged" Height="100%" Width="100%"></asp:Calendar>
         <p>Valt datum:</p>
-        <asp:Label ID="valtSlutdatum" runat="server" Text="Label"></asp:Label>
+        <asp:Label ID="lblSlutdatum" runat="server" Text="Label"></asp:Label>
 
     </div>  
   </div>
 
-    <asp:LinkButton ID="saveSeason" CssClass="btnadmin" Font-Underline="false" runat="server">Spara säsongsdatum</asp:LinkButton>
+    <asp:LinkButton ID="saveSeason" CssClass="btnadmin" Font-Underline="false" OnClick="saveSeason_Click" runat="server">Spara säsongsdatum</asp:LinkButton>
 
          <hr class="small">
 
