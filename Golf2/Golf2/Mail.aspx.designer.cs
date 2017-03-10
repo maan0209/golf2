@@ -10,96 +10,69 @@
 namespace Golf2 {
     
     
-    public partial class Admin {
+    public partial class Mail {
         
         /// <summary>
-        /// Calendar1 control.
+        /// form1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Calendar Calendar1;
+        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// lblStartdatum control.
+        /// toTbx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblStartdatum;
+        protected global::System.Web.UI.WebControls.TextBox toTbx;
         
         /// <summary>
-        /// Calendar2 control.
+        /// fromTbx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Calendar Calendar2;
+        protected global::System.Web.UI.WebControls.TextBox fromTbx;
         
         /// <summary>
-        /// lblSlutdatum control.
+        /// subjectTbx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSlutdatum;
+        protected global::System.Web.UI.WebControls.TextBox subjectTbx;
         
         /// <summary>
-        /// saveSeason control.
+        /// bodyTbx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton saveSeason;
+        protected global::System.Web.UI.WebControls.TextBox bodyTbx;
         
         /// <summary>
-        /// open control.
+        /// sendBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label open;
+        protected global::System.Web.UI.WebControls.Button sendBtn;
         
         /// <summary>
-        /// openhour control.
+        /// Status control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList openhour;
-        
-        /// <summary>
-        /// close control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label close;
-        
-        /// <summary>
-        /// closehour control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList closehour;
-        
-        /// <summary>
-        /// setOpenClose control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton setOpenClose;
+        protected global::System.Web.UI.WebControls.Label Status;
     }
 }
