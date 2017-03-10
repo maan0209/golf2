@@ -170,12 +170,15 @@ namespace Golf2
             }
 
             int counter = 0;
+            bool userIsAlreadyBookedThisTime = false;
             foreach (Booking item in bookingsPerSpecifiedDate)                                  // loopa genom de bokningar som finns för dagen
             {
 
                 if (item.BookingTime.ToShortTimeString() == convTime.ToShortTimeString())       // reglerar att enbart aktuell tid (se aBookingTime) behandlas
                 {
-                    counter++;
+                    counter++;                                                                  // räknar hur många som redan är bokade
+                    golfIdList.Remove(item.GolfId);                                             // golfidt rensas från listan, så att man inte kan dubbelboka en person samma tid
+                    
                     HtmlGenericControl lvl04_bodyText = new HtmlGenericControl("p");
                     string bookingInfo = "";
                     bookingInfo += "Golf-id: " + item.GolfId + " - ";
@@ -185,7 +188,8 @@ namespace Golf2
                     lvl04_bodyText.InnerHtml = bookingInfo;
                     lvl04_bodyText.Attributes.Add("class", "aBookableSpot");                    // för css-formatering
                     lvl04_body.Controls.Add(lvl04_bodyText);
-                    golfIdList.Remove(item.GolfId);                                             // golfidt rensas från listan, så att man inte kan dubbelboka en person samma tid
+
+                    userIsAlreadyBookedThisTime = (item.GolfId == Session["golfid"].ToString()) ? true : false;
                 }
             }
 
@@ -199,7 +203,7 @@ namespace Golf2
                 bool isadmin = false;
                 ToolBox.checkIfUserIsAdmin(ref isadmin, golfid);
 
-                if ((4-counter) == 1 && !isadmin)
+                if ((4-counter) == 1 && !isadmin && !userIsAlreadyBookedThisTime)
                 {
                     // Här skapas visuell konfirmering om att den sista platsen automatiskt reserverats på reservation0 för bokaren
                     CreateAutomaticBookingForBooker(ref lvl04_autoReservation);
@@ -208,7 +212,7 @@ namespace Golf2
                 else
                 {
                     int startingPoint = 0;
-                    if (!isadmin)
+                    if (!isadmin && !userIsAlreadyBookedThisTime)
                     {
                         startingPoint = 1;
                         // Här skapas visuell konfirmering om att den första platsen automatiskt reserverats på reservation0 för bokaren
