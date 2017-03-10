@@ -22,7 +22,7 @@
 
             <!-- Bokningsschemat printas ut här-->
             <div id="DisplayBookingSchedule" runat="server">       
-        
+
             </div>
             <!-- Bokningsschemat printas ut här-->
     </div>

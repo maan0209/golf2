@@ -3,8 +3,26 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 
+
+
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
+<script>
+        function printpage() {
+            var getpanel = document.getElementById("<%= Scorecard.ClientID%>");
+            var MainWindow = window.open('', '', 'height=850,width=1000');
+            MainWindow.document.write('<html><head><link type="text/css" rel="stylesheet" href="Scorekort.css"/><title>Print Page</title>');
+            MainWindow.document.write('</head><body>');
+            MainWindow.document.write(getpanel.innerHTML);
+            MainWindow.document.write('</body></html>');
+            
+            MainWindow.document.close();
+            setTimeout(function(){
+                MainWindow.print();
+            }, 500);
+            return false;
+        }
+</script>
    
         <!-- Karusellen börjar här -->
     
@@ -64,8 +82,8 @@
                 <div class="col-lg-8 col-lg-offset-2 text-center">
                     <h2 class="section-heading">Kom och spela golf hos oss!</h2>                    
                     <hr class="small">
-                    <p class="text-faded">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>                    
-                    <a href="/BookingSchedule.aspx" class="btn btn-default">Boka tid</a>
+                    <p class="text-faded">Du är välkommen att besöka oss och spela golf. Du som är medlem kan logga in för att boka dina egna golfrundor. Om du saknar inloggningsuppgifter så är du välkommen att kontakta oss på Hålslaget GK så ordnar vi detta.</p>                    
+                    <!--<a href="/BookingSchedule.aspx" class="btn btn-default">Boka tid</a>-->
                 </div>
             </div>
         </div>
@@ -111,7 +129,7 @@
   <h2>Upplev vår bana i världsklass</h2>
     
   <!--Här börjar scorekortet och alla tabeller-->
-    
+<asp:Panel ID="Scorecard" runat="server">
 <div id="div">
 
       <!-- Tabell Huvet-->  
@@ -633,7 +651,6 @@
 </table> 
 
   <!-- Scorekort footern   -->
-    <div id="left">
 <table id="Table5" width="1100" border="1"> 
 <tr>
 <td id="hej">Spelhandicap</td>
@@ -645,7 +662,6 @@
 
 </tr>
 </table>
-        </div>
      
 <table id="Table6" width="1100" border="1"> 
 <tr>
@@ -656,7 +672,10 @@
 </table>
 
 </div>
-
+</asp:Panel>
+<p>
+<input type="button" value="Lägg till ny Tee" onclick="Table3()" /> <button id="deleteknapp" disabled="true" type="button" onclick="Delete()">Ta bort Tee</button><asp:Button ID="printScorecard" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/>
+</p>
 
 
  <p class="stars"><span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> </p>

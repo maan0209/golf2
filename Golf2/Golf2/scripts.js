@@ -14,6 +14,7 @@ $(function () {
             var processedDate = formatTheDate(anyDate);
             var updateDate = document.getElementById('cdate');
             updateDate.innerHTML = processedDate;
+       
     });
 
     /* Ändrar datumet en dag bakåt i tiden */
@@ -115,9 +116,9 @@ function reservation(elementName, golfidElementName, confirmButton, r, reservati
 
 
 
-    /* Trycker man på 'stäng' så rensas alla reserverationer - allt återställs */
+    /* Trycker man på 'stäng' så rensas alla reserverationer - förutom den som automatiskt bokas för den inloggade */
 function clearAllReservations(elementName, reservationButton, confirmButton) {
-    for (var i = 0; i < 4; i++) {
+    for (var i = 1; i < 4; i++) {
         var whichElementToChange = document.getElementById(elementName + i);
         whichElementToChange.innerHTML = 'Ledig plats';
         document.getElementById(reservationButton + i).value = "Reservera";
@@ -205,3 +206,5 @@ function Delete2() {
 
     });
 };
+
+
