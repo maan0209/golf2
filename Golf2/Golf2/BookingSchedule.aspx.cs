@@ -38,7 +38,9 @@ namespace Golf2
                 Button1.Visible = true;
             }
 
-            bool isCourseClosed = GenerateBookingSchedule();   // aspx validation postback, server control <-- läs på
+            // genererar bokningsschemat, gör först en kontroll på om banan är öppen
+            // Är den inte det, så genereras ett meddelande att den är stängd
+            bool isCourseClosed = GenerateBookingSchedule();   
             if (isCourseClosed)
             {
                 GenerateCourseIsClosed();
@@ -271,15 +273,16 @@ namespace Golf2
                         lvl04_reserveFreeSpotButton.Attributes.Add("type", "button");
                         lvl04_reserveFreeSpotButton.Attributes.Add("value", "Reservera");
                         lvl04_reserveFreeSpotButton.Attributes.Add("class", "aBookableSpotReserve");       // för css-formatering
-                        lvl04_reserveFreeSpotButton.Attributes.Add("onclick", "reservation(\'" + convTime.ToShortTimeString() + i.ToString() + "\', \'" + convTime.ToShortTimeString() + "searchMembers" + i + "\', \'" + "ContentPlaceHolder1_fakeSenderButton" + "\', \'" + i + "\', \'" + convTime.ToShortTimeString() + "resereve" + i + "\')");
+                        lvl04_reserveFreeSpotButton.Attributes.Add("onclick", "reservation(\'" + convTime.ToShortTimeString() + i.ToString() + "\', \'" + convTime.ToShortTimeString() + "searchMembers" + i + "\', \'" + "ContentPlaceHolder1_fakeSenderButton" + "\', \'" + i + "\', \'" + convTime.ToShortTimeString() + "resereve" + i + "\', \'" + isadmin + "\')");
 
                         // "snabbknapp" för gästbokning
                         HtmlGenericControl lvl04_bookAGuest = new HtmlGenericControl("input");
                         lvl04_bookAGuest.Attributes.Add("type", "button");
                         lvl04_bookAGuest.Attributes.Add("id", convTime.ToShortTimeString() + i.ToString()+"guestButton" + i.ToString());
                         lvl04_bookAGuest.Attributes.Add("value", "Boka en gäst");
-                        // onclick="<id för vilken <p>-tag som skall ändras>, <fakebuttonknappens id>, <index för rad i modal>, <index för reserveringsknapp>)
-                        lvl04_bookAGuest.Attributes.Add("onclick", "reservationGuest(\'" + convTime.ToShortTimeString() + i.ToString() + "\', \'" + "ContentPlaceHolder1_fakeSenderButton" + "\', \'" + i + "\', \'" + convTime.ToShortTimeString() + "resereve" + i + "\')");
+
+                        // Förklaring på onclick: ="<id för vilken <p>-tag som skall ändras>, <fakebuttonknappens id>, <index för rad i modal>, <index för reserveringsknapp>, <bool för om nuvarande användare är admin> )
+                        lvl04_bookAGuest.Attributes.Add("onclick", "reservationGuest(\'" + convTime.ToShortTimeString() + i.ToString() + "\', \'" + "ContentPlaceHolder1_fakeSenderButton" + "\', \'" + i + "\', \'" + convTime.ToShortTimeString() + "resereve" + i + "\', \'"+ isadmin +"\')");
 
                         // sökbart textfält för medlemmar
                         HtmlGenericControl searchGolfMember = new HtmlGenericControl("input");
@@ -313,7 +316,9 @@ namespace Golf2
                 
             }
 
-
+            bool isAdmin = false;
+            ToolBox.checkIfUserIsAdmin(ref isAdmin, Session["golfid"].ToString());
+            
             HtmlGenericControl lvl04_footer = new HtmlGenericControl("div");
             lvl04_footer.Attributes.Add("class", "modal-footer");
 
