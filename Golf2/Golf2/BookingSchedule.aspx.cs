@@ -46,8 +46,12 @@ namespace Golf2
                 GenerateCourseIsClosed();
             }
 
-
-
+            if (isadmin == true && isCourseClosed == false)
+            {
+                DisplayCheckIns.Attributes.Add("visible", "true");
+                GenerateCheckinList(anyDate);
+            }
+          
         }
 
         /// <summary>
@@ -72,9 +76,11 @@ namespace Golf2
 
         #region ########## FIELDS ########## 
 
+        private Postgress p = new Postgress();
         private DataTable table;
         private DateTime anyDate;
         int co = 0;
+        private bool isadmin;
 
         #endregion
 
@@ -480,13 +486,10 @@ namespace Golf2
             string timeHHMM = cb.Last();    //spara och ta bort sista elementet (time) ur listan från "Bekräfta"-knappen
             cb.RemoveAt(cb.Count - 1);
 
-
-            Postgress p = new Postgress();
             bool isadmin = false;
             ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
             
-            
-            
+
             bool validdate = BookingValidDate();
             bool checkbooking = false;
             bool doublecheck = false;
@@ -550,7 +553,7 @@ namespace Golf2
                     bookingid = p.SQLBooking(sql, timeid, dt, owner);
                 }
 
-                foreach (string item in cb) //loopa igenom listan med golfids och lägg till givet bookingid
+                foreach (string item in cb) //loopa igenom listan med golfids och lägg till givet bookingid för varje
                 {
                     sql ="INSERT INTO included (bookingid, golfid) " +
                          "VALUES (@bookingid, @golfid)";
@@ -648,7 +651,7 @@ namespace Golf2
 
             if (guestcount <= 1)
             {
-                if (cb.Distinct().Count() == cb.Count())
+                if (cb.Distinct().Count() == cb.Count())    //Jämför antalet unika golfid mot totalt antal golfid i listan
                 {
 
                     return true;
@@ -662,16 +665,50 @@ namespace Golf2
             }
             else
             {
-                int distinct = cb.Count() - cb.Distinct().Count();
-                if (guestcount == distinct || isadmin == true)
+                int distinct = cb.Count() - cb.Distinct().Count();  // om antalet inte går ihop
+                if (guestcount == distinct || isadmin == true)     
                 {
                     return true;
                 }
+
                 Session["error"] = "Bokningen är inte genomförd. Antalet gäster stämmer inte";
                 return false;
             }
         }
-        
+
+
+        private void GenerateCheckinList(DateTime date)
+        {
+            
+            List<string> TodaysBookings = new List<string>();
+            ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
+
+            string sql = "SELECT person.firstname, person.surname, bookingtime.time, booking.bookingid, booking.owner " +
+                        "FROM included " +
+                        "INNER JOIN person ON person.golfid = included.golfid " +
+                        "INNER JOIN booking ON booking.bookingid = included.bookingid " +
+                        "INNER JOIN bookingtime ON bookingtime.timeid = booking.timeid " +
+                        "WHERE bookingdate = @date " +
+                        "ORDER BY booking.timeid ASC";
+
+            table = new DataTable();
+            ToolBox.SQL_NonParam(sql, ref table);
+
+            HtmlGenericControl ListGroup = new HtmlGenericControl("ul");
+            ListGroup.Attributes.Add("id", "ListGroup");
+            ListGroup.Attributes.Add("class", "list-group");
+
+            foreach (DataRow item in table.Rows)
+            {
+                HtmlGenericControl List = new HtmlGenericControl("li");
+                ListGroup.Controls.Add(List);
+                
+                
+            }
+            DisplayCheckIns.Controls.Add(ListGroup);
+        }
+
+
 
 
         #region ############ EVENT HANDLERS HÄR ############ 

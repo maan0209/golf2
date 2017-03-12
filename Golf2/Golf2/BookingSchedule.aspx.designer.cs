@@ -67,6 +67,24 @@ namespace Golf2 {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl DisplayBookingSchedule;
         
         /// <summary>
+        /// TodaysBookings control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl TodaysBookings;
+        
+        /// <summary>
+        /// DisplayCheckIns control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl DisplayCheckIns;
+        
+        /// <summary>
         /// fakeSenderButton control.
         /// </summary>
         /// <remarks>
