@@ -392,7 +392,7 @@ namespace Golf2
             if (counter != 4)
             {
 
-                HtmlGenericControl lvl04_footerButton02 = new HtmlGenericControl("div");
+                HtmlGenericControl lvl04_footerButton02 = new HtmlGenericControl("input");
                 lvl04_footerButton02.Attributes.Add("class", "btn btn-primary");
                 lvl04_footerButton02.Attributes.Add("Value", "Bekräfta");
                 lvl04_footerButton02.Attributes.Add("id", "Confirm" + convTime.ToShortTimeString());    // knappens id, för identifiering via javascript
