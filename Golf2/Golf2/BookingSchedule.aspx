@@ -27,19 +27,14 @@
 
             <!-- Bokningsschemat printas ut här-->
             <div id="DisplayBookingSchedule" runat="server">       
+                
+                
 
             </div>
             <!-- Bokningsschemat printas ut här-->
-
-        <!-- incheckningsfunktionen visas här för personal/admin -->
-        <div class="panel panel-default" runat="server" visible ="false">
-          <div class="panel-heading" id="TodaysBookings" runat="server" visible ="false">Dagens Bokningar</div>
-            <div class="panel-body" id="DisplayCheckIns" runat="server" visible="false"></div>
-        
-        <%--<asp:Table class="table-responsive" ID="CheckingTable" runat="server" visible="false"></asp:Table>--%>
         </div>
-
-    </div>
+        
+        
 
 
         
