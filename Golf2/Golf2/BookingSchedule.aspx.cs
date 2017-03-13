@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using System.ComponentModel;
 using System.Web.UI.HtmlControls;
 using System.Data;
+using System.Web.Services;
+using System.Configuration;
 
 namespace Golf2
 {
@@ -698,22 +700,41 @@ namespace Golf2
 
 
         /// <summary>
+        /// Checkar in/ut en spelare
+        /// </summary>
+        /// <param name="includedid"></param>
+        /// <param name="statusToChangeTo"></param>
+        /// <returns></returns>
+        [System.Web.Services.WebMethod]
+        public static string TogglePlayerCheckin(string includedid, string statusToChangeTo)
+        {
+            string sql = "UPDATE included ";
+            sql += "SET checkedin = "+ Convert.ToBoolean(statusToChangeTo) +" ";
+            sql += "WHERE includedid = '" + Convert.ToInt32(includedid) + "'; ";
+
+            string resultMessage = "";
+            // ändra status för 
+            ToolBox.SQL_NonParamCommand(sql, ref resultMessage);
+            return resultMessage;
+        }
+
+        /// <summary>
         /// Genererar en incheckningslista
         /// </summary>
         /// <param name="date"></param>
         private void GenerateCheckinList(DateTime date)
         {
-            
-            List<string> TodaysBookings = new List<string>();
-            ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
 
-            string sql = "SELECT person.firstname, person.surname, bookingtime.time, booking.bookingid, booking.owner " +
-                        "FROM included " +
-                        "INNER JOIN person ON person.golfid = included.golfid " +
-                        "INNER JOIN booking ON booking.bookingid = included.bookingid " +
-                        "INNER JOIN bookingtime ON bookingtime.timeid = booking.timeid " +
-                        "WHERE bookingdate = '" + anyDate + "'" + 
-                        "ORDER BY booking.timeid ASC";
+            //List<string> TodaysBookings = new List<string>();
+            //ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
+
+            string sql = "SELECT person.golfid, person.firstname, person.surname, booking.bookingdate, bookingtime.time, included.bookingid, booking.owner, included.checkedin, included.includedid ";
+            sql += "FROM included ";
+            sql += "INNER JOIN person ON person.golfid = included.golfid ";
+            sql += "INNER JOIN booking ON booking.bookingid = included.bookingid ";
+            sql += "INNER JOIN bookingtime ON bookingtime.timeid = booking.timeid ";
+            sql += "WHERE bookingdate = '" + anyDate + "' ";
+            sql += "ORDER BY booking.timeid ASC;";
 
             table = new DataTable();
             ToolBox.SQL_NonParam(sql, ref table);
@@ -724,8 +745,77 @@ namespace Golf2
 
             foreach (DataRow item in table.Rows)
             {
+                
+                string concatenatedString ="";
+
+                //kontrollerar om det är ett gästkonto och filtrerar bort onödig info isf.
+                if (item["golfid"].ToString() == "Gäst")
+                {
+                    concatenatedString = "Golfid: " + item["golfid"].ToString() + " ";
+                }
+                else
+                {
+                    concatenatedString = "Golfid: " + item["golfid"].ToString() + ", ";
+                    concatenatedString += item["FirstName"].ToString() + " " + item["SurName"].ToString() + " ";
+                }
+
+                // kontrollerar incheckningsstatus
+                HtmlGenericControl checkinDiv = new HtmlGenericControl("div");
+                checkinDiv.Attributes.Add("class", "checkInStatus");
+                checkinDiv.Attributes.Add("id", "chStatus" + item["includedid"].ToString());
+                if (Convert.ToBoolean(item["checkedin"]))
+                {
+                    checkinDiv.InnerHtml = "Incheckad";
+                    checkinDiv.Style.Add("background-color", "lightgreen");
+                }
+                else
+                {
+                    checkinDiv.InnerHtml = "Ej incheckad";
+                    checkinDiv.Style.Add("background-color", "lightgray");
+                }
+
+
                 HtmlGenericControl List = new HtmlGenericControl("li");
-                List.InnerHtml = "hej";
+
+                HtmlGenericControl teeTime = new HtmlGenericControl("div");
+                teeTime.Attributes.Add("class", "teeTimeInfo");
+                teeTime.InnerHtml = "Starttid: " + item["time"].ToString();
+
+                HtmlGenericControl bookedByInfo = new HtmlGenericControl("div");
+                bookedByInfo.Attributes.Add("class", "bookedByInfo");
+                bookedByInfo.InnerHtml = "bokad av " + item["owner"].ToString();
+
+                HtmlGenericControl listInfo = new HtmlGenericControl("div");
+                listInfo.InnerHtml = concatenatedString;
+                listInfo.Attributes.Add("class", "checkInInfo");
+                
+
+                HtmlGenericControl newButton = new HtmlGenericControl("input");
+                newButton.Attributes.Add("class", "checkInButton");
+                if (!Convert.ToBoolean(item["checkedin"]))
+                {
+                    newButton.Attributes.Add("value", "Checka in");
+                    newButton.Attributes.Add("checkedin", "false");
+                }
+                else
+                {
+                    newButton.Attributes.Add("value", "Ångra");
+                    newButton.Attributes.Add("checkedin", "true");
+                }
+                
+                newButton.Attributes.Add("golfid", item["golfid"].ToString());
+                newButton.Attributes.Add("type", "button");
+                newButton.Attributes.Add("id", "bookedTee" + item["includedid"].ToString());
+                
+                //förklaring på onclick: <aktuell bokad spelares golfid>, <speltid>, <datum>, <PK i included-tabell>
+                newButton.Attributes.Add("onclick", "togglePlayerCheckin(\'" + item["golfid"].ToString() + "\', \'" + item["time"].ToString() + "\', \'" + item["bookingdate"].ToString() +"\', \'" + item["includedid"].ToString() + "\')");
+
+                List.Controls.Add(listInfo);
+                List.Controls.Add(teeTime);
+                List.Controls.Add(bookedByInfo);
+                List.Controls.Add(checkinDiv);
+                List.Controls.Add(newButton);
+
                 ListGroup.Controls.Add(List);
                 
 

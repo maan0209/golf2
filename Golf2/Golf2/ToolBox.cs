@@ -28,9 +28,24 @@ namespace Golf2
             newPostgress = new Postgress();
             answerTable = newPostgress.sqlquestion(sql);
         }
+
+        /// <summary>
+        /// Databasanrop som ej använder parametrar
+        ///     1. Tar emot en string och en ref av datatyp string
+        ///     2. Ropar på databasen och skickar iväg sql-kommando
+        ///     3. Tar emot ett "ok" från Postgres om allt gick väl, alternativt ett felmeddelande
+        ///     4. Skickar vidare tillbaka meddelandet genom ref-variabeln
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="resultMessage"></param>
+        public static void SQL_NonParamCommand(string sql, ref string resultMessage)
+        {
+            newPostgress = new Postgress();
+            resultMessage = newPostgress.SqlNonQuery(sql);
+        }
         #endregion
 
-        #region ############### SQL OPERATIONS ###############
+        #region ############### OTHER ###############
         /// <summary>
         /// Tar emot ett golfid och kontrollerar om den är en admin. 
         /// 1. Returnerar false om det inte är en admin 
