@@ -208,26 +208,69 @@ namespace Golf2
             }
         }
 
-
-        public void SQLInsertSeasonDates (DateTime Startdate, DateTime Enddate)
+        public void ShowSeasondates(DateTime Startdate, DateTime Enddate)
         {
             try
             {
-            string sql = "INSERT INTO course(startdate, enddate) VALUES (@Startdate, @Enddate)";
+                string sql = "SELECT startdate, enddate FROM course"; 
 
-            cmd = new NpgsqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("Startdate", Startdate);
-            cmd.Parameters.AddWithValue("Enddate", Enddate);
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("Startdate", Startdate);
+                cmd.Parameters.AddWithValue("Enddate", Enddate);
+
+                NpgsqlDataReader dr = cmd.ExecuteReader();
+
             }
-            catch(NpgsqlException ex)
+            catch (NpgsqlException ex)
             {
-
             }
             finally
             {
-            conn.Close();
+                conn.Close();
             }
-        }
+        } 
+
+
+        //public void SQLInsertSeasonDates (DateTime Startdate, DateTime Enddate)
+        //{
+        //    try
+        //    {
+        //    string sql = "INSERT INTO course(startdate, enddate) VALUES (@Startdate, @Enddate)";
+
+        //    cmd = new NpgsqlCommand(sql, conn);
+        //    cmd.Parameters.AddWithValue("Startdate", Startdate);
+        //    cmd.Parameters.AddWithValue("Enddate", Enddate);
+        //    }
+        //    catch(NpgsqlException ex)
+        //    {
+
+        //    }
+        //    finally
+        //    {
+        //    conn.Close();
+        //    }
+        //}
+
+
+        //public DataTable getseasondates(DateTime Startdate, DateTime Enddate)
+        //{
+        //        string sql = "SELECT startdate AND enddate FROM course";
+
+        //        cmd = new NpgsqlCommand(sql, conn);
+        //        dr = cmd.ExecuteReader();
+
+        //    return table;
+        //    }
+        //}
+
+
+
+
+
+
+
+
+
 
 
         //public DataTable getaccount(string user, string pass)
