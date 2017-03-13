@@ -59,6 +59,7 @@
 .aBookableSpot {
     width:31%;
     display: inline-block;
+    vertical-align: text-bottom;
 }
 
 .freeSpot {
@@ -104,9 +105,19 @@
 }
 
 .bookingOptionsContainer{
-    width: 69%;
+    width: 60%;
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: text-bottom;
+}
+
+.bookingCounter {
+    display: inline-block;
+    width: 30px;
+    background: black;
+    color: white;
+    margin-right: 2px;
+    vertical-align: text-bottom;
+    border-radius: 15px;
 }
 
 .reserveSpotButton {

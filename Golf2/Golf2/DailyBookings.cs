@@ -51,7 +51,7 @@ namespace Golf2
             if (table.Rows.Count != 0)
             {
                 DateTime startDate = Convert.ToDateTime(table.Rows[0]["startdate"]);
-                DateTime endDate = Convert.ToDateTime(table.Rows[0]["startdate"]);
+                DateTime endDate = Convert.ToDateTime(table.Rows[0]["enddate"]);
                 if (date >= startDate && date <= endDate)
                 {
                     string sql2 = "SELECT time from bookingtime WHERE active = 'true' ORDER BY time ASC;";
