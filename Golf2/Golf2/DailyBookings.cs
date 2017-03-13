@@ -99,9 +99,8 @@ namespace Golf2
                 newBooking.BookingId = (int)row["bookingid"];
                 newBooking.CourseName = (string)row["coursename"];
                 newBooking.BookingDate = Convert.ToDateTime(row["bookingdate"]); 
-                newBooking.BookingTime = Convert.ToDateTime(row["time"].ToString()); 
-                             
-                
+                newBooking.BookingTime = Convert.ToDateTime(row["time"].ToString());
+                newBooking.checkedIn = Convert.ToBoolean(row["checkedin"]);
                 newBooking.GolfId = (string)row["golfid"];
                 newBooking.Gender = (string)row["gender"];
                 newBooking.FirstName = (string)row["firstname"];

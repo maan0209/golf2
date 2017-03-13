@@ -697,6 +697,10 @@ namespace Golf2
         }
 
 
+        /// <summary>
+        /// Genererar en incheckningslista
+        /// </summary>
+        /// <param name="date"></param>
         private void GenerateCheckinList(DateTime date)
         {
             
@@ -728,7 +732,7 @@ namespace Golf2
             }
 
 
-
+            // OBS! gamla koden som låg i BookingSchedule.aspx 170313
             //< div class="panel panel-default" id="panelIdTodaysBookings" runat="server" visible="true">
             //    <div class="panel-heading" id="TodaysBookings" runat="server" visible="true">Dagens Bokningar</div>
             //    <div class="panel-body" id="DisplayCheckIns" runat="server" visible="true"></div>
