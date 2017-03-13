@@ -4,6 +4,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     
+
     <div class="container">
             <h1>Bokningsschema</h1><br />
             <div id="DisplayChangeDay" runat="server">
@@ -19,13 +20,26 @@
                 </div>
             
             </div>
+            
+        <!-- Osynliga Alertfält som visas som Fail/Success efter man tryckt på "Bekräfta" -->
+        <div class="alert alert-danger text-center" id="bookingAlertFail" runat="server" visible="false" role="alert"></div>
+        <div class="alert alert-success text-center" id="bookingAlertsuccess" runat="server" visible="false" role="alert"></div>
 
             <!-- Bokningsschemat printas ut här-->
             <div id="DisplayBookingSchedule" runat="server">       
+                
+                
 
             </div>
             <!-- Bokningsschemat printas ut här-->
-    </div>
+        </div>
+        
+        
+
+
+        
+
+
     <!-- Denna knapp används för att trigga postback då man tryckt på bekräfta bokning                                              -->
     <asp:Button ID="fakeSenderButton" runat="server" OnCommand="fakeSenderButton_Command" CommandArgument="" text="" reservation0="" reservation1="" reservation2="" reservation3="" currBookingTime="" style="visibility:hidden"/>
     

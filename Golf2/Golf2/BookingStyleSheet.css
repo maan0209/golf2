@@ -10,7 +10,7 @@
     margin-left: auto;
     margin-right: auto;
     width: 60%;
-    height: 1200px;
+    height: 500px;
 }
 
 .body{
@@ -55,11 +55,18 @@
 }
 
 
-/* Formaterar lediga bokningsbara platser i en modal */
-
+/* Formaterar bokningsplatser i en modal */
 .aBookableSpot {
     width:31%;
     display: inline-block;
+    vertical-align: text-bottom;
+}
+
+.freeSpot {
+    background-color:lightgray;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: thin;
 }
 
 .aBookableSpotInput {
@@ -72,11 +79,22 @@
     display: inline-block;
 }
 
-.autoReservationLoggedInUser {
+.currMemberIsBooked {
     background-color:aquamarine;
     border-radius: 5px;
     border-style: solid;
     border-width: thin;
+}
+
+.autoReservationLoggedInUser {
+    background-color:blanchedalmond;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: thin;
+}
+
+.autoReservationLoggedInUser, p {
+    text-align:center;
 }
 
 .bookedSpot {
@@ -86,8 +104,24 @@
     border-width: thin;
 }
 
-.autoReservationLoggedInUser, p {
-    text-align:center;
+.bookingOptionsContainer{
+    width: 60%;
+    display: inline-block;
+    vertical-align: text-bottom;
+}
+
+.bookingCounter {
+    display: inline-block;
+    width: 30px;
+    background: black;
+    color: white;
+    margin-right: 2px;
+    vertical-align: text-bottom;
+    border-radius: 15px;
+}
+
+.reserveSpotButton {
+
 }
 
 /* Formaterar boxarna för bokningsbara tider*/
@@ -149,7 +183,7 @@
 
     background-color: darkseagreen;
     width: 98%;
-    height: 10%; 
+    height: 20%; 
 }
 
 

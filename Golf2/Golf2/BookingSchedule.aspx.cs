@@ -38,14 +38,20 @@ namespace Golf2
                 Button1.Visible = true;
             }
 
-            bool isCourseClosed = GenerateBookingSchedule();   // aspx validation postback, server control <-- läs på
+            // genererar bokningsschemat, gör först en kontroll på om banan är öppen
+            // Är den inte det, så genereras ett meddelande att den är stängd
+            bool isCourseClosed = GenerateBookingSchedule();   
             if (isCourseClosed)
             {
                 GenerateCourseIsClosed();
             }
 
-
-
+            ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
+            if (isadmin == true && isCourseClosed == false)
+            {
+                GenerateCheckinList(anyDate);
+            }
+          
         }
 
         /// <summary>
@@ -70,9 +76,11 @@ namespace Golf2
 
         #region ########## FIELDS ########## 
 
+        private Postgress p = new Postgress();
         private DataTable table;
         private DateTime anyDate;
         int co = 0;
+        private bool isadmin;
 
         #endregion
 
@@ -101,9 +109,9 @@ namespace Golf2
             {
                 HtmlGenericControl aBooking = new HtmlGenericControl("div");
 
-                CreateButtonContent(ref aBooking, aBookingTime, ShowBookings.BookingsPerSpecifiedDate);
+                CreateButtonContent(ref aBooking, aBookingTime, ShowBookings.BookingsPerSpecifiedDate); // skapar bokningsboxarna
 
-                CreateModalPopups(aBookingTime, ShowBookings.BookingsPerSpecifiedDate, ref newModals);
+                CreateModalPopups(aBookingTime, ShowBookings.BookingsPerSpecifiedDate, ref newModals); // skapar modalspopuperna
 
                 Schedule.Controls.Add(aBooking);
             }
@@ -171,23 +179,36 @@ namespace Golf2
 
             int counter = 0;
             bool userIsAlreadyBookedThisTime = false;
+            bool createdDivForAlreadyBookedUserCreated = false;
             foreach (Booking item in bookingsPerSpecifiedDate)                                  // loopa genom de bokningar som finns för dagen
             {
 
                 if (item.BookingTime.ToShortTimeString() == convTime.ToShortTimeString())       // reglerar att enbart aktuell tid (se aBookingTime) behandlas
                 {
                     counter++;                                                                  // räknar hur många som redan är bokade
+
+                    HtmlGenericControl counterDiv = new HtmlGenericControl("div");
+                    counterDiv.Attributes.Add("class", "bookingCounter");
+                    HtmlGenericControl bookingCounter = new HtmlGenericControl("p");
+                    bookingCounter.InnerHtml = counter.ToString();
+                    counterDiv.Controls.Add(bookingCounter);
+
                     golfIdList.Remove(item.GolfId);                                             // golfidt rensas från listan, så att man inte kan dubbelboka en person samma tid
-                    userIsAlreadyBookedThisTime = (item.GolfId == Session["golfid"].ToString()) ? true : false;
+                    if (item.GolfId == Session["golfid"].ToString())
+                    {
+                        userIsAlreadyBookedThisTime = true;
+                    }
+                     
 
                     HtmlGenericControl lvl04_bodyTextDiv = new HtmlGenericControl("div");
                     HtmlGenericControl lvl04_bodyText = new HtmlGenericControl("p");
                     string bookingInfo = "";
                     // för css-formatering
-                    if (userIsAlreadyBookedThisTime)
+                    if (userIsAlreadyBookedThisTime && !createdDivForAlreadyBookedUserCreated)
                     {
                         bookingInfo = "Du är inbokad på denna plats";
-                        lvl04_bodyTextDiv.Attributes.Add("class", "aBookableSpot autoReservationLoggedInUser");                 
+                        lvl04_bodyTextDiv.Attributes.Add("class", "aBookableSpot currMemberIsBooked");
+                        createdDivForAlreadyBookedUserCreated = true;
                     }
                     else
                     {
@@ -201,7 +222,7 @@ namespace Golf2
 
 
 
-
+                    lvl04_body.Controls.Add(counterDiv);                // bokningsräknare tillagd
 
                     lvl04_bodyTextDiv.Controls.Add(lvl04_bodyText);
                     lvl04_body.Controls.Add(lvl04_bodyTextDiv);
@@ -228,71 +249,102 @@ namespace Golf2
                 bool isadmin = false;
                 ToolBox.checkIfUserIsAdmin(ref isadmin, golfid);
 
-                if ((4-counter) == 1 && !isadmin && !userIsAlreadyBookedThisTime)
+                if (!isadmin && !userIsAlreadyBookedThisTime)
                 {
-                    // Här skapas visuell konfirmering om att den sista platsen automatiskt reserverats på reservation0 för bokaren
+                    counter++;
+                    HtmlGenericControl counterDiv = new HtmlGenericControl("div");
+                    counterDiv.Attributes.Add("class", "bookingCounter");
+                    HtmlGenericControl bookingCounter = new HtmlGenericControl("p");
+                    bookingCounter.InnerHtml = (counter).ToString();
+                    counterDiv.Controls.Add(bookingCounter);
+
+                    // Här reserveras den första platsen automatiskt på attribut reservation0 för bokaren
                     CreateAutomaticBookingForBooker(ref lvl04_autoReservation);
+                    lvl04_body.Controls.Add(counterDiv);
                     lvl04_body.Controls.Add(lvl04_autoReservation);
                 }
-                else
+
+                for (int i = 0; i < 4-counter; i++)   // reservation1, reservation2 och reservation3 kan endast bokas för andra
                 {
-                    int startingPoint = 0;
-                    if (!isadmin && !userIsAlreadyBookedThisTime)
+                    HtmlGenericControl counterDiv = new HtmlGenericControl("div");
+                    counterDiv.Attributes.Add("class", "bookingCounter");
+                    HtmlGenericControl bookingCounter = new HtmlGenericControl("p");
+                    bookingCounter.InnerHtml = (counter + i + 1).ToString();
+
+
+                    counterDiv.Controls.Add(bookingCounter);
+
+                    // container för alla controls nedan
+                    HtmlGenericControl lvl04_openBooking = new HtmlGenericControl("div");
+
+                    // text som indikerar att en ledig plats finns att boka
+                    HtmlGenericControl lvl04_bodyTextContainerDiv = new HtmlGenericControl("div");
+                    lvl04_bodyTextContainerDiv.Attributes.Add("class", "aBookableSpot freeSpot");                    // för css-formatering
+                    HtmlGenericControl lvl04_bodyText = new HtmlGenericControl("p");
+                    lvl04_bodyText.InnerHtml = "Ledig plats";
+                    lvl04_bodyText.Attributes.Add("id", convTime.ToShortTimeString() + i.ToString());
+                    lvl04_bodyText.Attributes.Add("isReserved", "false");
+                        
+
+                    // container för gästbokningsknapp + och reservation/ångra-knapp 
+                    HtmlGenericControl lvl04_bookingOptionsContainer = new HtmlGenericControl("div");
+                    lvl04_bookingOptionsContainer.Attributes.Add("class", "bookingOptionsContainer");
+
+                    // knapp för att reservera/ångra reservation
+                    HtmlGenericControl lvl04_reserveFreeSpotButton = new HtmlGenericControl("input");
+                    lvl04_reserveFreeSpotButton.Attributes.Add("id", convTime.ToShortTimeString() + "resereve" + i);
+                    lvl04_reserveFreeSpotButton.Attributes.Add("class", "btn btn-primary reserveSpotButton");
+                    lvl04_reserveFreeSpotButton.Attributes.Add("type", "button");
+                    lvl04_reserveFreeSpotButton.Attributes.Add("value", "Reservera");
+                    lvl04_reserveFreeSpotButton.Attributes.Add("class", "aBookableSpotReserve");       // för css-formatering
+                    lvl04_reserveFreeSpotButton.Attributes.Add("onclick", "reservation(\'" + convTime.ToShortTimeString() + i.ToString() + "\', \'" + convTime.ToShortTimeString() + "searchMembers" + i + "\', \'" + "ContentPlaceHolder1_fakeSenderButton" + "\', \'" + i + "\', \'" + convTime.ToShortTimeString() + "resereve" + i + "\', \'" + isadmin + "\')");
+
+                    // "snabbknapp" för gästbokning
+                    HtmlGenericControl lvl04_bookAGuest = new HtmlGenericControl("input");
+                    lvl04_bookAGuest.Attributes.Add("type", "button");
+                    lvl04_bookAGuest.Attributes.Add("id", convTime.ToShortTimeString() + i.ToString()+"guestButton" + i.ToString());
+                    lvl04_bookAGuest.Attributes.Add("value", "Boka en gäst");
+
+                    // Förklaring på onclick: ="<id för vilken <p>-tag som skall ändras>, <fakebuttonknappens id>, <index för rad i modal>, <index för reserveringsknapp>, <bool för om nuvarande användare är admin> )
+                    lvl04_bookAGuest.Attributes.Add("onclick", "reservationGuest(\'" + convTime.ToShortTimeString() + i.ToString() + "\', \'" + "ContentPlaceHolder1_fakeSenderButton" + "\', \'" + i + "\', \'" + convTime.ToShortTimeString() + "resereve" + i + "\', \'"+ isadmin +"\')");
+
+                    // sökbart textfält för medlemmar
+                    HtmlGenericControl searchGolfMember = new HtmlGenericControl("input");
+                    searchGolfMember.Attributes.Add("id", convTime.ToShortTimeString() + "searchMembers" + i);
+                    searchGolfMember.Attributes.Add("type", "text");
+                    searchGolfMember.Attributes.Add("list", convTime.ToShortTimeString() + "searchMembersList" + i);
+                    searchGolfMember.Attributes.Add("class", "aBookableSpotInput");                  // för css-formatering
+
+                    // sökunderlaget för ovan sökbara textfält
+                    HtmlGenericControl golfMembersList = new HtmlGenericControl("datalist");
+                    golfMembersList.Attributes.Add("id", convTime.ToShortTimeString() + "searchMembersList" + i);
+                    foreach (string item in golfIdList)
                     {
-                        startingPoint = 1;
-                        // Här skapas visuell konfirmering om att den första platsen automatiskt reserverats på reservation0 för bokaren
-                        CreateAutomaticBookingForBooker(ref lvl04_autoReservation);
-                        lvl04_body.Controls.Add(lvl04_autoReservation);
+                        HtmlGenericControl searchOptionsInList = new HtmlGenericControl("option");
+                        searchOptionsInList.Attributes.Add("value", item.ToString());
+                        golfMembersList.Controls.Add(searchOptionsInList);
                     }
-                    
 
-                    for (int i = startingPoint; i < 4 - counter; i++)   // reservation1, reservation2 och reservation3 kan endast bokas för andra
-                    {
-                        HtmlGenericControl lvl04_openBooking = new HtmlGenericControl("div");
-                        HtmlGenericControl lvl04_bodyText = new HtmlGenericControl("p");
-                        lvl04_bodyText.InnerHtml = "Ledig plats";
-                        lvl04_bodyText.Attributes.Add("class", "aBookableSpot");                    // för css-formatering
-                        lvl04_bodyText.Attributes.Add("id", convTime.ToShortTimeString() + i.ToString());
-                        lvl04_bodyText.Attributes.Add("isReserved", "false");
-                        lvl04_openBooking.Controls.Add(lvl04_bodyText);
+                    lvl04_openBooking.Controls.Add(counterDiv);
 
-                        HtmlGenericControl lvl04_reserveFreeSpotButton = new HtmlGenericControl("input");
-                        lvl04_reserveFreeSpotButton.Attributes.Add("id", convTime.ToShortTimeString() + "resereve" + i);
-                        lvl04_reserveFreeSpotButton.Attributes.Add("class", "btn btn-primary reserveSpotButton");
-                        lvl04_reserveFreeSpotButton.Attributes.Add("type", "button");
-                        lvl04_reserveFreeSpotButton.Attributes.Add("value", "Reservera");
-                        lvl04_reserveFreeSpotButton.Attributes.Add("class", "aBookableSpotReserve");       // för css-formatering
-                        lvl04_reserveFreeSpotButton.Attributes.Add("onclick", "reservation(\'" + convTime.ToShortTimeString() + i.ToString() + "\', \'" + convTime.ToShortTimeString() + "searchMembers" + i + "\', \'" + "ContentPlaceHolder1_fakeSenderButton" + "\', \'" + i + "\', \'" + convTime.ToShortTimeString() + "resereve" + i + "\')");
+                    lvl04_bodyTextContainerDiv.Controls.Add(lvl04_bodyText);
+                    lvl04_openBooking.Controls.Add(lvl04_bodyTextContainerDiv);
 
-                        // ####### LÄGG IN PLATS FÖR GÄSTBOKNING HÄR
+                    lvl04_bookingOptionsContainer.Controls.Add(lvl04_bookAGuest);
+                    lvl04_bookingOptionsContainer.Controls.Add(searchGolfMember);
+                    lvl04_bookingOptionsContainer.Controls.Add(golfMembersList);
+                    lvl04_bookingOptionsContainer.Controls.Add(lvl04_reserveFreeSpotButton);
 
-
-                        // en sökbar lista skapas
-                        HtmlGenericControl searchGolfMember = new HtmlGenericControl("input");
-                        searchGolfMember.Attributes.Add("id", convTime.ToShortTimeString() + "searchMembers" + i);
-                        searchGolfMember.Attributes.Add("type", "text");
-                        searchGolfMember.Attributes.Add("list", convTime.ToShortTimeString() + "searchMembersList" + i);
-                        searchGolfMember.Attributes.Add("class", "aBookableSpotInput");                  // för css-formatering
-
-                        HtmlGenericControl golfMembersList = new HtmlGenericControl("datalist");
-                        golfMembersList.Attributes.Add("id", convTime.ToShortTimeString() + "searchMembersList" + i);
-                        foreach (string item in golfIdList)
-                        {
-                            HtmlGenericControl searchOptionsInList = new HtmlGenericControl("option");
-                            searchOptionsInList.Attributes.Add("value", item.ToString());
-                            golfMembersList.Controls.Add(searchOptionsInList);
-                        }
-
-                        lvl04_openBooking.Controls.Add(searchGolfMember);
-                        lvl04_openBooking.Controls.Add(golfMembersList);
-                        lvl04_openBooking.Controls.Add(lvl04_reserveFreeSpotButton);
-                        lvl04_body.Controls.Add(lvl04_openBooking);
-                    }
+                    lvl04_openBooking.Controls.Add(lvl04_bookingOptionsContainer);
+                    lvl04_body.Controls.Add(lvl04_openBooking);
                 }
+                
                 
             }
 
-
+            bool isAdmin = false;
+            ToolBox.checkIfUserIsAdmin(ref isAdmin, Session["golfid"].ToString());
+            
             HtmlGenericControl lvl04_footer = new HtmlGenericControl("div");
             lvl04_footer.Attributes.Add("class", "modal-footer");
 
@@ -325,7 +377,7 @@ namespace Golf2
             if (counter != 4)
             {
 
-                HtmlGenericControl lvl04_footerButton02 = new HtmlGenericControl("input");
+                HtmlGenericControl lvl04_footerButton02 = new HtmlGenericControl("div");
                 lvl04_footerButton02.Attributes.Add("class", "btn btn-primary");
                 lvl04_footerButton02.Attributes.Add("Value", "Bekräfta");
                 lvl04_footerButton02.Attributes.Add("id", "Confirm" + convTime.ToShortTimeString());    // knappens id, för identifiering via javascript
@@ -337,7 +389,7 @@ namespace Golf2
 
 
 
-            // bygg ihop alla huvudtaggar av strukturen
+            // bygger ihop alla huvudtaggar av strukturen
             lvl03.Controls.Add(lvl04_header);
             lvl03.Controls.Add(lvl04_body);
             lvl03.Controls.Add(lvl04_footer);
@@ -345,7 +397,8 @@ namespace Golf2
             lvl01.Controls.Add(lvl02);
             newModals.Controls.Add(lvl01);
 
-            /* ######## HTML-KODEXEMPEL FÖR BOOTSTRAP MODAL ######## 
+            #region ######## HTML-KODEXEMPEL OCH STRUKTURMALL FÖR VÅR BOOTSTRAP MODAL ########
+            /*  
              * Nedan kod har testats att köras direkt i ett HTML-dokument. Används som mall för att bygga strukturen ovan.
              * 
              * <div class="span4 proj-div" data-toggle="modal" data-target="#GSCCModal"> asdfasd</div>
@@ -370,6 +423,7 @@ namespace Golf2
              * lvl01 ---> </div>
              *  Källa: http://stackoverflow.com/questions/20111219/bootstrap-modals-how-to-open-with-onclick
              */
+            #endregion
         }
 
         /// <summary>
@@ -385,8 +439,6 @@ namespace Golf2
 
             lvl04_autoReservation.Controls.Add(autoReservation);
         }
-
-
 
 
         /// <summary>
@@ -454,13 +506,10 @@ namespace Golf2
             string timeHHMM = cb.Last();    //spara och ta bort sista elementet (time) ur listan från "Bekräfta"-knappen
             cb.RemoveAt(cb.Count - 1);
 
-
-            Postgress p = new Postgress();
             bool isadmin = false;
             ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
             
-            
-            
+
             bool validdate = BookingValidDate();
             bool checkbooking = false;
             bool doublecheck = false;
@@ -481,7 +530,7 @@ namespace Golf2
                 }
             }
 
-            bool isUnique = IsGolfidUnique(cb, guestcount);
+            bool isUnique = IsGolfidUnique(cb, guestcount, isadmin);
             
             if (guestcount > 1 && isadmin == false) 
             {
@@ -498,7 +547,8 @@ namespace Golf2
 
             if (validdate == false || moreguests == true || doublecheck == true || isUnique == false)
             {
-                Response.Write("<script>alert('" + Convert.ToString(Session["error"]) + "')</script>");
+                bookingAlertFail.Visible = true;
+                bookingAlertFail.InnerText = Session["error"].ToString();
             }
             else
             {
@@ -523,7 +573,7 @@ namespace Golf2
                     bookingid = p.SQLBooking(sql, timeid, dt, owner);
                 }
 
-                foreach (string item in cb) //loopa igenom listan med golfids och lägg till givet bookingid
+                foreach (string item in cb) //loopa igenom listan med golfids och lägg till givet bookingid för varje
                 {
                     sql ="INSERT INTO included (bookingid, golfid) " +
                          "VALUES (@bookingid, @golfid)";
@@ -531,7 +581,8 @@ namespace Golf2
                     p.SQLbooking2(sql, item, bookingid);
                 }
 
-                Response.Write("<script>alert('Bokningen lyckades. Golf's up')</script>");
+                bookingAlertsuccess.Visible = true;
+                bookingAlertsuccess.InnerText = "Bokningen lyckades!";
             }
         }
 
@@ -615,12 +666,12 @@ namespace Golf2
         /// </summary>
         /// <param name="cb"></param>
         /// <returns></returns>
-        private bool IsGolfidUnique(BindingList<string> cb, int guestcount)
+        private bool IsGolfidUnique(BindingList<string> cb, int guestcount, bool isadmin)
         {
 
             if (guestcount <= 1)
             {
-                if (cb.Distinct().Count() == cb.Count())
+                if (cb.Distinct().Count() == cb.Count())    //Jämför antalet unika golfid mot totalt antal golfid i listan
                 {
 
                     return true;
@@ -634,16 +685,75 @@ namespace Golf2
             }
             else
             {
-                int distinct = cb.Count() - cb.Distinct().Count();
-                if (guestcount == distinct)
+                int distinct = cb.Count() - cb.Distinct().Count();  // om antalet inte går ihop
+                if (guestcount == distinct || isadmin == true)     
                 {
                     return true;
                 }
+
                 Session["error"] = "Bokningen är inte genomförd. Antalet gäster stämmer inte";
                 return false;
             }
         }
-        
+
+
+        private void GenerateCheckinList(DateTime date)
+        {
+            
+            List<string> TodaysBookings = new List<string>();
+            ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
+
+            string sql = "SELECT person.firstname, person.surname, bookingtime.time, booking.bookingid, booking.owner " +
+                        "FROM included " +
+                        "INNER JOIN person ON person.golfid = included.golfid " +
+                        "INNER JOIN booking ON booking.bookingid = included.bookingid " +
+                        "INNER JOIN bookingtime ON bookingtime.timeid = booking.timeid " +
+                        "WHERE bookingdate = '" + anyDate + "'" + 
+                        "ORDER BY booking.timeid ASC";
+
+            table = new DataTable();
+            ToolBox.SQL_NonParam(sql, ref table);
+
+            HtmlGenericControl ListGroup = new HtmlGenericControl("ul");
+            ListGroup.Attributes.Add("id", "ListGroup");
+            ListGroup.Attributes.Add("class", "list-group");
+
+            foreach (DataRow item in table.Rows)
+            {
+                HtmlGenericControl List = new HtmlGenericControl("li");
+                List.InnerHtml = "hej";
+                ListGroup.Controls.Add(List);
+                
+
+            }
+
+
+
+            //< div class="panel panel-default" id="panelIdTodaysBookings" runat="server" visible="true">
+            //    <div class="panel-heading" id="TodaysBookings" runat="server" visible="true">Dagens Bokningar</div>
+            //    <div class="panel-body" id="DisplayCheckIns" runat="server" visible="true"></div>
+            //</div>
+
+            HtmlGenericControl panelIdTodaysBookings = new HtmlGenericControl("div");
+            panelIdTodaysBookings.Attributes.Add("class", "panel panel-default");
+
+            HtmlGenericControl todaysBookings = new HtmlGenericControl("div");
+            todaysBookings.Attributes.Add("class","panel-heading");
+            todaysBookings.InnerHtml = "Dagens Bokningar";
+
+            HtmlGenericControl DisplayCheckIns = new HtmlGenericControl("div");
+            DisplayCheckIns.Attributes.Add("class", "panel-body");
+
+            DisplayCheckIns.Controls.Add(ListGroup);
+
+           
+            panelIdTodaysBookings.Controls.Add(todaysBookings);
+            panelIdTodaysBookings.Controls.Add(DisplayCheckIns);
+            DisplayBookingSchedule.Controls.Add(panelIdTodaysBookings);
+
+        }
+
+
 
 
         #region ############ EVENT HANDLERS HÄR ############ 
@@ -684,67 +794,13 @@ namespace Golf2
 
         protected void Button1_Click(object sender, EventArgs e)
         {
-
             // ####### 170308: ALL KOD FÖR ATT ÄNDRA DATUM HANTERAS ISTÄLLET PÅ CLIENT SIDE OCH FÅNGAS UPP I PAGE_LOAD
-
-
-
-            //anyDate = Convert.ToDateTime(Session["NextDay"]);
-            //if (anyDate != DateTime.Today)
-            //{
-            //    anyDate = anyDate.AddDays(-1);
-            //    Session["NextDay"] = anyDate.ToShortDateString();
-            //}
-            //GenerateBookingSchedule();
-
-
-
-            //if (anyDate.ToShortTimeString() == DateTime.Now.ToShortTimeString())
-            //{
-            //    Button1.Visible = false;
-            //    GenerateBookingSchedule();
-            //}
-
-            //else if (anyDate > DateTime.Now)
-            //{
-            //    anyDate = anyDate.AddDays(-1);
-            //    Session["NextDay"] = anyDate.ToString();
-            //    anyDate = Convert.ToDateTime(Session["NextDay"]);
-            //    GenerateBookingSchedule();
-
-            //}
         }
 
         //OnClickEvents för att byta till nästkommande dag
         protected void Button2_Click(object sender, EventArgs e)
         {
-            
-            
             // ####### 170308: ALL KOD FÖR ATT ÄNDRA DATUM HANTERAS ISTÄLLET PÅ CLIENT SIDE OCH FÅNGAS UPP I PAGE_LOAD
-
-
-
-
-            //anyDate = Convert.ToDateTime(Session["NextDay"]);
-            //anyDate = anyDate.AddDays(+1);
-            //Session["NextDay"] = anyDate.ToShortDateString();
-            //GenerateBookingSchedule();
-            //string clientSideChangeOfDate = HiddenChangeDateVariable.Value.ToString();
-
-            //Session["NextDay"] = clientSideChangeOfDate;
-
-
-            //anyDate = anyDate.AddDays(+1);
-            //if (IsPostBack)
-            //{
-            //    // anyDate = anyDate.AddDays(+1);
-
-            //    Session["NextDay"] = anyDate.ToString();
-            //    anyDate = Convert.ToDateTime(Session["NextDay"]);
-
-            //    GenerateBookingSchedule();
-            //    Button1.Visible = true;
-            //}
         }
 
 

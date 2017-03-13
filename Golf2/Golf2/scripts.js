@@ -58,6 +58,13 @@ $(function () {
         return yyyymmdd;
     };
 
+    /* sätter reservera-knappen till röd bakgrundsfärg om den får texten Ångra */
+    $("button span").each(function () {
+        if (this.Text === 'Ångra') {
+            $(this).css("background-color", "red")
+            $(this).css("color", "white")
+        }
+    });
 });
 
 /* Används för att trigga en postback*/
@@ -94,15 +101,65 @@ function fulfix(theTimeToBook) {
 }
 
 /* En reservation skapas för en ledig bokningsplats. Golfid anges */
-function reservation(elementName, golfidElementName, confirmButton, r, reservationButton) {
+function reservation(elementName, golfidElementName, confirmButton, r, reservationButton, isThisUserAnAdmin) {
     var whichElementToChange = document.getElementById(elementName);
-    if (whichElementToChange.innerHTML != 'Ledig plats') {
+    if (whichElementToChange.innerHTML != 'Ledig plats') {              /* tar bort reservation */
+        var isThisAGuestBooking = false;
+        if (whichElementToChange.innerHTML == "Reserverad för gäst") {
+            isThisAGuestBooking = true;
+        }
         whichElementToChange.innerHTML = 'Ledig plats';
         var cButton = document.getElementById(confirmButton);
         cButton.attributes["reservation" + r].value = "";
         document.getElementById(reservationButton).value = "Reservera";
+
+        /* hantering av gästknapparnas disabled/enabled-status */
+        var buttonID;
+        buttonID = elementName.toString() + "guestButton" + r.toString();
+        var eN = elementName.substring(0, 5);                           /* utelämnar indexet (sjätte tecknet) i elementName */
+        if (isThisUserAnAdmin.toString() == "True") {                   /* kollar om inloggad användare är en admin, enbart gästknapp på samma rad ska enablas */
+            console.log("användaren är en admin, endast gästknapp på samma rad ska enablas");
+            document.getElementById(buttonID).disabled = false;
+            document.getElementById(buttonID).style.color = 'black'
+        }
+        else {
+            /* medlem kan bara göra en gästbokning. När detta görs disablas alla andra gäst-knappar. 
+               För att det inte ska bli fel med enablande av knappar så kontrolleras här för medlemmar ifall 
+               detta är 'raden' där gästbokningen gjorts. Är den det, så enablas alla gästknappar. 
+               I övriga fall, lämnas gäst-knappen disablad för att fortsatt förhindra att fler gäster bokas*/
+            if (document.getElementById(buttonID).disabled == true && isThisAGuestBooking) {
+                console.log("icke-admin: raden för gästbokning avreserverades. samtliga gästknappar ska eneblas");
+                for (var i = 0; i < 4; i++) {
+                    buttonID = eN.toString() + i.toString() + "guestButton" + i.toString();
+                    if (document.getElementById(buttonID) !== null) {
+                        document.getElementById(buttonID).disabled = false;
+                        document.getElementById(buttonID).style.color = 'black'
+                    }
+                }
+            }
+            else {
+                console.log("icke-admin: kontroll om gästbokning har gjorts på någon av de andra raderna");
+                isThisAGuestBooking = false;
+                for (var i = 0; i < 4; i++) {
+                    if (document.getElementById(eN.toString() + i.toString()) !== null) {
+                        if (document.getElementById(eN.toString() + i.toString()).innerHTML == "Reserverad för gäst") {
+                            console.log("icke-admin: en kontroll gjordes för att se om bokad plats är en gästbokning.")
+                            isThisAGuestBooking = true;
+                        }
+                    }
+                }
+                console.log("Finns det en gästbokning? " + isThisAGuestBooking);
+                if (!isThisAGuestBooking) {
+                    buttonID = elementName.toString() + "guestButton" + r.toString();
+                    document.getElementById(buttonID).disabled = false;
+                    document.getElementById(buttonID).style.color = 'black'
+                }
+                
+            }
+
+        }
     }
-    else {
+    else {                                                              /* lägger till reservation */
         var golfid = document.getElementById(golfidElementName).value;
         if (golfid != "") {
             whichElementToChange.innerHTML = 'Reserverad för: ' + golfid.toString();
@@ -110,11 +167,44 @@ function reservation(elementName, golfidElementName, confirmButton, r, reservati
             cButton.attributes["reservation" + r].value = golfid;
             document.getElementById(reservationButton).value = "Ångra";
             document.getElementById(confirmButton).setAttribute("currBookingTime", "");
+            var buttonID = elementName.toString() + "guestButton" + r.toString();
+            document.getElementById(buttonID).disabled = true;
+            document.getElementById(buttonID).style.color = 'lightgray';
+
         }
     }
 };
 
+/* reserverar en plats för en gäst */
+/* reservationGuest(<id <p>-tag i modal>, <fakebuttonknappens id>, <index för rad i modal>, <id för reserveringsknapp>) */
+function reservationGuest(elementName, fakeSenderButton, r, reservationButton, isThisUserAnAdmin) {
+    var whichElementToChange = document.getElementById(elementName);
+    whichElementToChange.innerHTML = 'Reserverad för gäst';
+    var cButton = document.getElementById(fakeSenderButton);
+    cButton.attributes["reservation" + r].value = "Gäst";
+    document.getElementById(reservationButton).value = "Ångra";
 
+    
+    var eN = elementName.substring(0, 5); /* utelämnar indexet (sjätte tecknet) i elementName */
+
+    var buttonID;
+    /*begränsar en medlems möjlighet till att enbart boka 1 gäst medans personal fritt kan boka 4 gäster*/
+    if (isThisUserAnAdmin.toString() == "True") {
+        buttonID = elementName.toString() + "guestButton" + r.toString();
+        document.getElementById(buttonID).disabled = true;
+        document.getElementById(buttonID).style.color = 'lightgray'
+    }
+    else {
+        for (var i = 0; i < 4; i++) {
+            buttonID = eN.toString() + i.toString() + "guestButton" + i.toString();
+            if (document.getElementById(buttonID) !== null) {
+                document.getElementById(buttonID).disabled = true;
+                document.getElementById(buttonID).style.color = 'lightgray'
+            }
+        }
+    }
+
+};
 
     /* Trycker man på 'stäng' så rensas alla reserverationer - förutom den som automatiskt bokas för den inloggade */
 function clearAllReservations(elementName, reservationButton, confirmButton) {
@@ -125,7 +215,22 @@ function clearAllReservations(elementName, reservationButton, confirmButton) {
         document.getElementById(confirmButton).setAttribute("reservation" + i, "");
     };
     document.getElementById(confirmButton).setAttribute("currBookingTime", "");
+
+    /* tar bot disabled på alla gäst-knappar då stäng-knappen trycks ned*/
+    var buttonID;
+    for (var i = 0; i < 4; i++) {
+        buttonID = elementName.toString() + i.toString() + "guestButton" + i.toString();
+        if (document.getElementById(buttonID) !== null) {
+            document.getElementById(buttonID).disabled = false;
+            document.getElementById(buttonID).style.color = 'black';
+        }
+    }
 };
+
+
+
+
+
 
 //Hitta positon för där ny tee läggs till och lägger till ny kolumn i Scorekortet 
 
