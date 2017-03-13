@@ -83,6 +83,7 @@ namespace Golf2
         private DateTime anyDate;
         int co = 0;
         private bool isadmin;
+        private List<string> golfIdList;
 
         #endregion
 
@@ -118,8 +119,19 @@ namespace Golf2
                 Schedule.Controls.Add(aBooking);
             }
 
+            HtmlGenericControl golfMembersList = new HtmlGenericControl("datalist");
+            golfMembersList.Attributes.Add("id", "searchMembersList");
+            foreach (string item in golfIdList)
+            {
+                HtmlGenericControl searchOptionsInList = new HtmlGenericControl("option");
+                searchOptionsInList.Attributes.Add("value", item.ToString());
+                golfMembersList.Controls.Add(searchOptionsInList);
+            }
+
+
             DisplayBookingSchedule.Controls.Add(Schedule);                          // den ihopbyggda HTML-strukturen läggs in i sidan
             DisplayBookingSchedule.Controls.Add(newModals);
+            DisplayBookingSchedule.Controls.Add(golfMembersList);
 
             return isCourseClosed;                                                  // returnerar att banan är öppen
         }
@@ -169,7 +181,7 @@ namespace Golf2
             lvl04_body.Attributes.Add("class", "modal-body");
 
             // läs ut lista med golfidn
-            List<string> golfIdList = new List<string>();
+            golfIdList = new List<string>();
             string sql = "SELECT golfid FROM person;";
             table = new DataTable();
             ToolBox.SQL_NonParam(sql, ref table);
@@ -314,18 +326,19 @@ namespace Golf2
                     HtmlGenericControl searchGolfMember = new HtmlGenericControl("input");
                     searchGolfMember.Attributes.Add("id", convTime.ToShortTimeString() + "searchMembers" + i);
                     searchGolfMember.Attributes.Add("type", "text");
-                    searchGolfMember.Attributes.Add("list", convTime.ToShortTimeString() + "searchMembersList" + i);
+                    //searchGolfMember.Attributes.Add("list", convTime.ToShortTimeString() + "searchMembersList" + i);
+                    searchGolfMember.Attributes.Add("list", "searchMembersList");
                     searchGolfMember.Attributes.Add("class", "aBookableSpotInput");                  // för css-formatering
 
                     // sökunderlaget för ovan sökbara textfält
-                    HtmlGenericControl golfMembersList = new HtmlGenericControl("datalist");
-                    golfMembersList.Attributes.Add("id", convTime.ToShortTimeString() + "searchMembersList" + i);
-                    foreach (string item in golfIdList)
-                    {
-                        HtmlGenericControl searchOptionsInList = new HtmlGenericControl("option");
-                        searchOptionsInList.Attributes.Add("value", item.ToString());
-                        golfMembersList.Controls.Add(searchOptionsInList);
-                    }
+                    //HtmlGenericControl golfMembersList = new HtmlGenericControl("datalist");
+                    //golfMembersList.Attributes.Add("id", convTime.ToShortTimeString() + "searchMembersList" + i);
+                    //foreach (string item in golfIdList)
+                    //{
+                    //    HtmlGenericControl searchOptionsInList = new HtmlGenericControl("option");
+                    //    searchOptionsInList.Attributes.Add("value", item.ToString());
+                    //    golfMembersList.Controls.Add(searchOptionsInList);
+                    //}
 
                     lvl04_openBooking.Controls.Add(counterDiv);
 
@@ -334,7 +347,7 @@ namespace Golf2
 
                     lvl04_bookingOptionsContainer.Controls.Add(lvl04_bookAGuest);
                     lvl04_bookingOptionsContainer.Controls.Add(searchGolfMember);
-                    lvl04_bookingOptionsContainer.Controls.Add(golfMembersList);
+                    //lvl04_bookingOptionsContainer.Controls.Add(golfMembersList);
                     lvl04_bookingOptionsContainer.Controls.Add(lvl04_reserveFreeSpotButton);
 
                     lvl04_openBooking.Controls.Add(lvl04_bookingOptionsContainer);
