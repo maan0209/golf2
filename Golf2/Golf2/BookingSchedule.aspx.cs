@@ -46,9 +46,9 @@ namespace Golf2
                 GenerateCourseIsClosed();
             }
 
+            ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
             if (isadmin == true && isCourseClosed == false)
             {
-                DisplayCheckIns.Attributes.Add("visible", "true");
                 GenerateCheckinList(anyDate);
             }
           
@@ -109,9 +109,9 @@ namespace Golf2
             {
                 HtmlGenericControl aBooking = new HtmlGenericControl("div");
 
-                CreateButtonContent(ref aBooking, aBookingTime, ShowBookings.BookingsPerSpecifiedDate);
+                CreateButtonContent(ref aBooking, aBookingTime, ShowBookings.BookingsPerSpecifiedDate); // skapar bokningsboxarna
 
-                CreateModalPopups(aBookingTime, ShowBookings.BookingsPerSpecifiedDate, ref newModals);
+                CreateModalPopups(aBookingTime, ShowBookings.BookingsPerSpecifiedDate, ref newModals); // skapar modalspopuperna
 
                 Schedule.Controls.Add(aBooking);
             }
@@ -377,7 +377,7 @@ namespace Golf2
             if (counter != 4)
             {
 
-                HtmlGenericControl lvl04_footerButton02 = new HtmlGenericControl("input");
+                HtmlGenericControl lvl04_footerButton02 = new HtmlGenericControl("div");
                 lvl04_footerButton02.Attributes.Add("class", "btn btn-primary");
                 lvl04_footerButton02.Attributes.Add("Value", "Bekräfta");
                 lvl04_footerButton02.Attributes.Add("id", "Confirm" + convTime.ToShortTimeString());    // knappens id, för identifiering via javascript
@@ -708,7 +708,7 @@ namespace Golf2
                         "INNER JOIN person ON person.golfid = included.golfid " +
                         "INNER JOIN booking ON booking.bookingid = included.bookingid " +
                         "INNER JOIN bookingtime ON bookingtime.timeid = booking.timeid " +
-                        "WHERE bookingdate = @date " +
+                        "WHERE bookingdate = '" + anyDate + "'" + 
                         "ORDER BY booking.timeid ASC";
 
             table = new DataTable();
@@ -721,11 +721,36 @@ namespace Golf2
             foreach (DataRow item in table.Rows)
             {
                 HtmlGenericControl List = new HtmlGenericControl("li");
+                List.InnerHtml = "hej";
                 ListGroup.Controls.Add(List);
                 
-                
+
             }
+
+
+
+            //< div class="panel panel-default" id="panelIdTodaysBookings" runat="server" visible="true">
+            //    <div class="panel-heading" id="TodaysBookings" runat="server" visible="true">Dagens Bokningar</div>
+            //    <div class="panel-body" id="DisplayCheckIns" runat="server" visible="true"></div>
+            //</div>
+
+            HtmlGenericControl panelIdTodaysBookings = new HtmlGenericControl("div");
+            panelIdTodaysBookings.Attributes.Add("class", "panel panel-default");
+
+            HtmlGenericControl todaysBookings = new HtmlGenericControl("div");
+            todaysBookings.Attributes.Add("class","panel-heading");
+            todaysBookings.InnerHtml = "Dagens Bokningar";
+
+            HtmlGenericControl DisplayCheckIns = new HtmlGenericControl("div");
+            DisplayCheckIns.Attributes.Add("class", "panel-body");
+
             DisplayCheckIns.Controls.Add(ListGroup);
+
+           
+            panelIdTodaysBookings.Controls.Add(todaysBookings);
+            panelIdTodaysBookings.Controls.Add(DisplayCheckIns);
+            DisplayBookingSchedule.Controls.Add(panelIdTodaysBookings);
+
         }
 
 
