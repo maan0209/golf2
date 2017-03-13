@@ -28,6 +28,7 @@
   </div>
 
     <asp:LinkButton ID="saveSeason" CssClass="btnadmin" Font-Underline="false" OnClick="saveSeason_Click" runat="server">Spara säsongsdatum</asp:LinkButton>
+    <div id="tmp" runat="server"></div>   
 
          <hr class="small">
 

@@ -1,6 +1,8 @@
 ﻿/* ALL automatiserad JS-kod att läggas inom denna. Tvingar DOM:en att läses in före körning av någon kod */
 $(function () {
 
+
+
     /* Håller datumet uppdaterat i bokningsschemats header                                              */
     /*Källa: http://stackoverflow.com/questions/1309452/how-to-replace-innerhtml-of-a-div-using-jquery  */
     $(function () {
@@ -312,4 +314,10 @@ function Delete2() {
     });
 };
 
+
+function saveMeddelande() {
+
+    $('#seasonSaved').fadeOut('slow');
+
+};
 

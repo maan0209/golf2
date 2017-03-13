@@ -58,6 +58,15 @@ namespace Golf2 {
         protected global::System.Web.UI.WebControls.LinkButton saveSeason;
         
         /// <summary>
+        /// tmp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl tmp;
+        
+        /// <summary>
         /// open control.
         /// </summary>
         /// <remarks>
