@@ -46,6 +46,7 @@ namespace Golf2
             {
                 subjectTbx.Text = "Booking";
                 notification = "Du är inbokad i en boll klockan " + time + " den " + date;
+                bodyTbx.Text = notification;
                 return notification;
             }
 
@@ -53,6 +54,7 @@ namespace Golf2
             {
                 subjectTbx.Text = "Cancellation";
                 notification = "Din bokning för " + date + " klockan " + time + " har blivit avbokad";
+                bodyTbx.Text = notification;
                 return notification;
             }
             else
