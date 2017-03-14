@@ -135,13 +135,14 @@ namespace Golf2
         /// <param name="bookingdate"></param>
         /// <param name="timeid"></param>
         /// <returns></returns>
-        public int SQLCheckDateAndTime(string sql, DateTime dt, int timeid)
+        public int SQLCheckDateAndTime(string sql, DateTime dt, int timeid, string owner)
         {
             try
             {
                 cmd = new NpgsqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("bookingdate", dt);
                 cmd.Parameters.AddWithValue("timeid", timeid);
+                cmd.Parameters.AddWithValue("owner", owner);
 
                 int exists = Convert.ToInt32((cmd.ExecuteScalar()));
 
@@ -159,7 +160,31 @@ namespace Golf2
             
         }
 
+        public string SQLCheckIncluded(string sql, DateTime dt, int timeid, string golfid)
+        {
+            try
+            {
+                conn.Open();
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("bookingdate", dt);
+                cmd.Parameters.AddWithValue("timeid", timeid);
+                cmd.Parameters.AddWithValue("golfid", golfid);
 
+                string exists = Convert.ToString((cmd.ExecuteScalar()));
+
+                return exists;
+            }
+            catch (NpgsqlException ex)
+            {
+                return "ex";
+            }
+            finally
+            {
+
+                conn.Close();
+            }
+
+        }
 
 
 

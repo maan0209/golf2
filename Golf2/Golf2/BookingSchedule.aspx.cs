@@ -508,7 +508,7 @@ namespace Golf2
 
             bool isadmin = false;
             ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
-            
+
 
             bool validdate = BookingValidDate();
             bool checkbooking = false;
@@ -531,8 +531,8 @@ namespace Golf2
             }
 
             bool isUnique = IsGolfidUnique(cb, guestcount, isadmin);
-            
-            if (guestcount > 1 && isadmin == false) 
+
+            if (guestcount > 1 && isadmin == false)
             {
                 moreguests = true;
                 Session["error"] = "Bokningen är inte genomförd. Max 1 gäst per boll får anmälas";
@@ -548,6 +548,7 @@ namespace Golf2
             if (validdate == false || moreguests == true || doublecheck == true || isUnique == false)
             {
                 bookingAlertFail.Visible = true;
+                bookingAlertsuccess.Visible = false;
                 bookingAlertFail.InnerText = Session["error"].ToString();
             }
             else
@@ -556,15 +557,16 @@ namespace Golf2
                 DateTime dt = Convert.ToDateTime(Session["NextDay"]);
                 string owner = Convert.ToString(Session["golfid"]);
                 int bookingid = 0;
+                bool allclearforbooking = false;
 
-                string sql ="SELECT bookingid " +
+                string sql = "SELECT bookingid " +
                             "FROM booking " +
-                            "WHERE booking.bookingdate = @bookingdate AND booking.timeid = @timeid";
+                            "WHERE booking.bookingdate = @bookingdate AND booking.timeid = @timeid AND booking.owner = @owner";
 
                 int exists = 0;
-                exists = p.SQLCheckDateAndTime(sql, dt, timeid);
+                exists = p.SQLCheckDateAndTime(sql, dt, timeid, owner);
 
-                if (exists == 0) // om det inte redan finns bokade på samma tid samma dag
+                if (exists == 0) // om det inte redan finns tider bokade samma dag av samma owner
                 {
                     sql = "INSERT INTO booking (bookingdate, courseid, timeid, owner) " +
                         "VALUES(@bookingdate, '1', @timeid, @owner) " +
@@ -573,19 +575,48 @@ namespace Golf2
                     bookingid = p.SQLBooking(sql, timeid, dt, owner);
                 }
 
-                foreach (string item in cb) //loopa igenom listan med golfids och lägg till givet bookingid för varje
-                {
-                    sql ="INSERT INTO included (bookingid, golfid) " +
-                         "VALUES (@bookingid, @golfid)";
 
-                    p.SQLbooking2(sql, item, bookingid);
+                foreach (string item in cb) //loopa igenom listan med golfids för att kontrollera om någon redan finns
+                {
+
+                    sql = "SELECT booking.bookingid " +
+                           "FROM booking " +
+                           "INNER JOIN included ON included.bookingid = booking.bookingid " +
+                           "WHERE bookingdate = @bookingdate AND timeid = @timeid AND golfid = @golfid";
+
+                    string includedexists = "";
+                    includedexists = p.SQLCheckIncluded(sql, dt, timeid, item);
+
+                    if (includedexists == "")
+                    {
+                        allclearforbooking = true;
+                    }
                 }
 
-                bookingAlertsuccess.Visible = true;
-                bookingAlertsuccess.InnerText = "Bokningen lyckades!";
+                if (allclearforbooking == true)
+                {
+                    foreach (string item in cb) //loopa igenom listan med golfids och lägg till i databasen
+                    {
+                        sql = "INSERT INTO included (bookingid, golfid) " +
+                             "VALUES (@bookingid, @golfid)";
+
+                        p.SQLbooking2(sql, item, bookingid);
+                    }
+
+                    bookingAlertsuccess.Visible = true;
+                    bookingAlertFail.Visible = false;
+                    bookingAlertsuccess.InnerText = "Bokningen lyckades!";
+                }
+                else
+                {
+                    Session["error"] = "Bokningen är inte genomförd. Någon i bollen har redan en tid samma dag";
+
+                    bookingAlertFail.Visible = true;
+                    bookingAlertsuccess.Visible = false;
+                    bookingAlertFail.InnerText = Session["error"].ToString();
+                }
             }
         }
-
 
         /// <summary>
         /// Kontroll om bokningen är inom en månad
