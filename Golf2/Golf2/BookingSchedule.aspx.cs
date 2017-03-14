@@ -50,9 +50,11 @@ namespace Golf2
             }
 
             ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
+
+            GenerateCheckinList(anyDate);
+
             if (isadmin == true && isCourseClosed == false)
             {
-                GenerateCheckinList(anyDate);
 
                 if(!IsPostBack)
                 {
@@ -792,22 +794,38 @@ namespace Golf2
         /// <param name="date"></param>
         private void GenerateCheckinList(DateTime date)
         {
+            string sql = "";
 
-            //List<string> TodaysBookings = new List<string>();
-            //ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
+            if (isadmin)
+            {
+                // sqlsats för personal - söker alla bokningar för dagen
+                sql = "SELECT person.golfid, person.firstname, person.surname, booking.bookingdate, bookingtime.time, included.bookingid, booking.owner, included.checkedin, included.includedid ";
+                sql += "FROM included ";
+                sql += "INNER JOIN person ON person.golfid = included.golfid ";
+                sql += "INNER JOIN booking ON booking.bookingid = included.bookingid ";
+                sql += "INNER JOIN bookingtime ON bookingtime.timeid = booking.timeid ";
+                sql += "WHERE bookingdate = '" + anyDate + "' ";
+                sql += "ORDER BY booking.timeid ASC;";
+            }
+            else
+            {
+                // sqlsats för medlem  - söker alla bokningar för dagen
+                string currUser = Session["golfid"].ToString();
+                sql = "SELECT person.golfid, person.firstname, person.surname, booking.bookingdate, bookingtime.time, included.bookingid, booking.owner, included.checkedin, included.includedid ";
+                sql += "FROM included ";
+                sql += "INNER JOIN person ON person.golfid = included.golfid ";
+                sql += "INNER JOIN booking ON booking.bookingid = included.bookingid ";
+                sql += "INNER JOIN bookingtime ON bookingtime.timeid = booking.timeid ";
+                sql += "WHERE bookingdate = '" + anyDate + "' ";
+                sql += "AND(owner = '" + currUser + "' OR person.golfid = '" + currUser + "') ";
+                sql += "ORDER BY booking.timeid ASC; ";
+            }
 
-            string sql = "SELECT person.golfid, person.firstname, person.surname, booking.bookingdate, bookingtime.time, included.bookingid, booking.owner, included.checkedin, included.includedid ";
-            sql += "FROM included ";
-            sql += "INNER JOIN person ON person.golfid = included.golfid ";
-            sql += "INNER JOIN booking ON booking.bookingid = included.bookingid ";
-            sql += "INNER JOIN bookingtime ON bookingtime.timeid = booking.timeid ";
-            sql += "WHERE bookingdate = '" + anyDate + "' ";
-            sql += "ORDER BY booking.timeid ASC;";
 
             table = new DataTable();
             ToolBox.SQL_NonParam(sql, ref table);
 
-            HtmlGenericControl ListGroup = new HtmlGenericControl("ul");
+            HtmlGenericControl ListGroup = new HtmlGenericControl("div");
             ListGroup.Attributes.Add("id", "ListGroup");
             ListGroup.Attributes.Add("class", "list-group");
 
@@ -843,7 +861,7 @@ namespace Golf2
                 }
 
 
-                HtmlGenericControl List = new HtmlGenericControl("li");
+                HtmlGenericControl List = new HtmlGenericControl("div");
 
                 HtmlGenericControl teeTime = new HtmlGenericControl("div");
                 teeTime.Attributes.Add("class", "teeTimeInfo");
@@ -856,34 +874,52 @@ namespace Golf2
                 HtmlGenericControl listInfo = new HtmlGenericControl("div");
                 listInfo.InnerHtml = concatenatedString;
                 listInfo.Attributes.Add("class", "checkInInfo");
-                
 
-                HtmlGenericControl newButton = new HtmlGenericControl("input");
-                newButton.Attributes.Add("class", "checkInButton");
-                if (!Convert.ToBoolean(item["checkedin"]))
+                // Detta avsnitt styr vilken funktionalitet som blir tillgänglig beroende på roll
+                // Personal/admin: ser en incheckningsknapp + avbokningsknapp
+                // Medlem: ser bara avbokningsknapp
+                HtmlGenericControl checkInOutButton = new HtmlGenericControl("input");
+                if (isadmin)
                 {
-                    newButton.Attributes.Add("value", "Checka in");
-                    newButton.Attributes.Add("checkedin", "false");
+                    checkInOutButton.Attributes.Add("class", "checkInButton");
+                    if (!Convert.ToBoolean(item["checkedin"]))
+                    {
+                        checkInOutButton.Attributes.Add("value", "Checka in");
+                        checkInOutButton.Attributes.Add("checkedin", "false");
+                    }
+                    else
+                    {
+                        checkInOutButton.Attributes.Add("value", "Ångra");
+                        checkInOutButton.Attributes.Add("checkedin", "true");
+                    }
+
+                    checkInOutButton.Attributes.Add("golfid", item["golfid"].ToString());
+                    checkInOutButton.Attributes.Add("type", "button");
+                    checkInOutButton.Attributes.Add("id", "bookedTee" + item["includedid"].ToString());
+                    //förklaring på onclick: <aktuell bokad spelares golfid>, <speltid>, <datum>, <PK i included-tabell>
+                    checkInOutButton.Attributes.Add("onclick", "togglePlayerCheckin(\'" + item["golfid"].ToString() + "\', \'" + item["time"].ToString() + "\', \'" + item["bookingdate"].ToString() + "\', \'" + item["includedid"].ToString() + "\')");
                 }
-                else
-                {
-                    newButton.Attributes.Add("value", "Ångra");
-                    newButton.Attributes.Add("checkedin", "true");
-                }
-                
-                newButton.Attributes.Add("golfid", item["golfid"].ToString());
-                newButton.Attributes.Add("type", "button");
-                newButton.Attributes.Add("id", "bookedTee" + item["includedid"].ToString());
-                
-                //förklaring på onclick: <aktuell bokad spelares golfid>, <speltid>, <datum>, <PK i included-tabell>
-                newButton.Attributes.Add("onclick", "togglePlayerCheckin(\'" + item["golfid"].ToString() + "\', \'" + item["time"].ToString() + "\', \'" + item["bookingdate"].ToString() +"\', \'" + item["includedid"].ToString() + "\')");
+                // avbokningsknapp skapas
+                HtmlGenericControl cancelBookingButton = new HtmlGenericControl("input");
+                cancelBookingButton.Attributes.Add("value", "Avboka");
+                cancelBookingButton.Attributes.Add("id", "cancelTee" + item["includedid"].ToString());      // unikt id för knapp
+                cancelBookingButton.Attributes.Add("type", "button");
+                //cancelBookingButton.Attributes.Add("golfid", item["golfid"].ToString());                    // vem som ska avbokas
+                cancelBookingButton.Attributes.Add("class", "cancelTeeButton disable" + item["bookingid"].ToString());                             // css-formatering
+                //cancelBookingButton.Attributes.Add("owner", item["owner"].ToString());                      // vem som äger bokningen
+                //förklaring på onclick: <bokningsid> <includedid> <golfid att avbokas> <bokningsägare>
+                cancelBookingButton.Attributes.Add("onclick", "cancelPlayer(\'" + item["bookingid"].ToString() + "\', \'" + item["includedid"].ToString() + "\', \'" + item["golfid"].ToString() + "\', \'" + item["owner"].ToString() + "\')");
 
                 List.Controls.Add(listInfo);
                 List.Controls.Add(teeTime);
                 List.Controls.Add(bookedByInfo);
                 List.Controls.Add(checkinDiv);
-                List.Controls.Add(newButton);
-
+                // incheckningsknapp läggs till i struktur enbart om man är admin
+                if (isadmin)
+                {
+                    List.Controls.Add(checkInOutButton);
+                }
+                List.Controls.Add(cancelBookingButton);
                 ListGroup.Controls.Add(List);
                 
 

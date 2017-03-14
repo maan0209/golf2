@@ -33,7 +33,7 @@ $(function () {
 
     /* Tar emot en BOOL och ändrar datumet antingen en dag framåt eller bakåt */
     function pickAnotherDay(goForwards) {
-        
+
         var changeTheDate = new Date(sessionStorage.getItem("currDate"));
 
         if (goForwards == 'True') {
@@ -46,7 +46,7 @@ $(function () {
         sessionStorage.setItem("currDate", changeTheDate);
         var HiddenChangeDateVariable = document.getElementById('ContentPlaceHolder1_HiddenChangeDateVariable');
         HiddenChangeDateVariable.value = formatTheDate(changeTheDate);
-    }
+    };
 
     /* En lite trevligare formatering av javascript-datum*/
     function formatTheDate(dateIn) {
@@ -74,7 +74,7 @@ function fulfix(theTimeToBook) {
     var fakeButton = document.getElementById('ContentPlaceHolder1_fakeSenderButton');
     fakeButton.setAttribute("currBookingTime", theTimeToBook);
     var concatenateAString = "";
-    for (var i = 0; i < 4; i++) { 
+    for (var i = 0; i < 4; i++) {
         var bookingValue = fakeButton.getAttribute("reservation" + i);
         if (bookingValue != "") {
             if (concatenateAString != "") {
@@ -94,13 +94,13 @@ function fulfix(theTimeToBook) {
     for (var i = 0; i < 50; i++) {
         console.log(concatenateAString.toString());
     }
-    
+
     fakeButton.setAttribute("CommandArgument", concatenateAString);
     var hdnfldVariable = document.getElementById('ContentPlaceHolder1_hdnfldVariable');
     hdnfldVariable.value = concatenateAString;
-    $('#ContentPlaceHolder1_fakeSenderButton')[0].click();  
+    $('#ContentPlaceHolder1_fakeSenderButton')[0].click();
 
-}
+};
 
 /* En reservation skapas för en ledig bokningsplats. Golfid anges */
 function reservation(elementName, golfidElementName, confirmButton, r, reservationButton, isThisUserAnAdmin) {
@@ -227,6 +227,33 @@ function clearAllReservations(elementName, reservationButton, confirmButton) {
             document.getElementById(buttonID).style.color = 'black';
         }
     }
+};
+
+/* Reglerar avbokning av spelare*/
+/* förklaring på  parametrar: <bokningsid> <includedid> <golfid att avbokas> <bokningsägare> */
+function cancelPlayer(bookingid, includedid, player, owner) {
+
+    var removeAllPlayers = (player == owner) ? true : false;
+    console.log("KONTROLL: Ska alla spelare i bollen tas bort? " + removeAllPlayers.toString());
+    var disableButton = "disable" + bookingid.toString();
+    $('.disable' + bookingid.toString()).each(function () {
+        if (removeAllPlayers) {
+            console.log("HÄNDELSE: alla spelare avbokas");
+            $(this).attr("disabled", true);
+        }
+        else {
+            console.log("HÄNDELSE: vald spelare avbokas");
+            $('#cancelTee' + includedid.toString()).attr("disabled", true);
+        }
+        
+    });
+
+   
+    
+    
+
+
+
 };
 
 /* Togglar in-/ut-checkning av spelare i bokad boll */
