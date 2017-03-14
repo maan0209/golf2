@@ -18,7 +18,6 @@
     background-color: #fafafa;
 }
 
-
 #ContentPlaceHolder1_DisplayBookingSchedule {
    width: 100%;
    height: 100%; 
@@ -215,10 +214,20 @@
 }
 
 .checkInButton {
-    width: 80px;
+    width: 90px;
     display: inline-block;
     vertical-align: middle;
     margin-left: 4px;
+}
+
+.cancelTeeButton {
+    width: 90px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 40px;
+    /*background-color: firebrick;
+    color: white;
+    border-radius: 11px;*/
 }
 
 /* Övrigt */
