@@ -1,5 +1,11 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master2_SignedIn.Master" EnableEventValidation="true" AutoEventWireup="true" CodeBehind="BookingSchedule.aspx.cs" Inherits="Golf2.BookingSchedule" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+
+    <style>
+        #div{
+        float:left;
+    }
+    </style>
 </asp:Content>
 
 
@@ -626,7 +632,7 @@
 
 
 
-        </div>
+        </div>  
 
     </div>
 

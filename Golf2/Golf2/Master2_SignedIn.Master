@@ -17,6 +17,8 @@
 
     <script src="scripts.js"></script>
 
+    
+
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
@@ -104,9 +106,12 @@
         <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
         
         </asp:ContentPlaceHolder>
+
+        <div class="center" align:"center" >
         <asp:ContentPlaceHolder ID="ContentPlaceHolder2" runat="server">
         
         </asp:ContentPlaceHolder>
+        </div>
 
     </div>
   </form>  
