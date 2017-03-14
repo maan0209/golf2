@@ -109,6 +109,59 @@ namespace Golf2
 
         #endregion
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="removeAllPlayers"></param>
+        /// <param name="golfIdToRemove"></param>
+        /// <param name="bookingId"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public static string deletePlayerFromBooking(string removeAllPlayers, string includedid, string bookingId)
+        {
+            string sql = "";
+            string result = "";
+            if (Convert.ToBoolean(removeAllPlayers))
+            {
+                // deleta alla spelare i bokningen
+                sql = "DELETE FROM included WHERE bookingid = '" + bookingId.ToString() + "'";
+                ToolBox.SQL_NonParamCommand(sql, ref result);
+
+            }
+            else
+            {
+                // deleta spelaren
+                sql = "DELETE FROM included WHERE includedid = '" + includedid.ToString() + "'";
+                ToolBox.SQL_NonParamCommand(sql, ref result);
+            }
+
+            IsIncludedTableEmptyForBooking(bookingId);      // rensar bort bokning om den är tom
+
+            return null;
+        }
+
+        /// <summary>
+        /// Kontrollerar för en viss bokning om includedtabellen 
+        /// är tom (dvs. finns det folk bokade i bokningen?)
+        /// Är den tom, så deletas bokningen i tabellen booking.
+        /// </summary>
+        private static void IsIncludedTableEmptyForBooking(string bookingId)
+        {
+            string result = "";
+            string sql = "SELECT * FROM included WHERE bookingid = '" + bookingId.ToString() + "'";
+            DataTable _table = new DataTable();
+            // hämtar vilka som är bokade för en viss bokning
+            ToolBox.SQL_NonParam(sql, ref _table);  
+
+            // är inga spelare bokade, så deletas bokningen
+            if (_table.Rows.Count == 0)
+            {
+                sql = "DELETE FROM booking WHERE bookingid = '" + bookingId.ToString() +"'";
+                ToolBox.SQL_NonParamCommand(sql, ref result);
+            }
+        }
+
         /// <summary>
         /// Bygger upp och printar ut bokningsschemat till sidan
         /// </summary>

@@ -248,7 +248,7 @@ function cancelPlayer(bookingid, includedid, player, owner) {
         
     });
 
-   
+    PageMethods.deletePlayerFromBooking(removeAllPlayers, includedid, bookingid)
     
     
 
