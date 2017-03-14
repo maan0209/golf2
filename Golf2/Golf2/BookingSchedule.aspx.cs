@@ -590,6 +590,10 @@ namespace Golf2
                     bookingid = p.SQLBooking(sql, timeid, dt, owner);
                 }
 
+            else
+                {
+                    bookingid = exists;
+                }
 
                 foreach (string item in cb) //loopa igenom listan med golfids för att kontrollera om någon redan finns
                 {
