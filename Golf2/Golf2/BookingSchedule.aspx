@@ -35,15 +35,11 @@
             <!-- Bokningsschemat printas ut här-->
          
         </div>
-
-   
         
         
-
-       
-        
-
-
+    <!-- Denna tag behövs för att aktivera PageMethods så att man kan nå metoder i code behind från javascript-->    
+    <!-- källa: http://stackoverflow.com/questions/2257631/how-to-create-a-session-using-javascript           -->
+    <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="True"></asp:ScriptManager>
     <!-- Denna knapp används för att trigga postback då man tryckt på bekräfta bokning                                              -->
     <asp:Button ID="fakeSenderButton" runat="server" OnCommand="fakeSenderButton_Command" CommandArgument="" text="" reservation0="" reservation1="" reservation2="" reservation3="" currBookingTime="" style="visibility:hidden"/>
     

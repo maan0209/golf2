@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace Golf2
@@ -10,6 +12,8 @@ namespace Golf2
     public partial class Admin : System.Web.UI.Page
     {
         Postgress db = new Postgress();
+
+        List<course> seasondates = new List<course>();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -28,6 +32,25 @@ namespace Golf2
                 closehour.DataSource = p2.sqlquestion(sql);
                 closehour.DataTextField = "time";
                 closehour.DataBind();
+
+
+
+                sql = "SELECT startdate, enddate FROM course";
+                DataTable Table = new DataTable();
+                ToolBox.SQL_NonParam(sql, ref Table);
+
+                DateTime start = Convert.ToDateTime(Table.Rows[0]["startdate"]);
+                DateTime end = Convert.ToDateTime(Table.Rows[0]["enddate"]);
+
+                lblStartdatum.Text = start.ToShortDateString();
+                lblSlutdatum.Text = end.ToShortDateString();
+
+                Calendar1.SelectedDate = start;
+                Calendar1.VisibleDate = start;
+                Calendar2.SelectedDate = end;
+                Calendar2.VisibleDate = end;
+
+
             }
         }
 
@@ -57,27 +80,34 @@ namespace Golf2
 
         protected void saveSeason_Click(object sender, EventArgs e)
         {
-            string Startdate = Calendar1.SelectedDate.ToString("MM-dd-yyyy");
-            string Enddate = Calendar2.SelectedDate.ToString("MM-dd-yyyy");
+            string Startdate = Calendar1.SelectedDate.ToString("yyyy-MM-dd");
+            string Enddate = Calendar2.SelectedDate.ToString("yyyy-MM-dd");
 
             DateTime newstartdate = Convert.ToDateTime(Startdate);
             DateTime newenddate = Convert.ToDateTime(Enddate);
                     
             db.SQLUpdateSeasonDates(newstartdate, newenddate);
 
-        }
+            //Response.Write("<script>$(Function(){ $('seasonSaved').css('color', 'red');)};</script>");
+            HtmlGenericControl sparat = new HtmlGenericControl("p");
+            sparat.Attributes.Add("id", "saveSeason");
+            sparat.InnerHtml = "Ändringar sparade";
+            tmp.Controls.Add(sparat);
 
+        }
+        
         protected void Calendar1_SelectionChanged(object sender, EventArgs e)
         {
-            lblStartdatum.Text = Calendar1.SelectedDate.ToString("MM-dd-yyyy");
+            lblStartdatum.Text = Calendar1.SelectedDate.ToString("yyyy-MM-dd");
             string a = Calendar1.SelectedDate.ToString();
         }
 
         protected void Calendar2_SelectionChanged(object sender, EventArgs e)
         {
-            lblSlutdatum.Text = Calendar2.SelectedDate.ToString("MM-dd-yyyy");
+            lblSlutdatum.Text = Calendar2.SelectedDate.ToString("yyyy-MM-dd");
             string b = Calendar2.SelectedDate.ToString();
         }
+
 
 
     }

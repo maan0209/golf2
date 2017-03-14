@@ -25,7 +25,7 @@ namespace Golf2
             SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
             client.EnableSsl = true;
 
-                //I paranteserna nedan fick jag hårdkoda in min egna mail och lösen du funkade det men tar bort det nu när jag checkar in =)
+            //I paranteserna nedan fick jag hårdkoda in min egna mail och lösen då funkade det men tar bort det nu när jag checkar in =)
             client.Credentials = new System.Net.NetworkCredential();
             client.Send(message);
             Status.Text = "mailet är skickat";
@@ -34,11 +34,35 @@ namespace Golf2
             catch(Exception ex)
             {
                 Status.Text = ex.StackTrace;
-
             }
 
-
         }
-        
+
+        public string MailMessage(DateTime date, DateTime time, string typeOfMail, List<string> mailAddresses)
+        {
+            string notification;
+          
+            if (typeOfMail == "booking")
+            {
+                subjectTbx.Text = "Booking";
+                notification = "Du är inbokad i en boll klockan " + time + " den " + date;
+                bodyTbx.Text = notification;
+                return notification;
+            }
+
+            else if(typeOfMail== "cancellation")
+            {
+                subjectTbx.Text = "Cancellation";
+                notification = "Din bokning för " + date + " klockan " + time + " har blivit avbokad";
+                bodyTbx.Text = notification;
+                return notification;
+            }
+            else
+            {
+                return "";
+
+            }
+        }
+
     }
 }

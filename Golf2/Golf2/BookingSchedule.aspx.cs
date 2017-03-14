@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using System.ComponentModel;
 using System.Web.UI.HtmlControls;
 using System.Data;
+using System.Web.Services;
+using System.Configuration;
 
 namespace Golf2
 {
@@ -81,6 +83,7 @@ namespace Golf2
         private DateTime anyDate;
         int co = 0;
         private bool isadmin;
+        private List<string> golfIdList;
 
         #endregion
 
@@ -116,8 +119,19 @@ namespace Golf2
                 Schedule.Controls.Add(aBooking);
             }
 
+            HtmlGenericControl golfMembersList = new HtmlGenericControl("datalist");
+            golfMembersList.Attributes.Add("id", "searchMembersList");
+            foreach (string item in golfIdList)
+            {
+                HtmlGenericControl searchOptionsInList = new HtmlGenericControl("option");
+                searchOptionsInList.Attributes.Add("value", item.ToString());
+                golfMembersList.Controls.Add(searchOptionsInList);
+            }
+
+
             DisplayBookingSchedule.Controls.Add(Schedule);                          // den ihopbyggda HTML-strukturen läggs in i sidan
             DisplayBookingSchedule.Controls.Add(newModals);
+            DisplayBookingSchedule.Controls.Add(golfMembersList);
 
             return isCourseClosed;                                                  // returnerar att banan är öppen
         }
@@ -167,7 +181,7 @@ namespace Golf2
             lvl04_body.Attributes.Add("class", "modal-body");
 
             // läs ut lista med golfidn
-            List<string> golfIdList = new List<string>();
+            golfIdList = new List<string>();
             string sql = "SELECT golfid FROM person;";
             table = new DataTable();
             ToolBox.SQL_NonParam(sql, ref table);
@@ -312,18 +326,19 @@ namespace Golf2
                     HtmlGenericControl searchGolfMember = new HtmlGenericControl("input");
                     searchGolfMember.Attributes.Add("id", convTime.ToShortTimeString() + "searchMembers" + i);
                     searchGolfMember.Attributes.Add("type", "text");
-                    searchGolfMember.Attributes.Add("list", convTime.ToShortTimeString() + "searchMembersList" + i);
+                    //searchGolfMember.Attributes.Add("list", convTime.ToShortTimeString() + "searchMembersList" + i);
+                    searchGolfMember.Attributes.Add("list", "searchMembersList");
                     searchGolfMember.Attributes.Add("class", "aBookableSpotInput");                  // för css-formatering
 
                     // sökunderlaget för ovan sökbara textfält
-                    HtmlGenericControl golfMembersList = new HtmlGenericControl("datalist");
-                    golfMembersList.Attributes.Add("id", convTime.ToShortTimeString() + "searchMembersList" + i);
-                    foreach (string item in golfIdList)
-                    {
-                        HtmlGenericControl searchOptionsInList = new HtmlGenericControl("option");
-                        searchOptionsInList.Attributes.Add("value", item.ToString());
-                        golfMembersList.Controls.Add(searchOptionsInList);
-                    }
+                    //HtmlGenericControl golfMembersList = new HtmlGenericControl("datalist");
+                    //golfMembersList.Attributes.Add("id", convTime.ToShortTimeString() + "searchMembersList" + i);
+                    //foreach (string item in golfIdList)
+                    //{
+                    //    HtmlGenericControl searchOptionsInList = new HtmlGenericControl("option");
+                    //    searchOptionsInList.Attributes.Add("value", item.ToString());
+                    //    golfMembersList.Controls.Add(searchOptionsInList);
+                    //}
 
                     lvl04_openBooking.Controls.Add(counterDiv);
 
@@ -332,7 +347,7 @@ namespace Golf2
 
                     lvl04_bookingOptionsContainer.Controls.Add(lvl04_bookAGuest);
                     lvl04_bookingOptionsContainer.Controls.Add(searchGolfMember);
-                    lvl04_bookingOptionsContainer.Controls.Add(golfMembersList);
+                    //lvl04_bookingOptionsContainer.Controls.Add(golfMembersList);
                     lvl04_bookingOptionsContainer.Controls.Add(lvl04_reserveFreeSpotButton);
 
                     lvl04_openBooking.Controls.Add(lvl04_bookingOptionsContainer);
@@ -377,7 +392,7 @@ namespace Golf2
             if (counter != 4)
             {
 
-                HtmlGenericControl lvl04_footerButton02 = new HtmlGenericControl("div");
+                HtmlGenericControl lvl04_footerButton02 = new HtmlGenericControl("input");
                 lvl04_footerButton02.Attributes.Add("class", "btn btn-primary");
                 lvl04_footerButton02.Attributes.Add("Value", "Bekräfta");
                 lvl04_footerButton02.Attributes.Add("id", "Confirm" + convTime.ToShortTimeString());    // knappens id, för identifiering via javascript
@@ -508,7 +523,7 @@ namespace Golf2
 
             bool isadmin = false;
             ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
-            
+
 
             bool validdate = BookingValidDate();
             bool checkbooking = false;
@@ -531,8 +546,8 @@ namespace Golf2
             }
 
             bool isUnique = IsGolfidUnique(cb, guestcount, isadmin);
-            
-            if (guestcount > 1 && isadmin == false) 
+
+            if (guestcount > 1 && isadmin == false)
             {
                 moreguests = true;
                 Session["error"] = "Bokningen är inte genomförd. Max 1 gäst per boll får anmälas";
@@ -548,6 +563,7 @@ namespace Golf2
             if (validdate == false || moreguests == true || doublecheck == true || isUnique == false)
             {
                 bookingAlertFail.Visible = true;
+                bookingAlertsuccess.Visible = false;
                 bookingAlertFail.InnerText = Session["error"].ToString();
             }
             else
@@ -556,15 +572,16 @@ namespace Golf2
                 DateTime dt = Convert.ToDateTime(Session["NextDay"]);
                 string owner = Convert.ToString(Session["golfid"]);
                 int bookingid = 0;
+                bool allclearforbooking = false;
 
-                string sql ="SELECT bookingid " +
+                string sql = "SELECT bookingid " +
                             "FROM booking " +
-                            "WHERE booking.bookingdate = @bookingdate AND booking.timeid = @timeid";
+                            "WHERE booking.bookingdate = @bookingdate AND booking.timeid = @timeid AND booking.owner = @owner";
 
                 int exists = 0;
-                exists = p.SQLCheckDateAndTime(sql, dt, timeid);
+                exists = p.SQLCheckDateAndTime(sql, dt, timeid, owner);
 
-                if (exists == 0) // om det inte redan finns bokade på samma tid samma dag
+                if (exists == 0) // om det inte redan finns tider bokade samma dag av samma owner
                 {
                     sql = "INSERT INTO booking (bookingdate, courseid, timeid, owner) " +
                         "VALUES(@bookingdate, '1', @timeid, @owner) " +
@@ -573,19 +590,52 @@ namespace Golf2
                     bookingid = p.SQLBooking(sql, timeid, dt, owner);
                 }
 
-                foreach (string item in cb) //loopa igenom listan med golfids och lägg till givet bookingid för varje
+            else
                 {
-                    sql ="INSERT INTO included (bookingid, golfid) " +
-                         "VALUES (@bookingid, @golfid)";
-
-                    p.SQLbooking2(sql, item, bookingid);
+                    bookingid = exists;
                 }
 
-                bookingAlertsuccess.Visible = true;
-                bookingAlertsuccess.InnerText = "Bokningen lyckades!";
+                foreach (string item in cb) //loopa igenom listan med golfids för att kontrollera om någon redan finns
+                {
+
+                    sql = "SELECT booking.bookingid " +
+                           "FROM booking " +
+                           "INNER JOIN included ON included.bookingid = booking.bookingid " +
+                           "WHERE bookingdate = @bookingdate AND timeid = @timeid AND golfid = @golfid";
+
+                    string includedexists = "";
+                    includedexists = p.SQLCheckIncluded(sql, dt, timeid, item);
+
+                    if (includedexists == "")
+                    {
+                        allclearforbooking = true;
+                    }
+                }
+
+                if (allclearforbooking == true)
+                {
+                    foreach (string item in cb) //loopa igenom listan med golfids och lägg till i databasen
+                    {
+                        sql = "INSERT INTO included (bookingid, golfid) " +
+                             "VALUES (@bookingid, @golfid)";
+
+                        p.SQLbooking2(sql, item, bookingid);
+                    }
+
+                    bookingAlertsuccess.Visible = true;
+                    bookingAlertFail.Visible = false;
+                    bookingAlertsuccess.InnerText = "Bokningen lyckades!";
+                }
+                else
+                {
+                    Session["error"] = "Bokningen är inte genomförd. Någon i bollen har redan en tid samma dag";
+
+                    bookingAlertFail.Visible = true;
+                    bookingAlertsuccess.Visible = false;
+                    bookingAlertFail.InnerText = Session["error"].ToString();
+                }
             }
         }
-
 
         /// <summary>
         /// Kontroll om bokningen är inom en månad
@@ -697,19 +747,42 @@ namespace Golf2
         }
 
 
+        /// <summary>
+        /// Checkar in/ut en spelare
+        /// </summary>
+        /// <param name="includedid"></param>
+        /// <param name="statusToChangeTo"></param>
+        /// <returns></returns>
+        [System.Web.Services.WebMethod]
+        public static string TogglePlayerCheckin(string includedid, string statusToChangeTo)
+        {
+            string sql = "UPDATE included ";
+            sql += "SET checkedin = "+ Convert.ToBoolean(statusToChangeTo) +" ";
+            sql += "WHERE includedid = '" + Convert.ToInt32(includedid) + "'; ";
+
+            string resultMessage = "";
+            // ändra status för 
+            ToolBox.SQL_NonParamCommand(sql, ref resultMessage);
+            return resultMessage;
+        }
+
+        /// <summary>
+        /// Genererar en incheckningslista
+        /// </summary>
+        /// <param name="date"></param>
         private void GenerateCheckinList(DateTime date)
         {
-            
-            List<string> TodaysBookings = new List<string>();
-            ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
 
-            string sql = "SELECT person.firstname, person.surname, bookingtime.time, booking.bookingid, booking.owner " +
-                        "FROM included " +
-                        "INNER JOIN person ON person.golfid = included.golfid " +
-                        "INNER JOIN booking ON booking.bookingid = included.bookingid " +
-                        "INNER JOIN bookingtime ON bookingtime.timeid = booking.timeid " +
-                        "WHERE bookingdate = '" + anyDate + "'" + 
-                        "ORDER BY booking.timeid ASC";
+            //List<string> TodaysBookings = new List<string>();
+            //ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
+
+            string sql = "SELECT person.golfid, person.firstname, person.surname, booking.bookingdate, bookingtime.time, included.bookingid, booking.owner, included.checkedin, included.includedid ";
+            sql += "FROM included ";
+            sql += "INNER JOIN person ON person.golfid = included.golfid ";
+            sql += "INNER JOIN booking ON booking.bookingid = included.bookingid ";
+            sql += "INNER JOIN bookingtime ON bookingtime.timeid = booking.timeid ";
+            sql += "WHERE bookingdate = '" + anyDate + "' ";
+            sql += "ORDER BY booking.timeid ASC;";
 
             table = new DataTable();
             ToolBox.SQL_NonParam(sql, ref table);
@@ -720,15 +793,84 @@ namespace Golf2
 
             foreach (DataRow item in table.Rows)
             {
+                
+                string concatenatedString ="";
+
+                //kontrollerar om det är ett gästkonto och filtrerar bort onödig info isf.
+                if (item["golfid"].ToString() == "Gäst")
+                {
+                    concatenatedString = "Golfid: " + item["golfid"].ToString() + " ";
+                }
+                else
+                {
+                    concatenatedString = "Golfid: " + item["golfid"].ToString() + ", ";
+                    concatenatedString += item["FirstName"].ToString() + " " + item["SurName"].ToString() + " ";
+                }
+
+                // kontrollerar incheckningsstatus
+                HtmlGenericControl checkinDiv = new HtmlGenericControl("div");
+                checkinDiv.Attributes.Add("class", "checkInStatus");
+                checkinDiv.Attributes.Add("id", "chStatus" + item["includedid"].ToString());
+                if (Convert.ToBoolean(item["checkedin"]))
+                {
+                    checkinDiv.InnerHtml = "Incheckad";
+                    checkinDiv.Style.Add("background-color", "lightgreen");
+                }
+                else
+                {
+                    checkinDiv.InnerHtml = "Ej incheckad";
+                    checkinDiv.Style.Add("background-color", "lightgray");
+                }
+
+
                 HtmlGenericControl List = new HtmlGenericControl("li");
-                List.InnerHtml = "hej";
+
+                HtmlGenericControl teeTime = new HtmlGenericControl("div");
+                teeTime.Attributes.Add("class", "teeTimeInfo");
+                teeTime.InnerHtml = "Starttid: " + item["time"].ToString();
+
+                HtmlGenericControl bookedByInfo = new HtmlGenericControl("div");
+                bookedByInfo.Attributes.Add("class", "bookedByInfo");
+                bookedByInfo.InnerHtml = "bokad av " + item["owner"].ToString();
+
+                HtmlGenericControl listInfo = new HtmlGenericControl("div");
+                listInfo.InnerHtml = concatenatedString;
+                listInfo.Attributes.Add("class", "checkInInfo");
+                
+
+                HtmlGenericControl newButton = new HtmlGenericControl("input");
+                newButton.Attributes.Add("class", "checkInButton");
+                if (!Convert.ToBoolean(item["checkedin"]))
+                {
+                    newButton.Attributes.Add("value", "Checka in");
+                    newButton.Attributes.Add("checkedin", "false");
+                }
+                else
+                {
+                    newButton.Attributes.Add("value", "Ångra");
+                    newButton.Attributes.Add("checkedin", "true");
+                }
+                
+                newButton.Attributes.Add("golfid", item["golfid"].ToString());
+                newButton.Attributes.Add("type", "button");
+                newButton.Attributes.Add("id", "bookedTee" + item["includedid"].ToString());
+                
+                //förklaring på onclick: <aktuell bokad spelares golfid>, <speltid>, <datum>, <PK i included-tabell>
+                newButton.Attributes.Add("onclick", "togglePlayerCheckin(\'" + item["golfid"].ToString() + "\', \'" + item["time"].ToString() + "\', \'" + item["bookingdate"].ToString() +"\', \'" + item["includedid"].ToString() + "\')");
+
+                List.Controls.Add(listInfo);
+                List.Controls.Add(teeTime);
+                List.Controls.Add(bookedByInfo);
+                List.Controls.Add(checkinDiv);
+                List.Controls.Add(newButton);
+
                 ListGroup.Controls.Add(List);
                 
 
             }
 
 
-
+            // OBS! gamla koden som låg i BookingSchedule.aspx 170313
             //< div class="panel panel-default" id="panelIdTodaysBookings" runat="server" visible="true">
             //    <div class="panel-heading" id="TodaysBookings" runat="server" visible="true">Dagens Bokningar</div>
             //    <div class="panel-body" id="DisplayCheckIns" runat="server" visible="true"></div>

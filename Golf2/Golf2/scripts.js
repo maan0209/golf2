@@ -1,6 +1,8 @@
 ﻿/* ALL automatiserad JS-kod att läggas inom denna. Tvingar DOM:en att läses in före körning av någon kod */
 $(function () {
 
+
+
     /* Håller datumet uppdaterat i bokningsschemats header                                              */
     /*Källa: http://stackoverflow.com/questions/1309452/how-to-replace-innerhtml-of-a-div-using-jquery  */
     $(function () {
@@ -227,7 +229,41 @@ function clearAllReservations(elementName, reservationButton, confirmButton) {
     }
 };
 
+/* Togglar in-/ut-checkning av spelare i bokad boll */
+function togglePlayerCheckin(golfid, time, date, includedid) {
 
+    var bookingButton = document.getElementById("bookedTee" + includedid.toString());
+    var statusField = document.getElementById("chStatus" + includedid.toString());
+
+    
+    /* togglar statusen på knappar och incheckning*/
+    var statusToChangeTo = bookingButton.getAttribute("checkedin");
+    if (statusToChangeTo == "false") {
+        console.log("status false ändras till true");
+        statusToChangeTo = "true"
+        bookingButton.setAttribute("checkedin", statusToChangeTo)
+        bookingButton.setAttribute("value", "Ångra");
+        statusField.innerHTML = "Incheckad";
+        statusField.setAttribute("value", "Incheckad");
+        statusField.style.backgroundColor = 'lightgreen';
+    }
+    else {
+        console.log("status true ändras till false");
+        statusToChangeTo = "false"
+        bookingButton.setAttribute("checkedin", statusToChangeTo);
+        bookingButton.setAttribute("value", "Checka in");
+        statusField.innerHTML = "Ej incheckad";
+        statusField.setAttribute("value", "Ej incheckad");
+        statusField.style.backgroundColor = 'lightblue';
+    }
+
+    var test = "";
+    console.log(golfid + " " + time + " " + date + " " + includedid + " " + statusToChangeTo);
+    PageMethods.TogglePlayerCheckin(includedid, statusToChangeTo);
+
+
+    /* här skall text och knappars status togglas */
+};
 
 
 
@@ -312,4 +348,10 @@ function Delete2() {
     });
 };
 
+
+function saveMeddelande() {
+
+    $('#seasonSaved').fadeOut('slow');
+
+};
 
