@@ -58,11 +58,17 @@ namespace Golf2
                 {
                     DailyBookings bokning = new DailyBookings(anyDate);
 
-                    
+                    var name = from t in bokning.BookingsPerSpecifiedDate
+                               select new
+                               {
+                                   CompleteName = t.FirstName + " " + t.SurName + " Hcp:" + t.Hcp,
+                                   GolfID = t.GolfId,
 
-                    dropdownscorecard.DataSource = bokning.BookingsPerSpecifiedDate;
+                               };
+                    
+                    dropdownscorecard.DataSource = name;
                     dropdownscorecard.DataTextField = "GolfId";
-                    dropdownscorecard.DataValueField =  "FirstName";
+                    dropdownscorecard.DataValueField =  "CompleteName";
                     dropdownscorecard.DataBind();
 
                 }
@@ -970,6 +976,7 @@ namespace Golf2
         {
             aktuelltgolfID.Text = dropdownscorecard.SelectedItem.Text;
             aktuelltNamn.Text = dropdownscorecard.SelectedItem.Value;
+            aktuelltDatum.Text = anyDate.ToShortDateString();
            
         
         }
