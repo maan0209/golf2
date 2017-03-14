@@ -17,16 +17,17 @@ namespace Golf2
 
         protected void sendBtn_Click(object sender, EventArgs e)
         {
+           
             try {
              
-            MailMessage message = new MailMessage(toTbx.Text,fromTbx.Text,subjectTbx.Text,bodyTbx.Text);
+            MailMessage message = new MailMessage(fromTbx.Text, toTbx.Text,subjectTbx.Text,bodyTbx.Text);
             message.IsBodyHtml = true;
 
             SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
             client.EnableSsl = true;
             
             //I paranteserna nedan fick jag hårdkoda in min egna mail och lösen då funkade det men tar bort det nu när jag checkar in =)
-            client.Credentials = new System.Net.NetworkCredential();
+            client.Credentials = new System.Net.NetworkCredential(User.Text,Password.Text);
             client.Send(message);
             Status.Text = "mailet är skickat";
             }

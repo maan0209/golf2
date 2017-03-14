@@ -11,14 +11,15 @@
     <div>
         <br /> <br /> <br /> <br /> <br /> <br />
         <table align="center" width="60%">
+            
             <tr>
-                <td>to:</td>
-                <td><asp:TextBox ID="toTbx" Text="nathalieolsson123321@outlook.com" runat="server" Width="99%"></asp:TextBox></td>
-            </tr>
-             <tr>
                 <td>From:</td>
-                <td><asp:TextBox ID="fromTbx" Text="nathalieolsson123321@outlook.com" runat="server" Width="99%"></asp:TextBox></td>
+                <td><asp:TextBox ID="fromTbx" runat="server" Width="99%"></asp:TextBox></td>
             </tr>
+            <tr>
+                <td>To:</td>
+                <td><asp:TextBox ID="toTbx" runat="server" Width="99%"></asp:TextBox></td>
+            </tr>         
              <tr>
                 <td>Subject:</td>
                 <td><asp:TextBox ID="subjectTbx" Text="Test" runat="server" Width="99%"></asp:TextBox></td>
@@ -27,6 +28,20 @@
                 <td>Body:</td>
                 <td><asp:TextBox ID="bodyTbx" Text="Body text" runat="server" Height="150px" TextMode="MultiLine" Width="99%"></asp:TextBox></td>
             </tr>
+            
+              <tr>
+                <td>User:</td>
+                <td><asp:TextBox ID="User" Text="User" runat="server" Width="30%"></asp:TextBox></td>
+              </tr>
+            <tr>
+                 <td>Password:</td>
+                <td><asp:TextBox ID="Password" Text="Password" runat="server" Width="30%"></asp:TextBox></td>
+            </tr>
+           <tr>
+
+
+
+           </tr>
              <tr>
                 <td></td>
                 <td><asp:Button ID="sendBtn" onclick="sendBtn_Click" runat="server" Text="Send!" /></td>
