@@ -61,7 +61,7 @@ namespace Golf2
                     var name = from t in bokning.BookingsPerSpecifiedDate
                                select new
                                {
-                                   CompleteName = t.FirstName + " " + t.SurName + " Hcp:" + t.Hcp,
+                                   CompleteName = t.FirstName + " " + t.SurName + "|" + "Hcp:" + t.Hcp,
                                    GolfID = t.GolfId,
 
                                };
@@ -974,11 +974,37 @@ namespace Golf2
 
         protected void dropdownscorecard_SelectedIndexChanged(object sender, EventArgs e)
         {
+            
+
+            string test = name.ToString();
+            List<string> stringsplit = new List<string>();
+            string nyttOrd = "";
+
+            foreach (char c in test)
+            {
+                if (c == Convert.ToChar("|"))
+                {
+                    stringsplit.Add(nyttOrd);
+                    nyttOrd = "";
+                }
+                else
+                {
+                    nyttOrd += c.ToString();
+                }
+            }
+
             aktuelltgolfID.Text = dropdownscorecard.SelectedItem.Text;
             aktuelltNamn.Text = dropdownscorecard.SelectedItem.Value;
             aktuelltDatum.Text = anyDate.ToShortDateString();
-           
-        
+
+            scorecardDate.Text = anyDate.ToShortDateString();
+            scorecardGolfId.Text = aktuelltgolfID.Text;
+            //scorecardName.Text = 
+            
+
+
+
+
         }
     }
 }
