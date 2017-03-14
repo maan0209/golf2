@@ -9,6 +9,7 @@ using System.Web.UI.HtmlControls;
 using System.Data;
 using System.Web.Services;
 using System.Configuration;
+using System.ComponentModel;
 
 namespace Golf2
 {
@@ -52,6 +53,19 @@ namespace Golf2
             if (isadmin == true && isCourseClosed == false)
             {
                 GenerateCheckinList(anyDate);
+
+                if(!IsPostBack)
+                {
+                    DailyBookings bokning = new DailyBookings(anyDate);
+
+                    
+
+                    dropdownscorecard.DataSource = bokning.BookingsPerSpecifiedDate;
+                    dropdownscorecard.DataTextField = "GolfId";
+                    dropdownscorecard.DataValueField =  "FirstName";
+                    dropdownscorecard.DataBind();
+
+                }
             }
           
         }
@@ -949,8 +963,15 @@ namespace Golf2
 
 
 
+
         #endregion
 
-
+        protected void dropdownscorecard_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            aktuelltgolfID.Text = dropdownscorecard.SelectedItem.Text;
+            aktuelltNamn.Text = dropdownscorecard.SelectedItem.Value;
+           
+        
+        }
     }
 }
