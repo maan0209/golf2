@@ -81,7 +81,7 @@ namespace Golf2
         /// <param name="date"></param>
         private void GetTodaysBookings(DateTime date)
         {
-            string sql = "SELECT booking.owner, booking.bookingid, course.coursename, booking.bookingdate, bookingtime.time, person.golfid, person.hcp, person.gender, person.firstname, person.surname FROM PERSON ";
+            string sql = "SELECT booking.owner, booking.bookingid, course.coursename, booking.bookingdate, bookingtime.time, person.golfid, person.hcp, person.gender, person.firstname, person.surname, included.checkedin FROM PERSON ";
             sql += "RIGHT JOIN included ON person.golfid = included.golfid ";
             sql += "JOIN booking ON included.bookingid = booking.bookingid ";
             sql += "JOIN course ON booking.courseid = booking.courseid ";
@@ -99,9 +99,8 @@ namespace Golf2
                 newBooking.BookingId = (int)row["bookingid"];
                 newBooking.CourseName = (string)row["coursename"];
                 newBooking.BookingDate = Convert.ToDateTime(row["bookingdate"]); 
-                newBooking.BookingTime = Convert.ToDateTime(row["time"].ToString()); 
-                             
-                
+                newBooking.BookingTime = Convert.ToDateTime(row["time"].ToString());
+                newBooking.checkedIn = Convert.ToBoolean(row["checkedin"]);
                 newBooking.GolfId = (string)row["golfid"];
                 newBooking.Gender = (string)row["gender"];
                 newBooking.FirstName = (string)row["firstname"];

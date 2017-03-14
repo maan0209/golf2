@@ -70,6 +70,31 @@ namespace Golf2
         }
 
         /// <summary>
+        /// Metod för att skicka kommando till databasen
+        /// Stöder ej parametrar/injections
+        /// Returnerar "ok" om kommandot gick igenom visavi ett 
+        /// felmeddelande i ett motsatt  scenario.
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public string SqlNonQuery(string sql)
+        {
+            string svar;
+            try
+            {
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.ExecuteNonQuery();
+                conn.Close();
+                return svar = "ok";
+            }
+            catch (NpgsqlException ex)
+            {
+                conn.Close();
+                return svar = ex.ToString();
+            }
+        }
+
+        /// <summary>
         /// Lägg till tidsbokning för boll, returnera bokningsid
         /// </summary>
         /// <param name="sql"></param>
