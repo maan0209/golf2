@@ -2,6 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 
+
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     
 
@@ -32,11 +33,14 @@
 
             </div>
             <!-- Bokningsschemat printas ut här-->
+         
         </div>
+
+   
         
         
 
-
+       
         
 
 
@@ -48,6 +52,24 @@
     <!-- Källa: https://www.codeproject.com/Questions/708697/Pass-javascript-variables-value-to-Csharp-code-beh                     -->
     <asp:HiddenField ID="hdnfldVariable" runat="server" />
     <asp:HiddenField ID="HiddenChangeDateVariable" runat="server" />
+</asp:Content>
+
+<asp:Content ID="Content3" ContentPlaceHolderID="ContentPlaceHolder2" runat="server">
+
+     <div class="container">
+        <div id="dropdownScorecard">
+            <asp:DropDownList ID="dropdownscorecard" runat="server" OnSelectedIndexChanged="dropdownscorecard_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
+            
+            <asp:Label ID="golfID" runat="server" Text="GolfID: "></asp:Label><asp:Label ID="aktuelltgolfID" runat="server"></asp:Label>
+
+             <asp:Label ID="name" runat="server" Text="Namn: "></asp:Label><asp:Label ID="aktuelltNamn" runat="server"></asp:Label>
+             <asp:Label ID="date" runat="server" Text="Datum: "></asp:Label><asp:Label ID="aktuelltDatum" runat="server"></asp:Label>
+
+        </div>
+
+    </div>
+
+
 </asp:Content>
 
 
