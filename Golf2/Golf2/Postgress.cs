@@ -70,6 +70,31 @@ namespace Golf2
         }
 
         /// <summary>
+        /// Metod för att skicka kommando till databasen
+        /// Stöder ej parametrar/injections
+        /// Returnerar "ok" om kommandot gick igenom visavi ett 
+        /// felmeddelande i ett motsatt  scenario.
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public string SqlNonQuery(string sql)
+        {
+            string svar;
+            try
+            {
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.ExecuteNonQuery();
+                conn.Close();
+                return svar = "ok";
+            }
+            catch (NpgsqlException ex)
+            {
+                conn.Close();
+                return svar = ex.ToString();
+            }
+        }
+
+        /// <summary>
         /// Lägg till tidsbokning för boll, returnera bokningsid
         /// </summary>
         /// <param name="sql"></param>
@@ -135,13 +160,14 @@ namespace Golf2
         /// <param name="bookingdate"></param>
         /// <param name="timeid"></param>
         /// <returns></returns>
-        public int SQLCheckDateAndTime(string sql, DateTime dt, int timeid)
+        public int SQLCheckDateAndTime(string sql, DateTime dt, int timeid, string owner)
         {
             try
             {
                 cmd = new NpgsqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("bookingdate", dt);
                 cmd.Parameters.AddWithValue("timeid", timeid);
+                cmd.Parameters.AddWithValue("owner", owner);
 
                 int exists = Convert.ToInt32((cmd.ExecuteScalar()));
 
@@ -159,7 +185,31 @@ namespace Golf2
             
         }
 
+        public string SQLCheckIncluded(string sql, DateTime dt, int timeid, string golfid)
+        {
+            try
+            {
+                conn.Open();
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("bookingdate", dt);
+                cmd.Parameters.AddWithValue("timeid", timeid);
+                cmd.Parameters.AddWithValue("golfid", golfid);
 
+                string exists = Convert.ToString((cmd.ExecuteScalar()));
+
+                return exists;
+            }
+            catch (NpgsqlException ex)
+            {
+                return "ex";
+            }
+            finally
+            {
+
+                conn.Close();
+            }
+
+        }
 
 
 
@@ -183,26 +233,69 @@ namespace Golf2
             }
         }
 
-
-        public void SQLInsertSeasonDates (DateTime Startdate, DateTime Enddate)
+        public void ShowSeasondates(DateTime Startdate, DateTime Enddate)
         {
             try
             {
-            string sql = "INSERT INTO course(startdate, enddate) VALUES (@Startdate, @Enddate)";
+                string sql = "SELECT startdate, enddate FROM course"; 
 
-            cmd = new NpgsqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("Startdate", Startdate);
-            cmd.Parameters.AddWithValue("Enddate", Enddate);
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("Startdate", Startdate);
+                cmd.Parameters.AddWithValue("Enddate", Enddate);
+
+                NpgsqlDataReader dr = cmd.ExecuteReader();
+
             }
-            catch(NpgsqlException ex)
+            catch (NpgsqlException ex)
             {
-
             }
             finally
             {
-            conn.Close();
+                conn.Close();
             }
-        }
+        } 
+
+
+        //public void SQLInsertSeasonDates (DateTime Startdate, DateTime Enddate)
+        //{
+        //    try
+        //    {
+        //    string sql = "INSERT INTO course(startdate, enddate) VALUES (@Startdate, @Enddate)";
+
+        //    cmd = new NpgsqlCommand(sql, conn);
+        //    cmd.Parameters.AddWithValue("Startdate", Startdate);
+        //    cmd.Parameters.AddWithValue("Enddate", Enddate);
+        //    }
+        //    catch(NpgsqlException ex)
+        //    {
+
+        //    }
+        //    finally
+        //    {
+        //    conn.Close();
+        //    }
+        //}
+
+
+        //public DataTable getseasondates(DateTime Startdate, DateTime Enddate)
+        //{
+        //        string sql = "SELECT startdate AND enddate FROM course";
+
+        //        cmd = new NpgsqlCommand(sql, conn);
+        //        dr = cmd.ExecuteReader();
+
+        //    return table;
+        //    }
+        //}
+
+
+
+
+
+
+
+
+
 
 
         //public DataTable getaccount(string user, string pass)
