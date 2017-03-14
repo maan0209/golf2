@@ -557,7 +557,9 @@ namespace Golf2
                 {
                     guestcount++;
                 }
-                checkbooking = CheckBooking(item);
+
+                DateTime dt = Convert.ToDateTime(Session["NextDay"]);
+                checkbooking = CheckBooking(item, dt);
 
                 if (checkbooking == true)
                 {
@@ -578,6 +580,7 @@ namespace Golf2
             {
                 validdate = true;
                 doublecheck = false;
+                checkbooking = false;
             }
 
             if (validdate == false || moreguests == true || doublecheck == true || isUnique == false)
@@ -681,26 +684,23 @@ namespace Golf2
         /// </summary>
         /// <param name="golfid"></param>
         /// <returns></returns>
-        private bool CheckBooking(string golfid)
+        private bool CheckBooking(string golfid, DateTime date)
         {
             string sql = "SELECT booking.bookingid, booking.bookingdate " +
                         "FROM booking " +
                         "INNER JOIN included ON included.bookingid = booking.bookingid " +
-                        "WHERE included.golfid =" + golfid;
+                        "WHERE included.golfid = @golfid AND booking.bookingdate = @date";
 
-            table = new DataTable();
-            ToolBox.SQL_NonParam(sql, ref table);
+            string exists = p.SQLCheckIfBooked(sql, golfid, date);
 
-            string searchbooking = Convert.ToString(Session["NextDay"]);
-            bool contains = false;
+            //string searchbooking = Convert.ToString(Session["NextDay"]);
+            //bool contains = false;
+            //if (searchbooking != "")
+            //{
+            //    contains = table.AsEnumerable().Any(row => searchbooking == row.Field<String>(searchbooking));
+            //}
 
-            if (searchbooking != "")
-            {
-                contains = table.AsEnumerable().Any(row => searchbooking == row.Field<String>(searchbooking));
-            }
-
-
-            if (contains == true)
+            if (exists != "")
             {
                 Session["error"] = "Bokningen är inte genomförd. En person i bollen har redan en bokad tid samma dag!";
                 return true;
