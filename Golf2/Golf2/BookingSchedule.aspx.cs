@@ -1116,27 +1116,41 @@ namespace Golf2
                     nyttOrd += c.ToString();
                 }
             }
-            
-            if (person[2] == "Male")
+
+            double spelHcp;
+            double slope;
+            double CR;
+            double Par;
+            double värde;
+
+            if (person[3] == "Male")
             {
+                slope = 128;
+                värde = 113;
+                CR = 71.4;
+                Par = 72;
+                spelHcp = Convert.ToDouble(person[1]) * (slope / värde) + (CR - Par);
                 
-                double spelHcp = Convert.ToDouble(person[1])*(128/113)+(71.4 - 72);
             }
 
-            if (person[2] == "Female")
+            else
             {
-
-                double spelHcp = Convert.ToDouble(person[1]) * (120 / 113) + (67.8 - 72);
+                slope = 124;
+                värde = 113;
+                CR = 73;
+                Par = 72;
+                spelHcp = Convert.ToDouble(person[1]) * (slope / värde) + (CR - Par);
+               
             }
 
-
+            var erhslag = Math.Round(spelHcp, 0, MidpointRounding.AwayFromZero);
 
             scorecardDate.Text = anyDate.ToShortDateString();
             scorecardGolfId.Text = aktuelltgolfID.Text;
             scorecardName.Text = person[0];
             scorecardHcp.Text = person[1];
-            //scorecardTime.Text = person[2];
-            //spelHcp.Text = spelHcp.ToString();
+            scorecardTime.Text = person[2];
+            scorecardSpelHcp.Text = erhslag.ToString();
             
             
 

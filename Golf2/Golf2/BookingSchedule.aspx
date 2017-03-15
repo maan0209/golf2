@@ -79,11 +79,14 @@
         <div id="dropdownScorecard">
             <asp:DropDownList ID="dropdownscorecard" runat="server" OnSelectedIndexChanged="dropdownscorecard_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
             
-            <asp:Label ID="golfID" runat="server" Text="GolfID: "></asp:Label><asp:Label ID="aktuelltgolfID" runat="server"></asp:Label>
+            
+            <asp:Label ID="golfID" runat="server" Text="" Visible="false"></asp:Label><asp:Label ID="aktuelltgolfID" runat="server" Visible="false"></asp:Label>
+             <asp:Label ID="name" runat="server" Text="" Visible="false"></asp:Label><asp:Label ID="aktuelltNamn" runat="server" Visible="false"></asp:Label>
+             <asp:Label ID="date" runat="server" Text="" Visible="false"></asp:Label><asp:Label ID="aktuelltDatum" runat="server" Visible="false"></asp:Label>
 
-             <asp:Label ID="name" runat="server" Text="Namn: "></asp:Label><asp:Label ID="aktuelltNamn" runat="server"></asp:Label>
-             <asp:Label ID="date" runat="server" Text="Datum: "></asp:Label><asp:Label ID="aktuelltDatum" runat="server"></asp:Label>
+
              <asp:Button ID="printScorecard" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/><br />
+
   <!--Här börjar scorekortet och alla tabeller-->
 <asp:Panel ID="ScorecardWithInfo" runat="server"> 
    <div id="div">
@@ -108,7 +111,7 @@
 	</tr>
     
 <tr>
-<td id="r">SpelHcp <asp:Label ID="spelHcp" runat="server"></asp:Label>  </td>
+<td id="r">SpelHcp <asp:Label ID="scorecardSpelHcp" runat="server"></asp:Label>  </td>
 <td id="t">Klass</td>
 </tr>
 
@@ -160,7 +163,7 @@
 <td id ="Röd">386</td>
 <td id ="Par">5</td>
 <td id ="Index">16</td>
-<td id="Erh"></td>
+<td id="Erh"> <asp:Label ID="hole1" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -180,7 +183,7 @@
 <td id ="Röd">268</td>
 <td id ="Par">4</td>
 <td id ="Index">14</td>
-<td id="Erh"></td>
+<td id="Erh"><asp:Label ID="hole2" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
