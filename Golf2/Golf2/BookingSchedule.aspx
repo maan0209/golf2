@@ -108,7 +108,7 @@
 	</tr>
     
 <tr>
-<td id="r">SpelHcp <asp:Label ID="spelHcp" runat="server"></asp:Label>  </td>
+<td id="r">SpelHcp <asp:Label ID="scorecardSpelHcp" runat="server"></asp:Label>  </td>
 <td id="t">Klass</td>
 </tr>
 
@@ -160,7 +160,7 @@
 <td id ="Röd">386</td>
 <td id ="Par">5</td>
 <td id ="Index">16</td>
-<td id="Erh"></td>
+<td id="Erh"> <asp:Label ID="hole1" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -180,7 +180,7 @@
 <td id ="Röd">268</td>
 <td id ="Par">4</td>
 <td id ="Index">14</td>
-<td id="Erh"></td>
+<td id="Erh"><asp:Label ID="hole2" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
