@@ -98,7 +98,7 @@
     
 <tr>
 <td id="r">Klubb</td>
-<td id="t">Starttid</td>
+<td id="t">Starttid: <asp:Label ID="scorecardTime" runat="server"></asp:Label></td>
 </tr>
 
 	<tr>
@@ -108,7 +108,7 @@
 	</tr>
     
 <tr>
-<td id="r">SpelHcp</td>
+<td id="r">SpelHcp <asp:Label ID="spelHcp" runat="server"></asp:Label>  </td>
 <td id="t">Klass</td>
 </tr>
 

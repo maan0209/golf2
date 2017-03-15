@@ -63,7 +63,7 @@ namespace Golf2
                     var name = from t in bokning.BookingsPerSpecifiedDate
                                select new
                                {
-                                   CompleteName = t.FirstName + " " + t.SurName + "#" + "Hcp:" + t.Hcp + "#" + t.BookingTime.ToShortTimeString(),
+                                   CompleteName = t.FirstName + " " + t.SurName + "#" + t.Hcp + "#" + t.BookingTime.ToShortTimeString() + "#" + t.Gender + "#",
                                    GolfID = t.GolfId,
 
                                };
@@ -1098,13 +1098,26 @@ namespace Golf2
                 }
             }
             
+            if (person[2] == "Male")
+            {
+                
+                double spelHcp = Convert.ToDouble(person[1])*(128/113)+(71.4 - 72);
+            }
+
+            if (person[2] == "Female")
+            {
+
+                double spelHcp = Convert.ToDouble(person[1]) * (120 / 113) + (67.8 - 72);
+            }
 
 
-            
 
             scorecardDate.Text = anyDate.ToShortDateString();
             scorecardGolfId.Text = aktuelltgolfID.Text;
             scorecardName.Text = person[0];
+            scorecardHcp.Text = person[1];
+            scorecardTime.Text = person[2];
+            //spelHcp.Text = spelHcp.ToString();
             
             
 
