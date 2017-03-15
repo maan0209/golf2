@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Configuration;
+using System.Data;
 using System.Linq;
 using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.ComponentModel;
-using System.Web.UI.HtmlControls;
-using System.Data;
 using System.Web.Services;
-using System.Configuration;
-using System.ComponentModel;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 namespace Golf2
 {
@@ -100,7 +99,6 @@ namespace Golf2
 
         #region ########## FIELDS ########## 
 
-        private Postgress p = new Postgress();
         private DataTable table;
         private DateTime anyDate;
         int co = 0;
@@ -676,6 +674,9 @@ namespace Golf2
                             "WHERE booking.bookingdate = @bookingdate AND booking.timeid = @timeid AND booking.owner = @owner";
 
                 int exists = 0;
+
+                Postgress p = new Postgress();
+
                 exists = p.SQLCheckDateAndTime(sql, dt, timeid, owner);
 
                 if (exists == 0) // om det inte redan finns tider bokade samma dag av samma owner
@@ -766,6 +767,7 @@ namespace Golf2
                         "INNER JOIN included ON included.bookingid = booking.bookingid " +
                         "WHERE included.golfid = @golfid AND booking.bookingdate = @date";
 
+            Postgress p = new Postgress();
             
             string exists = p.SQLCheckIfBooked(sql, golfid, date);
 
@@ -1149,8 +1151,8 @@ namespace Golf2
             scorecardGolfId.Text = aktuelltgolfID.Text;
             scorecardName.Text = person[0];
             scorecardHcp.Text = person[1];
-            scorecardTime.Text = person[2];
-            scorecardSpelHcp.Text = erhslag.ToString();
+            //scorecardTime.Text = person[2];
+            //scorecardSpelHcp.Text = erhslag.ToString();
             
             
 

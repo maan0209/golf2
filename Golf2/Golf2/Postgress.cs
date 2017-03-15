@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Web;
-using Npgsql;
-using System.Data;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.ComponentModel;
 namespace Golf2
 {
     public class Postgress
@@ -69,32 +69,25 @@ namespace Golf2
             return table;
         }
 
-        public BindingList<Person> SQLGetEmails(string sql)
+
+        /// <summary>
+        /// Hämta email från 'person' i databas utifrån golfid
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public string SQLGetEmail(string sql, string golfid)
         {
             try
             {
-              
-
                 cmd = new NpgsqlCommand(sql, conn);
-                dr = cmd.ExecuteReader();
+                string email = Convert.ToString(cmd.ExecuteScalar());
 
-                BindingList<Person> emails = new BindingList<Person>();
-                Person mail;
-
-                while (dr.Read())
-                {
-                    mail = new Person()
-                    {
-                        Email = dr["email"].ToString()
-                    };
-                    emails.Add(mail);
-                }
-                dr.Close();
-                return emails;
+                return email;
             }
+
             catch (NpgsqlException ex)
             {
-
+                string exm = ex.Message;
                 return null;
             }
             finally
@@ -198,7 +191,6 @@ namespace Golf2
         {
             try
             {
-                conn.Open();
                 cmd = new NpgsqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("bookingdate", dt);
                 cmd.Parameters.AddWithValue("timeid", timeid);
@@ -214,12 +206,19 @@ namespace Golf2
             }
             finally
             {
-                
                 conn.Close();
             }
             
         }
 
+        /// <summary>
+        /// Kontrollera om entry finns i 'included'
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="dt"></param>
+        /// <param name="timeid"></param>
+        /// <param name="golfid"></param>
+        /// <returns></returns>
         public string SQLCheckIncluded(string sql, DateTime dt, int timeid, string golfid)
         {
             try

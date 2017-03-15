@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Linq;
+using System.Net.Mail;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Net.Mail;
-using System.Data;
-using System.ComponentModel;
 
 namespace Golf2
 {
     public partial class Mail : System.Web.UI.Page
     {
-        BindingList<Person> EmailList = new BindingList<Person>();
+        BindingList<string> EmailList = new BindingList<string>();
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -23,22 +24,33 @@ namespace Golf2
          
         }
 
+        /// <summary>
+        /// Metoden som skickar aviseringar om bokning/avbokning
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="time"></param>
+        /// <param name="typeOfMail"></param>
+        /// <param name="golfIds"></param>
         public void SendMail(DateTime date, string time, string typeOfMail, BindingList<string> golfIds)
         {
-
-            GetEmails(golfIds);
+            foreach (string item in golfIds)
+            {
+                string mail = GetEmail(item);
+                EmailList.Add(mail);
+            }
+            
 
             string notification;
 
             if (typeOfMail == "booking")
             {
-                foreach (Person s in EmailList)
+                foreach (string email in EmailList)
                 {
                     subjectTbx.Text = "Booking";
                     notification = "Du är inbokad i en boll klockan " + time + " den " + date;
                     bodyTbx.Text = notification;
 
-                    MailMessage message = new MailMessage("Golfklubben", s.Email);
+                    MailMessage message = new MailMessage("Golfklubben", email);
                     message.IsBodyHtml = true;
 
                     SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
@@ -52,7 +64,7 @@ namespace Golf2
 
             else if (typeOfMail == "cancellation")
             {
-                foreach (Person s in EmailList)
+                foreach (string email in EmailList)
                 {
                     subjectTbx.Text = "Cancellation";
                     notification = "Din bokning för " + date + " klockan " + time + " har blivit avbokad";
@@ -70,37 +82,36 @@ namespace Golf2
                 }
             }
 
-            try
-            {
-                MailMessage message = new MailMessage(fromTbx.Text, toTbx.Text);
-                message.IsBodyHtml = true;
+            //try
+            //{
+            //    MailMessage message = new MailMessage(fromTbx.Text, toTbx.Text);
+            //    message.IsBodyHtml = true;
 
-                SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
-                client.EnableSsl = true;
+            //    SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
+            //    client.EnableSsl = true;
 
-                client.Credentials = new System.Net.NetworkCredential("golfklubben_halslaget@outlook.com", "Golfbil123321");
-                client.Send(message);
-                Status.Text = "mailet är skickat";
-            }
+            //    client.Credentials = new System.Net.NetworkCredential("golfklubben_halslaget@outlook.com", "Golfbil123321");
+            //    client.Send(message);
+            //    Status.Text = "mailet är skickat";
+            //}
 
-            catch (Exception ex)
-            {
-                Status.Text = ex.StackTrace;
-            }
+            //catch (Exception ex)
+            //{
+            //    Status.Text = ex.StackTrace;
+            //}
         }
 
-        private BindingList<Person> GetEmails(BindingList<string> golfIDs)
+        /// <summary>
+        /// Hämtar emails utifrån golfids
+        /// </summary>
+        /// <param name="golfIDs"></param>
+        /// <returns></returns>
+        private string GetEmail(string golfid)
         {
             Postgress p = new Postgress();
-
-            foreach (string item in golfIDs)
-            {
-                string sql = "SELECT email FROM person WHERE golfid= " + item;
-                EmailList = p.SQLGetEmails(sql);
-
-            }              
-            return EmailList;
-
+            string sql = "SELECT email FROM person WHERE golfid= @golfid";
+            string mail = p.SQLGetEmail(sql, golfid);
+            return mail;
         }
 
 
