@@ -211,6 +211,15 @@ namespace Golf2 {
         protected global::System.Web.UI.WebControls.Label scorecardDate;
         
         /// <summary>
+        /// scorecardTime control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label scorecardTime;
+        
+        /// <summary>
         /// scorecardHcp control.
         /// </summary>
         /// <remarks>
@@ -218,5 +227,14 @@ namespace Golf2 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label scorecardHcp;
+        
+        /// <summary>
+        /// spelHcp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label spelHcp;
     }
 }

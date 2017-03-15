@@ -63,6 +63,24 @@ namespace Golf2
                 isadmin = true;
             }
         }
+
+        /// <summary>
+        /// 1. Metoden tar emot ett datum och en tid, drar av fem minuter på tiden
+        /// 2. kontrollerar ifall nuvarande klocklag (obs! format hh:mm:ss) är mer än den mottagna justerade tiden
+        /// 3. returnerar true om detta stämmer
+        /// </summary>
+        /// <param name="anyDate"></param>
+        /// <param name="anyTime"></param>
+        /// <returns></returns>
+        public static bool timeLimitCheck(DateTime anyDate, string anyTime)
+        {
+            DateTime currentTime = DateTime.Now;
+            DateTime timeLimitation = Convert.ToDateTime(anyDate.ToShortDateString() + " " + anyTime).AddMinutes(-5);
+            bool currTimeIsMoreThanTimeLimit = (currentTime > timeLimitation) ? true : false;
+
+            return currTimeIsMoreThanTimeLimit;
+        }
+
         #endregion
     }
 }
