@@ -700,15 +700,15 @@ namespace Golf2
 
                         p.SQLbooking2(sql, item, bookingid);
                     }
-
+                    Mail mail = new Mail();
+                    mail.SendMail(anyDate,Convert.ToDateTime(timeHHMM),"booking",cb);
                     bookingAlertsuccess.Visible = true;
                     bookingAlertFail.Visible = false;
                     bookingAlertsuccess.InnerText = "Bokningen lyckades!";
                 }
                 else
                 {
-                    Session["error"] = "Bokningen är inte genomförd. Någon i bollen har redan en tid samma dag";
-
+                    Session["error"] = "Bokningen är inte genomförd. Någon i bollen har redan en tid samma dag";              
                     bookingAlertFail.Visible = true;
                     bookingAlertsuccess.Visible = false;
                     bookingAlertFail.InnerText = Session["error"].ToString();
