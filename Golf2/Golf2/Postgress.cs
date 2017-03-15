@@ -164,6 +164,7 @@ namespace Golf2
         {
             try
             {
+                conn.Open();
                 cmd = new NpgsqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("bookingdate", dt);
                 cmd.Parameters.AddWithValue("timeid", timeid);
@@ -211,6 +212,35 @@ namespace Golf2
 
         }
 
+        /// <summary>
+        /// Kontrollera om bokning redan finns för golfid på samma dag
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="golfid"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public string SQLCheckIfBooked(string sql, string golfid, DateTime date)
+        {
+            try
+            {
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("golfid", golfid);
+                cmd.Parameters.AddWithValue("date", date);
+
+                string exists = Convert.ToString((cmd.ExecuteScalar()));
+
+                return exists;
+            }
+            catch (NpgsqlException ex)
+            {
+                return "";
+            }
+            finally
+            {
+
+                conn.Close();
+            }
+        }
 
 
         public void SQLUpdateSeasonDates(DateTime Startdate, DateTime Enddate)
