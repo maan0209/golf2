@@ -231,7 +231,7 @@ function clearAllReservations(elementName, reservationButton, confirmButton) {
 
 /* Reglerar avbokning av spelare*/
 /* förklaring på  parametrar: <bokningsid> <includedid> <golfid att avbokas> <bokningsägare> */
-function cancelPlayer(bookingid, includedid, player, owner) {
+function cancelPlayer(bookingid, includedid, player, owner, time) {
 
     var removeAllPlayers = (player == owner) ? true : false;
     console.log("KONTROLL: Ska alla spelare i bollen tas bort? " + removeAllPlayers.toString());
@@ -248,7 +248,7 @@ function cancelPlayer(bookingid, includedid, player, owner) {
         
     });
 
-    PageMethods.deletePlayerFromBooking(removeAllPlayers, includedid, bookingid)
+    PageMethods.deletePlayerFromBooking(removeAllPlayers, includedid, bookingid, time)
     
     
 

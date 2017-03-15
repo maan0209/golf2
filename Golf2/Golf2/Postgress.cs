@@ -6,7 +6,7 @@ using Npgsql;
 using System.Data;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
+using System.ComponentModel;
 namespace Golf2
 {
     public class Postgress
@@ -67,6 +67,40 @@ namespace Golf2
             }
             conn.Close();
             return table;
+        }
+
+        public BindingList<Person> SQLGetEmails(string sql)
+        {
+            try
+            {
+              
+
+                cmd = new NpgsqlCommand(sql, conn);
+                dr = cmd.ExecuteReader();
+
+                BindingList<Person> emails = new BindingList<Person>();
+                Person mail;
+
+                while (dr.Read())
+                {
+                    mail = new Person()
+                    {
+                        Email = dr["email"].ToString()
+                    };
+                    emails.Add(mail);
+                }
+                dr.Close();
+                return emails;
+            }
+            catch (NpgsqlException ex)
+            {
+
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         /// <summary>

@@ -106,7 +106,7 @@ namespace Golf2
         int co = 0;
         private bool isadmin;
         private List<string> golfIdList;
-
+        private Mail mail = new Mail();
         #endregion
 
 
@@ -119,19 +119,37 @@ namespace Golf2
         /// <param name="bookingId"></param>
         /// <returns></returns>
         [WebMethod]
-        public static string deletePlayerFromBooking(string removeAllPlayers, string includedid, string bookingId)
+        public static string deletePlayerFromBooking(string removeAllPlayers, string includedid, string bookingId, string time)
         {
-            string sql = "";
+            
+            string sql = "";    
             string result = "";
+            sql = "SELECT golfid FROM included WHERE bookingid = '" + bookingId.ToString() + "'";
+            DataTable Table = new DataTable();
+            ToolBox.SQL_NonParam(sql, ref Table);
+            Mail mail = new Mail();
+            BindingList<string> GolfIds = new BindingList<string>();
+
+            foreach (DataRow item in Table.Rows)
+            {
+                GolfIds.Add(item["golfid"].ToString());
+            }
+
+
             if (Convert.ToBoolean(removeAllPlayers))
             {
                 // deleta alla spelare i bokningen
                 sql = "DELETE FROM included WHERE bookingid = '" + bookingId.ToString() + "'";
                 ToolBox.SQL_NonParamCommand(sql, ref result);
-
             }
+
             else
             {
+                Page p = new Page();
+                DateTime mailDate = Convert.ToDateTime(p.Session["NextDay"]);
+
+                mail.SendMail(mailDate,time,"Cancellation", GolfIds);
+
                 // deleta spelaren
                 sql = "DELETE FROM included WHERE includedid = '" + includedid.ToString() + "'";
                 ToolBox.SQL_NonParamCommand(sql, ref result);
@@ -700,8 +718,9 @@ namespace Golf2
 
                         p.SQLbooking2(sql, item, bookingid);
                     }
-                    Mail mail = new Mail();
-                    mail.SendMail(anyDate,Convert.ToDateTime(timeHHMM),"booking",cb);
+
+                    mail = new Mail();
+                    mail.SendMail(anyDate,timeHHMM+ ":00","booking",cb);
                     bookingAlertsuccess.Visible = true;
                     bookingAlertFail.Visible = false;
                     bookingAlertsuccess.InnerText = "Bokningen lyckades!";
@@ -975,7 +994,7 @@ namespace Golf2
                     cancelBookingButton.Attributes.Add("class", "cancelTeeButton disable" + item["bookingid"].ToString());                             // css-formatering
                                                                                                                                                        //cancelBookingButton.Attributes.Add("owner", item["owner"].ToString());                      // vem som äger bokningen
                                                                                                                                                        //förklaring på onclick: <bokningsid> <includedid> <golfid att avbokas> <bokningsägare>
-                    cancelBookingButton.Attributes.Add("onclick", "cancelPlayer(\'" + item["bookingid"].ToString() + "\', \'" + item["includedid"].ToString() + "\', \'" + item["golfid"].ToString() + "\', \'" + item["owner"].ToString() + "\')");
+                    cancelBookingButton.Attributes.Add("onclick", "cancelPlayer(\'" + item["bookingid"].ToString() + "\', \'" + item["includedid"].ToString() + "\', \'" + item["golfid"].ToString() + "\', \'" + item["owner"].ToString() + "\',\'"+item["time"].ToString()+"\')");
 
                     List.Controls.Add(listInfo);
                     List.Controls.Add(teeTime);
@@ -1116,7 +1135,7 @@ namespace Golf2
             scorecardGolfId.Text = aktuelltgolfID.Text;
             scorecardName.Text = person[0];
             scorecardHcp.Text = person[1];
-            scorecardTime.Text = person[2];
+            //scorecardTime.Text = person[2];
             //spelHcp.Text = spelHcp.ToString();
             
             

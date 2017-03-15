@@ -12,7 +12,7 @@ namespace Golf2
 {
     public partial class Mail : System.Web.UI.Page
     {
-        BindingList<string> EmailList = new BindingList<string>();
+        BindingList<Person> EmailList = new BindingList<Person>();
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -23,7 +23,7 @@ namespace Golf2
          
         }
 
-        public void SendMail(DateTime date, DateTime time, string typeOfMail, BindingList<string> golfIds)
+        public void SendMail(DateTime date, string time, string typeOfMail, BindingList<string> golfIds)
         {
 
             GetEmails(golfIds);
@@ -32,13 +32,13 @@ namespace Golf2
 
             if (typeOfMail == "booking")
             {
-                foreach (string s in EmailList)
+                foreach (Person s in EmailList)
                 {
                     subjectTbx.Text = "Booking";
                     notification = "Du är inbokad i en boll klockan " + time + " den " + date;
                     bodyTbx.Text = notification;
 
-                    MailMessage message = new MailMessage("Golfklubben", s);
+                    MailMessage message = new MailMessage("Golfklubben", s.Email);
                     message.IsBodyHtml = true;
 
                     SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
@@ -52,7 +52,7 @@ namespace Golf2
 
             else if (typeOfMail == "cancellation")
             {
-                foreach (string s in EmailList)
+                foreach (Person s in EmailList)
                 {
                     subjectTbx.Text = "Cancellation";
                     notification = "Din bokning för " + date + " klockan " + time + " har blivit avbokad";
@@ -89,17 +89,18 @@ namespace Golf2
             }
         }
 
-        private BindingList<string> GetEmails(List<string> golfID)
+        private BindingList<Person> GetEmails(BindingList<string> golfIDs)
         {
-            string sql = "SELECT email FROM person WHERE golfid= " + golfID;
-            DataTable Table = new DataTable();
-            ToolBox.SQL_NonParam(sql,ref Table);
-             EmailList = new BindingList<string>();
-            foreach(DataRow item in Table.Rows)
+            Postgress p = new Postgress();
+
+            foreach (string item in golfIDs)
             {
-                EmailList.Add(item["email"].ToString());
-            }
+                string sql = "SELECT email FROM person WHERE golfid= " + item;
+                EmailList = p.SQLGetEmails(sql);
+
+            }              
             return EmailList;
+
         }
 
 
