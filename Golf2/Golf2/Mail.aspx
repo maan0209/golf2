@@ -35,7 +35,7 @@
               </tr>
             <tr>
                  <td>Password:</td>
-                <td><asp:TextBox ID="Password" Text="Password" runat="server" Width="30%"></asp:TextBox></td>
+                <td><asp:TextBox ID="Password" Text="Password" TextMode="Password" runat="server" Width="30%"></asp:TextBox></td>
             </tr>
            <tr>
 
