@@ -79,11 +79,14 @@
         <div id="dropdownScorecard">
             <asp:DropDownList ID="dropdownscorecard" runat="server" OnSelectedIndexChanged="dropdownscorecard_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
             
-            <asp:Label ID="golfID" runat="server" Text="GolfID: "></asp:Label><asp:Label ID="aktuelltgolfID" runat="server"></asp:Label>
+            
+            <asp:Label ID="golfID" runat="server" Text="" Visible="false"></asp:Label><asp:Label ID="aktuelltgolfID" runat="server" Visible="false"></asp:Label>
+             <asp:Label ID="name" runat="server" Text="" Visible="false"></asp:Label><asp:Label ID="aktuelltNamn" runat="server" Visible="false"></asp:Label>
+             <asp:Label ID="date" runat="server" Text="" Visible="false"></asp:Label><asp:Label ID="aktuelltDatum" runat="server" Visible="false"></asp:Label>
 
-             <asp:Label ID="name" runat="server" Text="Namn: "></asp:Label><asp:Label ID="aktuelltNamn" runat="server"></asp:Label>
-             <asp:Label ID="date" runat="server" Text="Datum: "></asp:Label><asp:Label ID="aktuelltDatum" runat="server"></asp:Label>
+
              <asp:Button ID="printScorecard" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/><br />
+
   <!--Här börjar scorekortet och alla tabeller-->
 <asp:Panel ID="ScorecardWithInfo" runat="server"> 
    <div id="div">
