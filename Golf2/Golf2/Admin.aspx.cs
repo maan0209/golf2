@@ -73,14 +73,14 @@ namespace Golf2
 
                 updateclosinglist();
             }
-            //if (IsPostBack)
-            //{
-            //    updateclosinglist();
-            //}
+        
+
+
         }
 
         private void updateclosinglist()
         {
+            listcloseddays.Items.Clear();
             // VISA STÄNGDA DATUM
             Postgress p5 = new Postgress();
             String sql = "SELECT * FROM closed";
@@ -92,7 +92,6 @@ namespace Golf2
             foreach (DataRow Item in roligtnamn.Rows)
             {
                 listcloseddays.Items.Add(Item["closedid"].ToString() + ": Banan stänger: " + Item["startclose"].ToString() + " Banan öppnar: " + Item["endclose"].ToString());
-
             }
         }
 
@@ -186,7 +185,7 @@ namespace Golf2
             bool deleteclose = true;
 
             InsertOrDelteClosingCourse(newfirstclosed, newlastclosed, deleteclose);
-
+            updateclosinglist();
         }
 
         private void InsertOrDelteClosingCourse(DateTime newfirstclosed, DateTime newlastclosed, bool addclosingtime)
@@ -234,7 +233,7 @@ namespace Golf2
                             DateTime tmp = newfirstclosed.Date + item.BookingTime.TimeOfDay;                                //Slår ihop datum och tid. En temporär variabel skapas som Datetime för att kunna jämföra med newfirstclosed. Egentligen bara intresserade av tiden på den första dagen i spannet.
                             if (tmp > newfirstclosed)                                                                       //Klockslagen jämförs mot varandra. Tmp = aktuell bokningstid, kollar om tmp är mer än tiden i newfirstclosed
                             {
-                               //BookingSchedule.deletePlayerFromBooking("true", "000" , item.BookingId.ToString());          //Om tmp-tiden är mer än newfirstclosed så skall hela bokningen tas bort.
+                               BookingSchedule.deletePlayerFromBooking("true", "000" , item.BookingId.ToString(), item.BookingTime.ToShortTimeString());          //Om tmp-tiden är mer än newfirstclosed så skall hela bokningen tas bort.
                             }
                         }
                     }
@@ -245,7 +244,7 @@ namespace Golf2
                             DateTime tmp = newlastclosed.Date + item.BookingTime.TimeOfDay;                                 //Slår ihop datum och tid. En temporär variabel skapas som Datetime för att kunna jämföra med newfirstclosed. Egentligen bara intresserade av tiden på den första dagen i spannet.
                             if (tmp < newlastclosed)                                                                        //Klockslagen jämförs mot varandra. Tmp = aktuell bokningstid, kollar om tmp är mer än tiden i newfirstclosed
                             {
-                                //BookingSchedule.deletePlayerFromBooking("true", "000", item.BookingId.ToString());          //Om tmp-tiden är mer än newfirstclosed så skall hela bokningen tas bort.
+                                BookingSchedule.deletePlayerFromBooking("true", "000", item.BookingId.ToString(), item.BookingTime.ToShortTimeString());          //Om tmp-tiden är mer än newfirstclosed så skall hela bokningen tas bort.
                             }
                         }
                     }
@@ -260,7 +259,7 @@ namespace Golf2
                             {
                                 tmp2 = tmp;
                                 
-                            //BookingSchedule.deletePlayerFromBooking("true", "000", item.BookingId.ToString());              //Om tmp-tiden är mer än newfirstclosed så skall hela bokningen tas bort.
+                            BookingSchedule.deletePlayerFromBooking("true", "000", item.BookingId.ToString(), item.BookingTime.ToShortTimeString());              //Om tmp-tiden är mer än newfirstclosed så skall hela bokningen tas bort.
                                 
                             }                           
                         }
@@ -281,7 +280,7 @@ namespace Golf2
             bool deleteclose = false;
 
             InsertOrDelteClosingCourse(newfirstclosed, newlastclosed, deleteclose);
-
+            updateclosinglist();
         }
     }
 }
