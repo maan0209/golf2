@@ -22,6 +22,7 @@ namespace Golf2
         protected void sendBtn_Click(object sender, EventArgs e)
         {
          
+
         }
 
         /// <summary>
@@ -65,12 +66,12 @@ namespace Golf2
             {
                 foreach (string email in EmailList)
                 {
-                    subjectTbx.Text = "Cancellation";
-                    notification = "Din bokning för " + date + " klockan " + time + " har blivit avbokad";
-                    bodyTbx.Text = notification;
-
-                    MailMessage message = new MailMessage(fromTbx.Text, toTbx.Text);
+                    MailMessage message = new MailMessage("golfklubben_halslaget@outlook.com", email);
                     message.IsBodyHtml = true;
+
+                    message.Subject = "Cancellation";
+                    notification = "Din bokning för " + date + " klockan " + time + " har blivit avbokad";
+                    message.Body = notification;
 
                     SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
                     client.EnableSsl = true;

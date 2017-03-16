@@ -122,20 +122,26 @@ namespace Golf2
             
             string sql = "";    
             string result = "";
-            sql = "SELECT golfid FROM included WHERE bookingid = '" + bookingId.ToString() + "'";
-            DataTable Table = new DataTable();
-            ToolBox.SQL_NonParam(sql, ref Table);
+
+            Page p = new Page();
             Mail mail = new Mail();
-            BindingList<string> GolfIds = new BindingList<string>();
-
-            foreach (DataRow item in Table.Rows)
-            {
-                GolfIds.Add(item["golfid"].ToString());
-            }
-
+            BindingList<string> golfids = new BindingList<string>();
+            BindingList<Booking> listofids = new BindingList<Booking>();
+            Postgress postgres = new Postgress();
+            DateTime mailDate = Convert.ToDateTime(p.Session["NextDay"]);
 
             if (Convert.ToBoolean(removeAllPlayers))
             {
+
+                //sök efter golfids utifrån bookingid
+                sql = "SELECT golfid, includedid FROM included WHERE bookingid = @bookingid";
+                listofids = postgres.SQLGetIncludedIds(sql, Convert.ToInt32(bookingId));
+
+                foreach (var Booking in listofids)
+                {
+                    mail.SendMail(mailDate, time, "cancellation", golfids);
+                }
+                
                 // deleta alla spelare i bokningen
                 sql = "DELETE FROM included WHERE bookingid = '" + bookingId.ToString() + "'";
                 ToolBox.SQL_NonParamCommand(sql, ref result);
@@ -143,15 +149,20 @@ namespace Golf2
 
             else
             {
-                Page p = new Page();
-                DateTime mailDate = Convert.ToDateTime(p.Session["NextDay"]);
-
-                mail.SendMail(mailDate, time, "Cancellation", GolfIds);
+                //söker efter vilket golfid i included som ska aviseras
+                sql = "SELECT golfid FROM included WHERE bookingid = @bookingid AND includedid = @includedid";
+                string golfid = postgres.SQLGetGolfidIncluded(sql, Convert.ToInt32(bookingId), Convert.ToInt32(includedid));
+                golfids.Add(golfid);
 
                 // deleta spelaren
                 sql = "DELETE FROM included WHERE includedid = '" + includedid.ToString() + "'";
                 ToolBox.SQL_NonParamCommand(sql, ref result);
+                
+                //avisera golfids av avbokning
+                mail.SendMail(mailDate, time, "cancellation", golfids);
             }
+
+            
 
             IsIncludedTableEmptyForBooking(bookingId);      // rensar bort bokning om den är tom
 
