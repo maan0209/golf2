@@ -146,7 +146,7 @@ namespace Golf2
                 Page p = new Page();
                 DateTime mailDate = Convert.ToDateTime(p.Session["NextDay"]);
 
-                mail.SendMail(mailDate,time,"Cancellation", GolfIds);
+                //mail.SendMail(mailDate,time,"Cancellation", GolfIds);
 
                 // deleta spelaren
                 sql = "DELETE FROM included WHERE includedid = '" + includedid.ToString() + "'";
@@ -673,10 +673,8 @@ namespace Golf2
                             "FROM booking " +
                             "WHERE booking.bookingdate = @bookingdate AND booking.timeid = @timeid AND booking.owner = @owner";
 
-                int exists = 0;
-
                 Postgress p = new Postgress();
-
+                int exists = 0;
                 exists = p.SQLCheckDateAndTime(sql, dt, timeid, owner);
 
                 if (exists == 0) // om det inte redan finns tider bokade samma dag av samma owner
@@ -720,8 +718,8 @@ namespace Golf2
                         p.SQLbooking2(sql, item, bookingid);
                     }
 
-                    mail = new Mail();
-                    mail.SendMail(anyDate,timeHHMM+ ":00","booking",cb);
+                    //mail = new Mail();
+                    //mail.SendMail(anyDate,timeHHMM+ ":00","booking",cb);
                     bookingAlertsuccess.Visible = true;
                     bookingAlertFail.Visible = false;
                     bookingAlertsuccess.InnerText = "Bokningen lyckades!";
