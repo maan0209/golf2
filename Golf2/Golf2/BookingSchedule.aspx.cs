@@ -146,7 +146,7 @@ namespace Golf2
                 Page p = new Page();
                 DateTime mailDate = Convert.ToDateTime(p.Session["NextDay"]);
 
-                //mail.SendMail(mailDate,time,"Cancellation", GolfIds);
+                mail.SendMail(mailDate, time, "Cancellation", GolfIds);
 
                 // deleta spelaren
                 sql = "DELETE FROM included WHERE includedid = '" + includedid.ToString() + "'";
@@ -718,8 +718,8 @@ namespace Golf2
                         p.SQLbooking2(sql, item, bookingid);
                     }
 
-                    //mail = new Mail();
-                    //mail.SendMail(anyDate,timeHHMM+ ":00","booking",cb);
+                    mail = new Mail();
+                    mail.SendMail(anyDate, timeHHMM + ":00", "booking", cb);
                     bookingAlertsuccess.Visible = true;
                     bookingAlertFail.Visible = false;
                     bookingAlertsuccess.InnerText = "Bokningen lyckades!";

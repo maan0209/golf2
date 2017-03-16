@@ -80,6 +80,7 @@ namespace Golf2
             try
             {
                 cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("golfid", golfid);
                 string email = Convert.ToString(cmd.ExecuteScalar());
 
                 return email;

@@ -46,19 +46,18 @@ namespace Golf2
             {
                 foreach (string email in EmailList)
                 {
-                    subjectTbx.Text = "Booking";
-                    notification = "Du är inbokad i en boll klockan " + time + " den " + date;
-                    bodyTbx.Text = notification;
-
-                    MailMessage message = new MailMessage("Golfklubben", email);
+                    MailMessage message = new MailMessage("golfklubben_halslaget@outlook.com", email);
                     message.IsBodyHtml = true;
+                    message.Subject = "Booking";
+                    notification = "Du är inbokad i en boll klockan " + time + " den " + date.ToShortDateString();
+                    message.Body = notification;
 
                     SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
                     client.EnableSsl = true;
 
                     client.Credentials = new System.Net.NetworkCredential("golfklubben_halslaget@outlook.com", "Golfbil123321");
                     client.Send(message);
-                    Status.Text = "mailet är skickat";
+                    //Status.Text = "mailet är skickat";
                 }
             }
 
@@ -78,7 +77,7 @@ namespace Golf2
 
                     client.Credentials = new System.Net.NetworkCredential("golfklubben_halslaget@outlook.com", "Golfbil123321");
                     client.Send(message);
-                    Status.Text = "mailet är skickat";
+                    //Status.Text = "mailet är skickat";
                 }
             }
 
