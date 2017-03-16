@@ -21,6 +21,8 @@ namespace Golf2
         /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
+            ScorecardWithInfo.Visible = false;
+
             if (HiddenChangeDateVariable.Value != "")
             {
                 string clientSideChangeOfDate = HiddenChangeDateVariable.Value.ToString();
@@ -46,34 +48,49 @@ namespace Golf2
             if (isCourseClosed)
             {
                 GenerateCourseIsClosed();
+                ScorecardWithInfo.Visible = false;
+                dropdownscorecard.Visible = false;
+                printScorecard.Visible = false;
             }
 
             ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
 
-            GenerateCheckinList(anyDate);
-
-            if (isadmin == true && isCourseClosed == false)
+            if(isCourseClosed == false)
             {
+                GenerateCheckinList(anyDate);
 
-                if(!IsPostBack)
+                if (isadmin == true)
                 {
-                    DailyBookings bokning = new DailyBookings(anyDate);
 
-                    var name = from t in bokning.BookingsPerSpecifiedDate
-                               select new
-                               {
-                                   CompleteName = t.FirstName + " " + t.SurName + "#" + t.Hcp + "#" + t.BookingTime.ToShortTimeString() + "#" + t.Gender + "#",
-                                   GolfID = t.GolfId,
+                    ScorecardWithInfo.Visible = true;
+                    dropdownscorecard.Visible = true;
+                    printScorecard.Visible = true;
 
-                               };
-                    
-                    dropdownscorecard.DataSource = name;
-                    dropdownscorecard.DataTextField = "GolfId";
-                    dropdownscorecard.DataValueField =  "CompleteName";
-                    dropdownscorecard.DataBind();
+                    if (!IsPostBack)
+                    {
+                        DailyBookings bokning = new DailyBookings(anyDate);
 
+                        var name = from t in bokning.BookingsPerSpecifiedDate
+                                   select new
+                                   {
+                                       CompleteName = t.FirstName + " " + t.SurName + "#" + t.Hcp + "#" + t.BookingTime.ToShortTimeString() + "#" + t.Gender + "#",
+                                       GolfID = t.GolfId,
+
+                                   };
+
+                        dropdownscorecard.DataSource = name;
+                        dropdownscorecard.DataTextField = "GolfId";
+                        dropdownscorecard.DataValueField = "CompleteName";
+                        dropdownscorecard.DataBind();
+
+                    }
                 }
             }
+            
+
+
+
+            
           
         }
 
@@ -1160,8 +1177,8 @@ namespace Golf2
             scorecardGolfId.Text = aktuelltgolfID.Text;
             scorecardName.Text = person[0];
             scorecardHcp.Text = person[1];
-            //scorecardTime.Text = person[2];
-            //scorecardSpelHcp.Text = erhslag.ToString();
+            scorecardTime.Text = person[2];
+            scorecardSpelHcp.Text = erhslag.ToString();
             
             
 
