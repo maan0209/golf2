@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Configuration;
+using System.Data;
 using System.Linq;
 using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.ComponentModel;
-using System.Web.UI.HtmlControls;
-using System.Data;
 using System.Web.Services;
-using System.Configuration;
-using System.ComponentModel;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 namespace Golf2
 {
@@ -22,6 +21,8 @@ namespace Golf2
         /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
+            ScorecardWithInfo.Visible = false;
+
             if (HiddenChangeDateVariable.Value != "")
             {
                 string clientSideChangeOfDate = HiddenChangeDateVariable.Value.ToString();
@@ -47,34 +48,49 @@ namespace Golf2
             if (isCourseClosed)
             {
                 GenerateCourseIsClosed();
+                ScorecardWithInfo.Visible = false;
+                dropdownscorecard.Visible = false;
+                printScorecard.Visible = false;
             }
 
             ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
 
-            GenerateCheckinList(anyDate);
-
-            if (isadmin == true && isCourseClosed == false)
+            if(isCourseClosed == false)
             {
+                GenerateCheckinList(anyDate);
 
-                if(!IsPostBack)
+                if (isadmin == true)
                 {
-                    DailyBookings bokning = new DailyBookings(anyDate);
 
-                    var name = from t in bokning.BookingsPerSpecifiedDate
-                               select new
-                               {
-                                   CompleteName = t.FirstName + " " + t.SurName + "#" + "Hcp:" + t.Hcp + "#" + t.BookingTime.ToShortTimeString(),
-                                   GolfID = t.GolfId,
+                    ScorecardWithInfo.Visible = true;
+                    dropdownscorecard.Visible = true;
+                    printScorecard.Visible = true;
 
-                               };
-                    
-                    dropdownscorecard.DataSource = name;
-                    dropdownscorecard.DataTextField = "GolfId";
-                    dropdownscorecard.DataValueField =  "CompleteName";
-                    dropdownscorecard.DataBind();
+                    if (!IsPostBack)
+                    {
+                        DailyBookings bokning = new DailyBookings(anyDate);
 
+                        var name = from t in bokning.BookingsPerSpecifiedDate
+                                   select new
+                                   {
+                                       CompleteName = t.FirstName + " " + t.SurName + "#" + t.Hcp + "#" + t.BookingTime.ToShortTimeString() + "#" + t.Gender + "#",
+                                       GolfID = t.GolfId,
+
+                                   };
+
+                        dropdownscorecard.DataSource = name;
+                        dropdownscorecard.DataTextField = "GolfId";
+                        dropdownscorecard.DataValueField = "CompleteName";
+                        dropdownscorecard.DataBind();
+
+                    }
                 }
             }
+            
+
+
+
+            
           
         }
 
@@ -100,13 +116,12 @@ namespace Golf2
 
         #region ########## FIELDS ########## 
 
-        private Postgress p = new Postgress();
         private DataTable table;
         private DateTime anyDate;
         int co = 0;
         private bool isadmin;
         private List<string> golfIdList;
-
+        private Mail mail = new Mail();
         #endregion
 
 
@@ -119,23 +134,52 @@ namespace Golf2
         /// <param name="bookingId"></param>
         /// <returns></returns>
         [WebMethod]
-        public static string deletePlayerFromBooking(string removeAllPlayers, string includedid, string bookingId)
+        public static string deletePlayerFromBooking(string removeAllPlayers, string includedid, string bookingId, string time)
         {
-            string sql = "";
+            
+            string sql = "";    
             string result = "";
+
+            Page p = new Page();
+            Mail mail = new Mail();
+            BindingList<string> golfids = new BindingList<string>();
+            BindingList<Booking> listofids = new BindingList<Booking>();
+            Postgress postgres = new Postgress();
+            DateTime mailDate = Convert.ToDateTime(p.Session["NextDay"]);
+
             if (Convert.ToBoolean(removeAllPlayers))
             {
+
+                //sök efter golfids utifrån bookingid
+                sql = "SELECT golfid, includedid FROM included WHERE bookingid = @bookingid";
+                listofids = postgres.SQLGetIncludedIds(sql, Convert.ToInt32(bookingId));
+
+                foreach (var Booking in listofids)
+                {
+                    mail.SendMail(mailDate, time, "cancellation", golfids);
+                }
+                
                 // deleta alla spelare i bokningen
                 sql = "DELETE FROM included WHERE bookingid = '" + bookingId.ToString() + "'";
                 ToolBox.SQL_NonParamCommand(sql, ref result);
-
             }
+
             else
             {
+                //söker efter vilket golfid i included som ska aviseras
+                sql = "SELECT golfid FROM included WHERE bookingid = @bookingid AND includedid = @includedid";
+                string golfid = postgres.SQLGetGolfidIncluded(sql, Convert.ToInt32(bookingId), Convert.ToInt32(includedid));
+                golfids.Add(golfid);
+
                 // deleta spelaren
                 sql = "DELETE FROM included WHERE includedid = '" + includedid.ToString() + "'";
                 ToolBox.SQL_NonParamCommand(sql, ref result);
+                
+                //avisera golfids av avbokning
+                mail.SendMail(mailDate, time, "cancellation", golfids);
             }
+
+            
 
             IsIncludedTableEmptyForBooking(bookingId);      // rensar bort bokning om den är tom
 
@@ -657,6 +701,7 @@ namespace Golf2
                             "FROM booking " +
                             "WHERE booking.bookingdate = @bookingdate AND booking.timeid = @timeid AND booking.owner = @owner";
 
+                Postgress p = new Postgress();
                 int exists = 0;
                 exists = p.SQLCheckDateAndTime(sql, dt, timeid, owner);
 
@@ -701,14 +746,15 @@ namespace Golf2
                         p.SQLbooking2(sql, item, bookingid);
                     }
 
+                    mail = new Mail();
+                    mail.SendMail(anyDate, timeHHMM + ":00", "booking", cb);
                     bookingAlertsuccess.Visible = true;
                     bookingAlertFail.Visible = false;
                     bookingAlertsuccess.InnerText = "Bokningen lyckades!";
                 }
                 else
                 {
-                    Session["error"] = "Bokningen är inte genomförd. Någon i bollen har redan en tid samma dag";
-
+                    Session["error"] = "Bokningen är inte genomförd. Någon i bollen har redan en tid samma dag";              
                     bookingAlertFail.Visible = true;
                     bookingAlertsuccess.Visible = false;
                     bookingAlertFail.InnerText = Session["error"].ToString();
@@ -747,6 +793,7 @@ namespace Golf2
                         "INNER JOIN included ON included.bookingid = booking.bookingid " +
                         "WHERE included.golfid = @golfid AND booking.bookingdate = @date";
 
+            Postgress p = new Postgress();
             
             string exists = p.SQLCheckIfBooked(sql, golfid, date);
 
@@ -975,7 +1022,7 @@ namespace Golf2
                     cancelBookingButton.Attributes.Add("class", "cancelTeeButton disable" + item["bookingid"].ToString());                             // css-formatering
                                                                                                                                                        //cancelBookingButton.Attributes.Add("owner", item["owner"].ToString());                      // vem som äger bokningen
                                                                                                                                                        //förklaring på onclick: <bokningsid> <includedid> <golfid att avbokas> <bokningsägare>
-                    cancelBookingButton.Attributes.Add("onclick", "cancelPlayer(\'" + item["bookingid"].ToString() + "\', \'" + item["includedid"].ToString() + "\', \'" + item["golfid"].ToString() + "\', \'" + item["owner"].ToString() + "\')");
+                    cancelBookingButton.Attributes.Add("onclick", "cancelPlayer(\'" + item["bookingid"].ToString() + "\', \'" + item["includedid"].ToString() + "\', \'" + item["golfid"].ToString() + "\', \'" + item["owner"].ToString() + "\',\'"+item["time"].ToString()+"\')");
 
                     List.Controls.Add(listInfo);
                     List.Controls.Add(teeTime);
@@ -1097,14 +1144,41 @@ namespace Golf2
                     nyttOrd += c.ToString();
                 }
             }
-            
 
+            double spelHcp;
+            double slope;
+            double CR;
+            double Par;
+            double värde;
 
-            
+            if (person[3] == "Male")
+            {
+                slope = 128;
+                värde = 113;
+                CR = 71.4;
+                Par = 72;
+                spelHcp = Convert.ToDouble(person[1]) * (slope / värde) + (CR - Par);
+                
+            }
+
+            else
+            {
+                slope = 124;
+                värde = 113;
+                CR = 73;
+                Par = 72;
+                spelHcp = Convert.ToDouble(person[1]) * (slope / värde) + (CR - Par);
+               
+            }
+
+            var erhslag = Math.Round(spelHcp, 0, MidpointRounding.AwayFromZero);
 
             scorecardDate.Text = anyDate.ToShortDateString();
             scorecardGolfId.Text = aktuelltgolfID.Text;
             scorecardName.Text = person[0];
+            scorecardHcp.Text = person[1];
+            scorecardTime.Text = person[2];
+            scorecardSpelHcp.Text = erhslag.ToString();
             
             
 

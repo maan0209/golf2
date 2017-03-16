@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Linq;
+using System.Net.Mail;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Net.Mail;
 
 namespace Golf2
 {
     public partial class Mail : System.Web.UI.Page
     {
+        BindingList<string> EmailList = new BindingList<string>();
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -17,51 +21,116 @@ namespace Golf2
 
         protected void sendBtn_Click(object sender, EventArgs e)
         {
-           
-            try {
-             
-            MailMessage message = new MailMessage(fromTbx.Text, toTbx.Text,subjectTbx.Text,bodyTbx.Text);
-            message.IsBodyHtml = true;
-
-            SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
-            client.EnableSsl = true;
-            
-            //I paranteserna nedan fick jag hårdkoda in min egna mail och lösen då funkade det men tar bort det nu när jag checkar in =)
-            client.Credentials = new System.Net.NetworkCredential(User.Text,Password.Text);
-            client.Send(message);
-            Status.Text = "mailet är skickat";
-            }
-
-            catch(Exception ex)
-            {
-                Status.Text = ex.StackTrace;
-            }
+         
 
         }
 
-        public void MailMessage(DateTime date, DateTime time, string typeOfMail, List<string> mailAddresses)
+        /// <summary>
+        /// Metoden som skickar aviseringar om bokning/avbokning
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="time"></param>
+        /// <param name="typeOfMail"></param>
+        /// <param name="golfIds"></param>
+        public void SendMail(DateTime date, string time, string typeOfMail, BindingList<string> golfIds)
         {
+            foreach (string item in golfIds)
+            {
+                string mail = GetEmail(item);
+                EmailList.Add(mail);
+            }
+            
+
             string notification;
 
             if (typeOfMail == "booking")
             {
-                foreach(string s in mailAddresses)
+                foreach (string email in EmailList)
                 {
-                    subjectTbx.Text = "Booking";
-                    notification = "Du är inbokad i en boll klockan " + time + " den " + date;                 
-                    bodyTbx.Text = notification;                   
-                }    
+                    MailMessage message = new MailMessage("golfklubben_halslaget@outlook.com", email);
+                    message.IsBodyHtml = true;
+                    message.Subject = "Booking";
+                    notification = "Du är inbokad i en boll klockan " + time + " den " + date.ToShortDateString();
+                    message.Body = notification;
+
+                    SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
+                    client.EnableSsl = true;
+
+                    client.Credentials = new System.Net.NetworkCredential("golfklubben_halslaget@outlook.com", "Golfbil123321");
+                    client.Send(message);
+                    //Status.Text = "mailet är skickat";
+                }
             }
-        
+
             else if (typeOfMail == "cancellation")
             {
-                foreach (string s in mailAddresses)
+                foreach (string email in EmailList)
                 {
-                    subjectTbx.Text = "Cancellation";
+                    MailMessage message = new MailMessage("golfklubben_halslaget@outlook.com", email);
+                    message.IsBodyHtml = true;
+
+                    message.Subject = "Cancellation";
                     notification = "Din bokning för " + date + " klockan " + time + " har blivit avbokad";
-                    bodyTbx.Text = notification;                    
-                }              
-            }          
+                    message.Body = notification;
+
+                    SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
+                    client.EnableSsl = true;
+
+                    client.Credentials = new System.Net.NetworkCredential("golfklubben_halslaget@outlook.com", "Golfbil123321");
+                    client.Send(message);
+                    //Status.Text = "mailet är skickat";
+                }
+            }
+
+            //try
+            //{
+            //    MailMessage message = new MailMessage(fromTbx.Text, toTbx.Text);
+            //    message.IsBodyHtml = true;
+
+            //    SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
+            //    client.EnableSsl = true;
+
+            //    client.Credentials = new System.Net.NetworkCredential("golfklubben_halslaget@outlook.com", "Golfbil123321");
+            //    client.Send(message);
+            //    Status.Text = "mailet är skickat";
+            //}
+
+            //catch (Exception ex)
+            //{
+            //    Status.Text = ex.StackTrace;
+            //}
         }
+
+        /// <summary>
+        /// Hämtar emails utifrån golfids
+        /// </summary>
+        /// <param name="golfIDs"></param>
+        /// <returns></returns>
+        private string GetEmail(string golfid)
+        {
+            Postgress p = new Postgress();
+            string sql = "SELECT email FROM person WHERE golfid= @golfid";
+            string mail = p.SQLGetEmail(sql, golfid);
+            return mail;
+        }
+
+
+        //      try
+        //    {
+        //        MailMessage message = new MailMessage(fromTbx.Text, toTbx.Text, subjectTbx.Text, bodyTbx.Text);
+        //message.IsBodyHtml = true;
+
+        //        SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
+        //client.EnableSsl = true;
+
+        //        client.Credentials = new System.Net.NetworkCredential(User.Text, Password.Text);
+        //        client.Send(message);
+        //        Status.Text = "mailet är skickat";
+        //    }
+
+        //    catch (Exception ex)
+        //    {
+        //        Status.Text = ex.StackTrace;
+        //    }
     }
 }

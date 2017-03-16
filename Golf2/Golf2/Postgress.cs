@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Web;
-using Npgsql;
-using System.Data;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
 namespace Golf2
 {
     public class Postgress
@@ -67,6 +67,104 @@ namespace Golf2
             }
             conn.Close();
             return table;
+        }
+
+
+        /// <summary>
+        /// Hämta email från 'person' i databas utifrån golfid
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public string SQLGetEmail(string sql, string golfid)
+        {
+            try
+            {
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("golfid", golfid);
+                string email = Convert.ToString(cmd.ExecuteScalar());
+
+                return email;
+            }
+
+            catch (NpgsqlException ex)
+            {
+                string exm = ex.Message;
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        /// <summary>
+        /// hämtar golfid utifrån bookingid i included
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="bookingid"></param>
+        /// <returns></returns>
+        public string SQLGetGolfidIncluded(string sql, int bookingid, int includedid)
+        {
+            try
+            {
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("bookingid", bookingid);
+                cmd.Parameters.AddWithValue("includedid", includedid);
+                string golfid = Convert.ToString(cmd.ExecuteScalar());
+
+                return golfid;
+            }
+
+            catch (NpgsqlException ex)
+            {
+                string exm = ex.Message;
+                return "";
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        /// <summary>
+        /// hämta includedid och golfsid utifrån bookingid
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="bookingid"></param>
+        /// <returns></returns>
+        public BindingList<Booking> SQLGetIncludedIds(string sql, int bookingid)
+        {
+            try
+            {
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("bookingid", bookingid);
+                dr = cmd.ExecuteReader();
+
+                BindingList<Booking> includedids = new BindingList<Booking>();
+                Booking included;
+
+                while (dr.Read())
+                {
+                    included = new Booking()
+                    {
+                        includedid = (int)dr["includedid"],
+                        GolfId = dr["golfid"].ToString(),
+                    };
+                    includedids.Add(included);
+                }
+                dr.Close();
+                return includedids;
+
+            }
+            catch (NpgsqlException ex)
+            {
+                string exm = ex.Message;
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         /// <summary>
@@ -164,7 +262,6 @@ namespace Golf2
         {
             try
             {
-                conn.Open();
                 cmd = new NpgsqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("bookingdate", dt);
                 cmd.Parameters.AddWithValue("timeid", timeid);
@@ -180,12 +277,19 @@ namespace Golf2
             }
             finally
             {
-                
                 conn.Close();
             }
             
         }
 
+        /// <summary>
+        /// Kontrollera om entry finns i 'included'
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="dt"></param>
+        /// <param name="timeid"></param>
+        /// <param name="golfid"></param>
+        /// <returns></returns>
         public string SQLCheckIncluded(string sql, DateTime dt, int timeid, string golfid)
         {
             try
