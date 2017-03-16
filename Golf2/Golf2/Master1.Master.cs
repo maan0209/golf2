@@ -28,14 +28,17 @@ namespace Golf2
             int obj = Convert.ToInt32(p.cmd.ExecuteScalar());           /* vi måste även hantera kontonamn med bokstäver, med tanke på personalkonton om de ej ska listas som vanliga golfidn - Martin N*/
             if(obj > 0)
             {
+
                 Session["golfid"] = golf_id.Text;
-                Response.Redirect("inloggad.aspx");
                 p.conn.Close();
+                Response.Redirect("inloggad.aspx");
+                
             }
             else
             {
-                Response.Write("<script>alert('Felaktigt användarnamn och lösenord')</script>");
                 p.conn.Close();
+                Response.Write("<script>alert('Felaktigt användarnamn och lösenord')</script>");
+                
             }
             
             
