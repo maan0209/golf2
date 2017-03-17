@@ -18,6 +18,7 @@ namespace Golf2
         public string FirstName { get; set; }       // förnamn
         public string SurName { get; set; }         // efternamn
         public double Hcp { get; set; }             // spelarens handikapp
-        
+        public int includedid { get; set; }         // unikt id i tabellen included
+
     }
 }
