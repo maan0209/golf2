@@ -79,14 +79,14 @@
         <div id="dropdownScorecard">
             <asp:DropDownList ID="dropdownscorecard" runat="server" OnSelectedIndexChanged="dropdownscorecard_SelectedIndexChanged" AutoPostBack="true" Visible="false">
 
-                <asp:ListItem Text="Välf aktuellt GolfId" Value="0"></asp:ListItem>
+                
             </asp:DropDownList>
             
             
             <asp:Label ID="golfID" runat="server" Text="" Visible="false"></asp:Label><asp:Label ID="aktuelltgolfID" runat="server" Visible="false"></asp:Label>
              <asp:Label ID="name" runat="server" Text="" Visible="false"></asp:Label><asp:Label ID="aktuelltNamn" runat="server" Visible="false"></asp:Label>
              <asp:Label ID="date" runat="server" Text="" Visible="false"></asp:Label><asp:Label ID="aktuelltDatum" runat="server" Visible="false"></asp:Label>
-
+             <asp:RadioButtonList ID="chooseTee" runat="server" Visible="false"><asp:ListItem Text="Röd" Value="red" /><asp:ListItem Text="Gul" Value="yellow" /></asp:RadioButtonList>
 
              <asp:Button ID="printScorecard" Visible="false" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/><br />
 
