@@ -1095,16 +1095,16 @@ namespace Golf2
 
         protected void Button1_Click(object sender, EventArgs e)
         {
-            generateDropdownList();
-            clearScorecard();
+            generateDropdownList(); //Kod som krävs för att skapa dropdownlist
+            clearScorecard();       //Kod som krävs för att rensa uppgifter i scorekortet
             // ####### 170308: ALL KOD FÖR ATT ÄNDRA DATUM HANTERAS ISTÄLLET PÅ CLIENT SIDE OCH FÅNGAS UPP I PAGE_LOAD
         }
 
         //OnClickEvents för att byta till nästkommande dag
         protected void Button2_Click(object sender, EventArgs e)
         {
-            generateDropdownList();
-            clearScorecard();
+            generateDropdownList(); //Kod som krävs för att skapa dropdownlist
+            clearScorecard();       //Kod som krävs för att rensa uppgifter i scorekortet
             // ####### 170308: ALL KOD FÖR ATT ÄNDRA DATUM HANTERAS ISTÄLLET PÅ CLIENT SIDE OCH FÅNGAS UPP I PAGE_LOAD
         }
 
