@@ -1149,8 +1149,161 @@ namespace Golf2
             scorecardGolfId.Text = aktuelltgolfID.Text;
             scorecardName.Text = person[0];
             scorecardHcp.Text = person[1];
-            //scorecardTime.Text = person[2];
-            //scorecardSpelHcp.Text = erhslag.ToString();
+            scorecardTime.Text = person[2];
+            scorecardSpelHcp.Text = erhslag.ToString();
+            
+
+            for (int i = 1; i <= erhslag; i++)
+            {
+
+                
+                //index 1
+               if(i <= erhslag)
+                {
+                    string getPar = hole15Par.Text;
+                    int totalStrokes = Convert.ToInt32(getPar) + 1;
+                    hole15Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 2
+                if (i <= erhslag)
+                {
+                    string getpar = hole4Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole4Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 3
+                if (i <= erhslag)
+                {
+                    string getpar = hole13Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole13Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 4
+                if (i <= erhslag)
+                {
+                    string getpar = hole5Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole5Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 5
+                if (i <= erhslag)
+                {
+                    string getpar = hole18Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole18Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 6
+                if (i <= erhslag)
+                {
+                    string getpar = hole9Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole9Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 7
+                if (i <= erhslag)
+                {
+                    string getpar = hole12Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole12Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 8
+                if (i <= erhslag)
+                {
+                    string getpar = hole7Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole7Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 9
+                if (i <= erhslag)
+                {
+                    string getpar = hole10Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole10Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 10
+                if (i <= erhslag)
+                {
+                    string getpar = hole3Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole3Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 11
+                if (i <= erhslag)
+                {
+                    string getpar = hole17Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole17Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 12
+                if (i <= erhslag)
+                {
+                    string getpar = hole8Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole8Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+
+                //Index 13
+                if (i <= erhslag)
+                {
+                    string getpar = hole11Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole11Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 14
+                if (i <= erhslag)
+                {
+                    string getpar = hole2Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole2Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 15
+                if (i <= erhslag)
+                {
+                    string getpar = hole16Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole16Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 16
+                if (i <= erhslag)
+                {
+                    string getpar = hole1Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole1Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 17
+                if (i <= erhslag)
+                {
+                    string getpar = hole14Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole14Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+                //Index 18
+                if (i <= erhslag)
+                {
+                    string getpar = hole6Par.Text;
+                    int totalStrokes = Convert.ToInt32(getpar) + 1;
+                    hole6Erh.Text = totalStrokes.ToString();
+                    i++;
+                }
+
+            }
             
             
 

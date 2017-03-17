@@ -161,9 +161,9 @@
 <td id ="Hål">1</td>
 <td id ="Gul">453</td>
 <td id ="Röd">386</td>
-<td id ="Par">   <asp:Label ID="hole1Par" runat="server"> 5 </asp:Label></td>
-<td id ="Index"> <asp:Label ID="hole1Index" runat="server"> 16 </asp:Label></td>
-<td id="Erh">    <asp:Label ID="hole1Erh" runat="server"></asp:Label></td>
+<td id ="Par">   <asp:Label ID="hole1Par" runat="server" Text="5"> 5 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole1Index" runat="server" > 16 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole1Erh" runat="server" Text=""></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
