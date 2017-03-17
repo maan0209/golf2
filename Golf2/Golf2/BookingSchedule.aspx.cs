@@ -1226,7 +1226,7 @@ namespace Golf2
 
 
 
-                    for (int i = 0; i < erhslag; i++)
+                    for (int i = 0; i < erhslag;)
                     {
 
 
