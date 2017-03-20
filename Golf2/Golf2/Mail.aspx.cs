@@ -21,8 +21,26 @@ namespace Golf2
 
         protected void sendBtn_Click(object sender, EventArgs e)
         {
-         
 
+
+
+            try
+            {
+                MailMessage message = new MailMessage(fromTbx.Text, toTbx.Text, subjectTbx.Text, bodyTbx.Text);
+                message.IsBodyHtml = true;
+
+                SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
+                client.EnableSsl = true;
+
+                client.Credentials = new System.Net.NetworkCredential("golfklubben_halslaget", "Golfbil123321");
+                client.Send(message);
+                Status.Text = "mailet är skickat";
+            }
+
+            catch (Exception ex)
+            {
+                Status.Text = ex.StackTrace;
+            }
         }
 
         /// <summary>
@@ -36,69 +54,59 @@ namespace Golf2
         {
             foreach (string item in golfIds)
             {
-                string mail = GetEmail(item);
-                EmailList.Add(mail);
+                if (item != "Gäst")
+                {
+                    string mail = GetEmail(item);
+                    EmailList.Add(mail);
+                }          
             }
             
-
             string notification;
 
-            if (typeOfMail == "booking")
+            try
             {
-                foreach (string email in EmailList)
+                if (typeOfMail == "booking")
                 {
-                    MailMessage message = new MailMessage("golfklubben_halslaget@outlook.com", email);
-                    message.IsBodyHtml = true;
-                    message.Subject = "Booking";
-                    notification = "Du är inbokad i en boll klockan " + time + " den " + date.ToShortDateString();
-                    message.Body = notification;
+                    foreach (string email in EmailList)
+                    {
+                        MailMessage message = new MailMessage("golfklubben_halslaget@outlook.com", email);
+                        message.IsBodyHtml = true;
+                        message.Subject = "Booking";
+                        notification = "Du är inbokad i en boll klockan " + time + " den " + date.ToShortDateString();
+                        message.Body = notification;
 
-                    SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
-                    client.EnableSsl = true;
+                        SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
+                        client.EnableSsl = true;
 
-                    client.Credentials = new System.Net.NetworkCredential("golfklubben_halslaget@outlook.com", "Golfbil123321");
-                    client.Send(message);
-                    //Status.Text = "mailet är skickat";
+                        client.Credentials = new System.Net.NetworkCredential("golfklubben_halslaget@outlook.com", "Golfbil123321");
+                        client.Send(message);
+                        //Status.Text = "mailet är skickat";
+                    }
+                }
+
+
+                else if (typeOfMail == "cancellation")
+                {
+                    foreach (string email in EmailList)
+                    {
+                        subjectTbx.Text = "Cancellation";
+                        notification = "Din bokning för " + date + " klockan " + time + " har blivit avbokad";
+                        bodyTbx.Text = notification;
+
+                        MailMessage message = new MailMessage(fromTbx.Text, toTbx.Text);
+                        message.IsBodyHtml = true;
+
+                        SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
+                        client.EnableSsl = true;
+
+                        client.Credentials = new System.Net.NetworkCredential("golfklubben_halslaget@outlook.com", "Golfbil123321");
+                        client.Send(message);
+                        //Status.Text = "mailet är skickat";
+                    }
                 }
             }
 
-            else if (typeOfMail == "cancellation")
-            {
-                foreach (string email in EmailList)
-                {
-                    MailMessage message = new MailMessage("golfklubben_halslaget@outlook.com", email);
-                    message.IsBodyHtml = true;
-
-                    message.Subject = "Cancellation";
-                    notification = "Din bokning för " + date + " klockan " + time + " har blivit avbokad";
-                    message.Body = notification;
-
-                    SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
-                    client.EnableSsl = true;
-
-                    client.Credentials = new System.Net.NetworkCredential("golfklubben_halslaget@outlook.com", "Golfbil123321");
-                    client.Send(message);
-                    //Status.Text = "mailet är skickat";
-                }
-            }
-
-            //try
-            //{
-            //    MailMessage message = new MailMessage(fromTbx.Text, toTbx.Text);
-            //    message.IsBodyHtml = true;
-
-            //    SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
-            //    client.EnableSsl = true;
-
-            //    client.Credentials = new System.Net.NetworkCredential("golfklubben_halslaget@outlook.com", "Golfbil123321");
-            //    client.Send(message);
-            //    Status.Text = "mailet är skickat";
-            //}
-
-            //catch (Exception ex)
-            //{
-            //    Status.Text = ex.StackTrace;
-            //}
+            catch { }
         }
 
         /// <summary>
@@ -115,22 +123,5 @@ namespace Golf2
         }
 
 
-        //      try
-        //    {
-        //        MailMessage message = new MailMessage(fromTbx.Text, toTbx.Text, subjectTbx.Text, bodyTbx.Text);
-        //message.IsBodyHtml = true;
-
-        //        SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
-        //client.EnableSsl = true;
-
-        //        client.Credentials = new System.Net.NetworkCredential(User.Text, Password.Text);
-        //        client.Send(message);
-        //        Status.Text = "mailet är skickat";
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        Status.Text = ex.StackTrace;
-        //    }
     }
 }
