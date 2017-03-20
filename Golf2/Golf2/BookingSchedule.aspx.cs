@@ -21,6 +21,8 @@ namespace Golf2
         /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
+            ScorecardWithInfo.Visible = false;
+
             if (HiddenChangeDateVariable.Value != "")
             {
                 string clientSideChangeOfDate = HiddenChangeDateVariable.Value.ToString();
@@ -42,38 +44,41 @@ namespace Golf2
 
             // genererar bokningsschemat, gör först en kontroll på om banan är öppen
             // Är den inte det, så genereras ett meddelande att den är stängd
-            bool isCourseClosed = GenerateBookingSchedule();   
+            bool isCourseClosed = GenerateBookingSchedule();
+             
             if (isCourseClosed)
             {
                 GenerateCourseIsClosed();
+                ScorecardWithInfo.Visible = false;
+                dropdownscorecard.Visible = false;
+                printScorecard.Visible = false;
             }
 
             ToolBox.checkIfUserIsAdmin(ref isadmin, Session["golfid"].ToString());
 
-            GenerateCheckinList(anyDate);
 
-            if (isadmin == true && isCourseClosed == false)
+            if(isCourseClosed == false)
             {
-
-                if(!IsPostBack)
+                GenerateCheckinList(anyDate);
+                
+                if (isadmin == true)
                 {
-                    DailyBookings bokning = new DailyBookings(anyDate);
+                        ScorecardWithInfo.Visible = true;
+                        dropdownscorecard.Visible = true;
+                        printScorecard.Visible = true;
+                    chooseTee.Visible = true;
 
-                    var name = from t in bokning.BookingsPerSpecifiedDate
-                               select new
-                               {
-                                   CompleteName = t.FirstName + " " + t.SurName + "#" + t.Hcp + "#" + t.BookingTime.ToShortTimeString() + "#" + t.Gender + "#",
-                                   GolfID = t.GolfId,
-
-                               };
-                    
-                    dropdownscorecard.DataSource = name;
-                    dropdownscorecard.DataTextField = "GolfId";
-                    dropdownscorecard.DataValueField =  "CompleteName";
-                    dropdownscorecard.DataBind();
-
+                    if (!IsPostBack)
+                    {
+                        generateDropdownList();
+                    }
                 }
             }
+            
+
+
+
+            
           
         }
 
@@ -105,6 +110,7 @@ namespace Golf2
         private bool isadmin;
         private List<string> golfIdList;
         private Mail mail = new Mail();
+        private List<string> memberList;
         #endregion
 
 
@@ -130,15 +136,18 @@ namespace Golf2
             DataTable Table = new DataTable();
             ToolBox.SQL_NonParam(sql, ref Table);            
 
-            foreach (DataRow item in Table.Rows)
+            if (Convert.ToBoolean(removeAllPlayers))
             {
                 GolfIds.Add(item["golfid"].ToString());
                
             }
             mail.SendMail(mailDate, time, "Cancellation", GolfIds);
 
-            if (Convert.ToBoolean(removeAllPlayers))
-            {
+                foreach (var Booking in listofids)
+                {
+                    mail.SendMail(mailDate, time, "cancellation", golfids);
+                }
+                
                 // deleta alla spelare i bokningen
                 sql = "DELETE FROM included WHERE bookingid = '" + bookingId.ToString() + "'";
                 ToolBox.SQL_NonParamCommand(sql, ref result);
@@ -151,6 +160,8 @@ namespace Golf2
                 sql = "DELETE FROM included WHERE includedid = '" + includedid.ToString() + "'";
                 ToolBox.SQL_NonParamCommand(sql, ref result);
             }
+
+            
 
             IsIncludedTableEmptyForBooking(bookingId);      // rensar bort bokning om den är tom
 
@@ -215,7 +226,22 @@ namespace Golf2
             foreach (string item in golfIdList)
             {
                 HtmlGenericControl searchOptionsInList = new HtmlGenericControl("option");
-                searchOptionsInList.Attributes.Add("value", item.ToString());
+                searchOptionsInList.InnerHtml = item.ToString();
+                string tmp = "";
+
+                foreach (char c in item.ToString())
+                {
+                    if (c == Convert.ToChar(" "))
+                    {
+                        searchOptionsInList.Attributes.Add("value", tmp);
+                        tmp = "";
+                        break;
+                    }
+
+                    tmp += c.ToString();
+                }
+                
+
                 golfMembersList.Controls.Add(searchOptionsInList);
             }
 
@@ -273,16 +299,17 @@ namespace Golf2
 
             // läs ut lista med golfidn
             golfIdList = new List<string>();
-            string sql = "SELECT golfid FROM person;";
+            string sql = "SELECT golfid,firstname,surname FROM person;";
             table = new DataTable();
             ToolBox.SQL_NonParam(sql, ref table);
 
             foreach (DataRow item in table.Rows)
             {
-                golfIdList.Add(item["golfid"].ToString());                                      // lista skapas med alla existerande golfidn i databas
+                golfIdList.Add(item["golfid"].ToString() + " " + item["firstname"].ToString() + " " + item["surname"].ToString());                                      // lista skapas med alla existerande golfidn i databas
+             //   golfIdList.Add(item["firstname"].ToString() + " " + item["surname"].ToString());
             }
 
-            int counter = 0;
+            int counter = 0;    
             bool userIsAlreadyBookedThisTime = false;
             bool createdDivForAlreadyBookedUserCreated = false;
             foreach (Booking item in bookingsPerSpecifiedDate)                                  // loopa genom de bokningar som finns för dagen
@@ -1077,12 +1104,17 @@ namespace Golf2
 
         protected void Button1_Click(object sender, EventArgs e)
         {
+            
+            generateDropdownList(); //Kod som krävs för att skapa dropdownlist
+            clearScorecard();       //Kod som krävs för att rensa uppgifter i scorekortet
             // ####### 170308: ALL KOD FÖR ATT ÄNDRA DATUM HANTERAS ISTÄLLET PÅ CLIENT SIDE OCH FÅNGAS UPP I PAGE_LOAD
         }
 
         //OnClickEvents för att byta till nästkommande dag
         protected void Button2_Click(object sender, EventArgs e)
         {
+            generateDropdownList(); //Kod som krävs för att skapa dropdownlist
+            clearScorecard();       //Kod som krävs för att rensa uppgifter i scorekortet
             // ####### 170308: ALL KOD FÖR ATT ÄNDRA DATUM HANTERAS ISTÄLLET PÅ CLIENT SIDE OCH FÅNGAS UPP I PAGE_LOAD
         }
 
@@ -1095,67 +1127,287 @@ namespace Golf2
 
         protected void dropdownscorecard_SelectedIndexChanged(object sender, EventArgs e)
         {
-            aktuelltgolfID.Text = dropdownscorecard.SelectedItem.Text;
-            aktuelltNamn.Text = dropdownscorecard.SelectedItem.Value;
-            aktuelltDatum.Text = anyDate.ToShortDateString();
-
-            string tmpscorecard = aktuelltNamn.Text;
-            List<string> person = new List<string>();
-            string nyttOrd = "";
-
-            foreach(char c in tmpscorecard)
+            if (chooseTee.SelectedIndex > -1)
             {
-                if(c == Convert.ToChar("#"))
+
+                if (IsPostBack)
                 {
-                    person.Add(nyttOrd);
-                    nyttOrd = "";
+
+               
+
+
+                    aktuelltgolfID.Text = dropdownscorecard.SelectedItem.Text;
+                    aktuelltNamn.Text = dropdownscorecard.SelectedItem.Value;
+                    aktuelltDatum.Text = anyDate.ToShortDateString();
+                    string selectedTee = chooseTee.SelectedValue;
+
+                    string tmpscorecard = aktuelltNamn.Text;
+                    List<string> person = new List<string>();
+                    string nyttOrd = "";
+
+                    foreach (char c in tmpscorecard)
+                    {
+                        if (c == Convert.ToChar("#"))
+                        {
+                            person.Add(nyttOrd);
+                            nyttOrd = "";
+                        }
+                        else
+                        {
+                            nyttOrd += c.ToString();
+                        }
+                    }
+
+
+
+                    double spelHcp;
+                    double slope;
+                    double CR;
+                    double Par;
+                    double värde;
+
+                    if (person[3] == "Male")
+                    {
+                        if (selectedTee == "red")
+                        {
+                            slope = 120;
+                            CR = 67.8;
+                        }
+                        else
+                        {
+                            slope = 128;
+                            CR = 71.4;
+                        }
+                        värde = 113;
+                        Par = 72;
+                        spelHcp = Convert.ToDouble(person[1]) * (slope / värde) + (CR - Par);
+
+                    }
+
+                    else
+                    {
+                        if (selectedTee == "red")
+                        {
+                            slope = 124;
+                            CR = 73;
+                        }
+                        else
+                        {
+                            slope = 133;
+                            CR = 77.4;
+                        }
+                        värde = 113;
+                        Par = 72;
+                        spelHcp = Convert.ToDouble(person[1]) * (slope / värde) + (CR - Par);
+
+                    }
+
+                    var erhslag = Math.Round(spelHcp, 0, MidpointRounding.AwayFromZero);
+
+                    scorecardDate.Text = anyDate.ToShortDateString();
+                    scorecardGolfId.Text = aktuelltgolfID.Text;
+                    scorecardName.Text = person[0];
+                    scorecardHcp.Text = person[1];
+                    scorecardTime.Text = person[2];
+                    scorecardSpelHcp.Text = erhslag.ToString();
+
+
+
+                    hole1Erh.Text = hole1Par.Text;
+                    hole2Erh.Text = hole2Par.Text;
+                    hole3Erh.Text = hole3Par.Text;
+                    hole4Erh.Text = hole4Par.Text;
+                    hole5Erh.Text = hole5Par.Text;
+                    hole6Erh.Text = hole6Par.Text;
+                    hole7Erh.Text = hole7Par.Text;
+                    hole8Erh.Text = hole8Par.Text;
+                    hole9Erh.Text = hole9Par.Text;
+                    hole10Erh.Text = hole10Par.Text;
+                    hole11Erh.Text = hole11Par.Text;
+                    hole12Erh.Text = hole12Par.Text;
+                    hole13Erh.Text = hole13Par.Text;
+                    hole14Erh.Text = hole14Par.Text;
+                    hole15Erh.Text = hole15Par.Text;
+                    hole16Erh.Text = hole16Par.Text;
+                    hole17Erh.Text = hole17Par.Text;
+                    hole18Erh.Text = hole18Par.Text;
+
+
+
+
+
+                    for (int i = 0; i < erhslag;)
+                    {
+
+
+
+
+                        //index 1
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole15Erh.Text) + 1;
+                            hole15Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 2
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole4Erh.Text) + 1;
+                            hole4Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 3
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole13Erh.Text) + 1;
+                            hole13Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 4
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole5Erh.Text) + 1;
+                            hole5Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 5
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole18Erh.Text) + 1;
+                            hole18Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 6
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole9Erh.Text) + 1;
+                            hole9Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 7
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole12Erh.Text) + 1;
+                            hole12Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 8
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole7Erh.Text) + 1;
+                            hole7Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 9
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole10Erh.Text) + 1;
+                            hole10Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 10
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole3Erh.Text) + 1;
+                            hole3Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 11
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole17Erh.Text) + 1;
+                            hole17Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 12
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole8Erh.Text) + 1;
+                            hole8Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+
+                        //Index 13
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole11Erh.Text) + 1;
+                            hole11Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 14
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole2Erh.Text) + 1;
+                            hole2Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 15
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole16Erh.Text) + 1;
+                            hole16Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 16
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole1Erh.Text) + 1;
+                            hole1Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 17
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole14Erh.Text) + 1;
+                            hole14Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+                        //Index 18
+                        if (i < erhslag)
+                        {
+                            int totalStrokes = Convert.ToInt32(hole6Erh.Text) + 1;
+                            hole6Erh.Text = totalStrokes.ToString();
+                            i++;
+                        }
+
+                    }
+
+
                 }
-                else
-                {
-                    nyttOrd += c.ToString();
-                }
-            }
-
-            double spelHcp;
-            double slope;
-            double CR;
-            double Par;
-            double värde;
-
-            if (person[3] == "Male")
-            {
-                slope = 128;
-                värde = 113;
-                CR = 71.4;
-                Par = 72;
-                spelHcp = Convert.ToDouble(person[1]) * (slope / värde) + (CR - Par);
-                
-            }
-
-            else
-            {
-                slope = 124;
-                värde = 113;
-                CR = 73;
-                Par = 72;
-                spelHcp = Convert.ToDouble(person[1]) * (slope / värde) + (CR - Par);
                
             }
+            else
+            {
+                Response.Write("<script>alert('Välj vilken tee som scorekortet ska gälla.')</script>");
+            }
+        }
 
-            var erhslag = Math.Round(spelHcp, 0, MidpointRounding.AwayFromZero);
+        private void generateDropdownList()
+        {
+            DailyBookings bokning = new DailyBookings(anyDate);
 
-            scorecardDate.Text = anyDate.ToShortDateString();
-            scorecardGolfId.Text = aktuelltgolfID.Text;
-            scorecardName.Text = person[0];
-            scorecardHcp.Text = person[1];
-            //scorecardTime.Text = person[2];
-            //scorecardSpelHcp.Text = erhslag.ToString();
-            
-            
+            var name = from t in bokning.BookingsPerSpecifiedDate
+                       select new
+                       {
+                           CompleteName = t.FirstName + " " + t.SurName + "#" + t.Hcp + "#" + t.BookingTime.ToShortTimeString() + "#" + t.Gender + "#",
+                           GolfID = t.GolfId,
 
+                       };
 
+            dropdownscorecard.DataSource = name;
+            dropdownscorecard.DataTextField = "GolfId";
+            dropdownscorecard.DataValueField = "CompleteName";
+            dropdownscorecard.DataBind();
+        }
 
-
+        private void clearScorecard()
+        {
+            scorecardDate.Text = "";
+            scorecardGolfId.Text = "";
+            scorecardHcp.Text = "";
+            scorecardName.Text = "";
+            scorecardSpelHcp.Text = "";
+            scorecardTime.Text = "";
         }
     }
 }

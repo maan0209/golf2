@@ -77,18 +77,21 @@
 
      <div class="container">
         <div id="dropdownScorecard">
-            <asp:DropDownList ID="dropdownscorecard" runat="server" OnSelectedIndexChanged="dropdownscorecard_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
+            <asp:DropDownList ID="dropdownscorecard" runat="server" OnSelectedIndexChanged="dropdownscorecard_SelectedIndexChanged" AutoPostBack="true" Visible="false">
+
+                
+            </asp:DropDownList>
             
             
             <asp:Label ID="golfID" runat="server" Text="" Visible="false"></asp:Label><asp:Label ID="aktuelltgolfID" runat="server" Visible="false"></asp:Label>
              <asp:Label ID="name" runat="server" Text="" Visible="false"></asp:Label><asp:Label ID="aktuelltNamn" runat="server" Visible="false"></asp:Label>
              <asp:Label ID="date" runat="server" Text="" Visible="false"></asp:Label><asp:Label ID="aktuelltDatum" runat="server" Visible="false"></asp:Label>
+             <asp:RadioButtonList ID="chooseTee" runat="server" Visible="false"><asp:ListItem Text="Röd" Value="red" /><asp:ListItem Text="Gul" Value="yellow" /></asp:RadioButtonList>
 
-
-             <asp:Button ID="printScorecard" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/><br />
+             <asp:Button ID="printScorecard" Visible="false" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/><br />
 
   <!--Här börjar scorekortet och alla tabeller-->
-<asp:Panel ID="ScorecardWithInfo" runat="server"> 
+<asp:Panel ID="ScorecardWithInfo" runat="server" Visible="false"> 
    <div id="div">
 
       <!-- Tabell Huvet-->  
@@ -161,9 +164,9 @@
 <td id ="Hål">1</td>
 <td id ="Gul">453</td>
 <td id ="Röd">386</td>
-<td id ="Par">5</td>
-<td id ="Index">16</td>
-<td id="Erh"> <asp:Label ID="hole1" runat="server"></asp:Label></td>
+<td id ="Par">   <asp:Label ID="hole1Par" runat="server" Text="5"> 5 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole1Index" runat="server" > 16 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole1Erh" runat="server" Text=""></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -181,9 +184,9 @@
 <td id ="Hål">2</td>
 <td id ="Gul">299</td>
 <td id ="Röd">268</td>
-<td id ="Par">4</td>
-<td id ="Index">14</td>
-<td id="Erh"><asp:Label ID="hole2" runat="server"></asp:Label></td>
+<td id ="Par">   <asp:Label ID="hole2Par" runat="server"> 4 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole2Index" runat="server"> 14 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole2Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -201,9 +204,9 @@
 <td id ="Hål">3</td>
 <td id ="Gul">155</td>
 <td id ="Röd">145</td>
-<td id ="Par">3</td>
-<td id ="Index">10</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole3Par" runat="server"> 3 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole3Index" runat="server"> 10 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole3Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -221,9 +224,9 @@
 <td id ="Hål">4</td>
 <td id ="Gul">348</td>
 <td id ="Röd">304</td>
-<td id ="Par">4</td>
-<td id ="Index">2</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole4Par" runat="server"> 4 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole4Index" runat="server"> 2 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole4Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -241,9 +244,9 @@
 <td id ="Hål">5</td>
 <td id ="Gul">341</td>
 <td id ="Röd">301</td>
-<td id ="Par">4</td>
-<td id ="Index">4</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole5Par" runat="server"> 4 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole5Index" runat="server"> 4 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole5Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -261,9 +264,9 @@
 <td id ="Hål">6</td>
 <td id ="Gul">116</td>
 <td id ="Röd">101</td>
-<td id ="Par">3</td>
-<td id ="Index">18</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole6Par" runat="server"> 3 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole6Index" runat="server"> 18 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole6Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -282,9 +285,9 @@
 <td id ="Hål">7</td>
 <td id ="Gul">304</td>
 <td id ="Röd">268</td>
-<td id ="Par">4</td>
-<td id ="Index">8</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole7Par" runat="server"> 4 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole7Index" runat="server"> 8 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole7Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -302,9 +305,9 @@
 <td id ="Hål">8</td>
 <td id ="Gul">480</td>
 <td id ="Röd">415</td>
-<td id ="Par">5</td>
-<td id ="Index">12</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole8Par" runat="server"> 5 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole8Index" runat="server"> 12 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole8Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -322,9 +325,9 @@
 <td id ="Hål">9</td>
 <td id ="Gul">344</td>
 <td id ="Röd">312</td>
-<td id ="Par">4</td>
-<td id ="Index">6</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole9Par" runat="server"> 4 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole9Index" runat="server"> 6 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole9Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -370,9 +373,9 @@
 <td id ="Hål">10</td>
 <td id ="Gul">321</td>
 <td id ="Röd">306</td>
-<td id ="Par">4</td>
-<td id ="Index">9</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole10Par" runat="server"> 4 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole10Index" runat="server"> 9 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole10Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -390,9 +393,9 @@
 <td id ="Hål">11</td>
 <td id ="Gul">308</td>
 <td id ="Röd">286</td>
-<td id ="Par">4</td>
-<td id ="Index">13</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole11Par" runat="server"> 4 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole11Index" runat="server"> 13 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole11Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -410,9 +413,9 @@
 <td id ="Hål">12</td>
 <td id ="Gul">450</td>
 <td id ="Röd">428</td>
-<td id ="Par">5</td>
-<td id ="Index">7</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole12Par" runat="server"> 5 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole12Index" runat="server"> 7 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole12Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -430,9 +433,9 @@
 <td id ="Hål">13</td>
 <td id ="Gul">357</td>
 <td id ="Röd">332</td>
-<td id ="Par">4</td>
-<td id ="Index">3</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole13Par" runat="server"> 4 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole13Index" runat="server"> 3 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole13Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -450,9 +453,9 @@
 <td id ="Hål">14</td>
 <td id ="Gul">150</td>
 <td id ="Röd">150</td>
-<td id ="Par">3</td>
-<td id ="Index">17</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole14Par" runat="server"> 3 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole14Index" runat="server"> 17 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole14Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -470,9 +473,9 @@
 <td id ="Hål">15</td>
 <td id ="Gul">366</td>
 <td id ="Röd">351</td>
-<td id ="Par">4</td>
-<td id ="Index">1</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole15Par" runat="server"> 4 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole15Index" runat="server"> 1 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole15Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -490,9 +493,9 @@
 <td id ="Hål">16</td>
 <td id ="Gul">437</td>
 <td id ="Röd">376</td>
-<td id ="Par">5</td>
-<td id ="Index">15</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole16Par" runat="server"> 5 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole16Index" runat="server"> 15 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole16Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -510,9 +513,9 @@
 <td id ="Hål">17</td>
 <td id ="Gul">139</td>
 <td id ="Röd">139</td>
-<td id ="Par">3</td>
-<td id ="Index">11</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole17Par" runat="server"> 3 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole17Index" runat="server"> 11 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole17Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -530,9 +533,9 @@
 <td id ="Hål">18</td>
 <td id ="Gul">318</td>
 <td id ="Röd">308</td>
-<td id ="Par">4</td>
-<td id ="Index">5</td>
-<td id="Erh"></td>
+<td id ="Par">   <asp:Label ID="hole18Par" runat="server"> 4 </asp:Label></td>
+<td id ="Index"> <asp:Label ID="hole18Index" runat="server"> 5 </asp:Label></td>
+<td id="Erh">    <asp:Label ID="hole18Erh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>

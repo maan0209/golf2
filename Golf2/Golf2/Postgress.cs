@@ -98,6 +98,76 @@ namespace Golf2
         }
 
         /// <summary>
+        /// hämtar golfid utifrån bookingid i included
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="bookingid"></param>
+        /// <returns></returns>
+        public string SQLGetGolfidIncluded(string sql, int bookingid, int includedid)
+        {
+            try
+            {
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("bookingid", bookingid);
+                cmd.Parameters.AddWithValue("includedid", includedid);
+                string golfid = Convert.ToString(cmd.ExecuteScalar());
+
+                return golfid;
+            }
+
+            catch (NpgsqlException ex)
+            {
+                string exm = ex.Message;
+                return "";
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        /// <summary>
+        /// hämta includedid och golfsid utifrån bookingid
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="bookingid"></param>
+        /// <returns></returns>
+        public BindingList<Booking> SQLGetIncludedIds(string sql, int bookingid)
+        {
+            try
+            {
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("bookingid", bookingid);
+                dr = cmd.ExecuteReader();
+
+                BindingList<Booking> includedids = new BindingList<Booking>();
+                Booking included;
+
+                while (dr.Read())
+                {
+                    included = new Booking()
+                    {
+                        includedid = (int)dr["includedid"],
+                        GolfId = dr["golfid"].ToString(),
+                    };
+                    includedids.Add(included);
+                }
+                dr.Close();
+                return includedids;
+
+            }
+            catch (NpgsqlException ex)
+            {
+                string exm = ex.Message;
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        /// <summary>
         /// Metod för att skicka kommando till databasen
         /// Stöder ej parametrar/injections
         /// Returnerar "ok" om kommandot gick igenom visavi ett 

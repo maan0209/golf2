@@ -123,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Admin.aspx" />
+    <Content Include="bild1.jpg" />
     <Content Include="BookingSchedule.aspx" />
     <Content Include="BookingStyleSheet.css" />
     <Content Include="Index.aspx" />
@@ -166,6 +167,7 @@
     <Compile Include="BookingSchedule.aspx.designer.cs">
       <DependentUpon>BookingSchedule.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ClosedCourse.cs" />
     <Compile Include="course.cs" />
     <Compile Include="DailyBookings.cs" />
     <Compile Include="Home.aspx.cs">

@@ -243,13 +243,38 @@ box-shadow:         1px 0px 30px 0px rgba(0, 0, 0, 0.17);
     color: #fafafa;
 }
 
-#kalendersektion{
-    margin-bottom:20px;
+.kalendersektion{
+    margin-bottom:10px;
 }
 
 #tmp{
 }
 
+#closecourse, #openhours{
+    margin-top:20px;
+    float:none;
+}
+
+#listcloseddays{
+    height:200px;
+}
+
+.btnadmin1{
+    margin-top:10px;
+    background-color: #fafafa;
+    border: 1px solid rgb(34, 34, 34);
+    color: rgb(34, 34, 34);
+    font-size:15px;
+    font-family:roboto;
+    padding:4px 4px;
+    border-radius:3px;
+}
+
+.btnadmin1:hover{
+    background-color: rgb(34, 34, 34);
+    border: 1px solid rgb(34, 34, 34);
+    color: #fafafa;
+}
 
 /*Admin-sektion ----- SLUT */ 
 
