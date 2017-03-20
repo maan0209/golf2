@@ -217,13 +217,32 @@ namespace Golf2
             HtmlGenericControl newModals = new HtmlGenericControl("div");
             newModals.Attributes.Add("id", "newModals");
 
+           
             foreach (string aBookingTime in ShowBookings.AvailableBookingTimes)     // loopar genom tillgängliga bokningstider
             {
+                table = new DataTable();
+                string sql = "SELECT startclose, endclose FROM closed";
+
+                ToolBox.SQL_NonParam(sql, ref table);
+
+
                 HtmlGenericControl aBooking = new HtmlGenericControl("div");
 
-                CreateButtonContent(ref aBooking, aBookingTime, ShowBookings.BookingsPerSpecifiedDate); // skapar bokningsboxarna
+                bool isBookingClosed = CheckIfTimeIsClosed(aBookingTime);
 
-                CreateModalPopups(aBookingTime, ShowBookings.BookingsPerSpecifiedDate, ref newModals); // skapar modalspopuperna
+                if (isBookingClosed)
+                {
+                    CreateButtonContentClosed(aBookingTime, ref aBooking);
+                }
+                else
+                {
+                    CreateButtonContent(ref aBooking, aBookingTime, ShowBookings.BookingsPerSpecifiedDate); // skapar bokningsboxarna
+
+                    CreateModalPopups(aBookingTime, ShowBookings.BookingsPerSpecifiedDate, ref newModals); // skapar modalspopuperna
+                }
+
+
+
 
                 Schedule.Controls.Add(aBooking);
             }
@@ -258,6 +277,52 @@ namespace Golf2
             DisplayBookingSchedule.Controls.Add(golfMembersList);
 
             return isCourseClosed;                                                  // returnerar att banan är öppen
+        }
+
+        private void CreateButtonContentClosed(string aBookingTime, ref HtmlGenericControl aBooking)
+        {
+            DateTime convTime = Convert.ToDateTime(aBookingTime);
+            aBooking.Attributes.Add("id", "Booking " + convTime.ToShortTimeString());
+
+            aBooking.Attributes.Add("class", "aBookingIsClosed");
+
+            // ############## Info om vilket klockslag en viss bokning gäller
+            HtmlGenericControl textInfo = new HtmlGenericControl("p");
+            textInfo.InnerText = convTime.ToShortTimeString();
+            aBooking.Controls.Add(textInfo);
+
+            HtmlGenericControl closedText = new HtmlGenericControl("p");
+            closedText.InnerHtml = "STÄNGT !";
+            closedText.Attributes.Add("class", "TimeIsClosed");
+            aBooking.Controls.Add(closedText);
+
+
+        }
+
+        /// <summary>
+        /// Kollar om en viss bokningstid är stängd
+        /// </summary>
+        /// <param name="aBookingTime"></param>
+        /// <returns></returns>
+        private bool CheckIfTimeIsClosed(string aBookingTime)                       
+        {
+            bool isItClosed = false;
+
+            DateTime compare = Convert.ToDateTime(anyDate.ToShortDateString() + " " + aBookingTime);
+            foreach (DataRow item in table.Rows)
+            {
+                bool startclose = (compare >= Convert.ToDateTime(item["startclose"])) ? true : false;
+
+                bool endclose = (compare <= Convert.ToDateTime(item["endclose"])) ? true : false;
+
+                if (startclose && endclose)
+                {
+                    isItClosed = true;
+                    return isItClosed;
+                }
+            }
+
+            return isItClosed;
         }
 
 
