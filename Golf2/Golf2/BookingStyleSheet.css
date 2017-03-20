@@ -55,24 +55,23 @@
 
 
 /* Formaterar bokningsplatser i en modal */
-
-.TimeIsClosed{
-
-   text-align: center;
-}
-
 .aBookingIsClosed{
+    display: inline-block;
     min-width: 70px;
     min-height: 70px;
     background-color: lightcyan;
     margin: 1px;
-    display: inline-block;
     border-style: solid;
     border-width: thin;
     border-color: #969696;
     margin-bottom: 2px;
-
 }
+
+.TimeIsClosed{
+   text-align: center;
+}
+
+
 
 .aBookableSpot {
     width:31%;
