@@ -13,8 +13,14 @@
         <table align="center" width="60%">
             
             <tr>
+                <td>Massutskick Medlemstyp:</td>
+                <asp:ListBox ID="typelistbox" OnSelectedIndexChanged="typelistbox_SelectedIndexChanged" runat="server"></asp:ListBox>
+            
+            </tr>    
+            <tr>
                 <td>From:</td>
                 <td><asp:TextBox ID="fromTbx" runat="server" Width="99%"></asp:TextBox></td>
+                
             </tr>
             <tr>
                 <td>To:</td>

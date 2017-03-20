@@ -22,8 +22,6 @@ namespace Golf2
         protected void sendBtn_Click(object sender, EventArgs e)
         {
 
-
-
             try
             {
                 MailMessage message = new MailMessage(fromTbx.Text, toTbx.Text, subjectTbx.Text, bodyTbx.Text);
@@ -83,8 +81,6 @@ namespace Golf2
                         //Status.Text = "mailet är skickat";
                     }
                 }
-
-
                 else if (typeOfMail == "cancellation")
                 {
                     foreach (string email in EmailList)
@@ -122,6 +118,10 @@ namespace Golf2
             return mail;
         }
 
+        // index changed för Type Listbox
+        protected void typelistbox_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
+        }
     }
 }

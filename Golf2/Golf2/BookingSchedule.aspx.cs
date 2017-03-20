@@ -74,12 +74,7 @@ namespace Golf2
                     }
                 }
             }
-            
-
-
-
-            
-          
+   
         }
 
         /// <summary>
@@ -136,30 +131,22 @@ namespace Golf2
             DataTable Table = new DataTable();
             ToolBox.SQL_NonParam(sql, ref Table);
 
+            foreach (DataRow item in Table.Rows)
+            {
+                GolfIds.Add(item.ToString());
+            }
 
-            //GolfIds.Add(item["golfid"].ToString());
-
-
+            //skicka listan med golfids till send-metoden i Mail.aspx.cs
             mail.SendMail(mailDate, time, "Cancellation", GolfIds);
-
-
-                
-
+        
             if (Convert.ToBoolean(removeAllPlayers))
             {
-                //foreach (var Booking in listofids)
-                //{
-                //    mail.SendMail(mailDate, time, "cancellation", golfids);
-                //}
-
                 // deleta alla spelare i bokningen
                 sql = "DELETE FROM included WHERE bookingid = '" + bookingId.ToString() + "'";
                 ToolBox.SQL_NonParamCommand(sql, ref result);
             }
             else
             {            
-                mail.SendMail(mailDate, time, "Cancellation", GolfIds);
-
                 // deleta spelaren
                 sql = "DELETE FROM included WHERE includedid = '" + includedid.ToString() + "'";
                 ToolBox.SQL_NonParamCommand(sql, ref result);
