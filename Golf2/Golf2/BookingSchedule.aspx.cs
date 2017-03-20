@@ -134,20 +134,24 @@ namespace Golf2
 
             sql = "SELECT golfid FROM included WHERE bookingid = '" + bookingId.ToString() + "'";
             DataTable Table = new DataTable();
-            ToolBox.SQL_NonParam(sql, ref Table);            
+            ToolBox.SQL_NonParam(sql, ref Table);
+
+
+            //GolfIds.Add(item["golfid"].ToString());
+
+
+            mail.SendMail(mailDate, time, "Cancellation", GolfIds);
+
+
+                
 
             if (Convert.ToBoolean(removeAllPlayers))
             {
-                GolfIds.Add(item["golfid"].ToString());
-               
-            }
-            mail.SendMail(mailDate, time, "Cancellation", GolfIds);
+                //foreach (var Booking in listofids)
+                //{
+                //    mail.SendMail(mailDate, time, "cancellation", golfids);
+                //}
 
-                foreach (var Booking in listofids)
-                {
-                    mail.SendMail(mailDate, time, "cancellation", golfids);
-                }
-                
                 // deleta alla spelare i bokningen
                 sql = "DELETE FROM included WHERE bookingid = '" + bookingId.ToString() + "'";
                 ToolBox.SQL_NonParamCommand(sql, ref result);
