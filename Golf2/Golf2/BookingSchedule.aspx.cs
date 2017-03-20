@@ -110,6 +110,7 @@ namespace Golf2
         private bool isadmin;
         private List<string> golfIdList;
         private Mail mail = new Mail();
+        private List<string> memberList;
         #endregion
 
 
@@ -232,7 +233,22 @@ namespace Golf2
             foreach (string item in golfIdList)
             {
                 HtmlGenericControl searchOptionsInList = new HtmlGenericControl("option");
-                searchOptionsInList.Attributes.Add("value", item.ToString());
+                searchOptionsInList.InnerHtml = item.ToString();
+                string tmp = "";
+
+                foreach (char c in item.ToString())
+                {
+                    if (c == Convert.ToChar(" "))
+                    {
+                        searchOptionsInList.Attributes.Add("value", tmp);
+                        tmp = "";
+                        break;
+                    }
+
+                    tmp += c.ToString();
+                }
+                
+
                 golfMembersList.Controls.Add(searchOptionsInList);
             }
 
@@ -290,16 +306,17 @@ namespace Golf2
 
             // läs ut lista med golfidn
             golfIdList = new List<string>();
-            string sql = "SELECT golfid FROM person;";
+            string sql = "SELECT golfid,firstname,surname FROM person;";
             table = new DataTable();
             ToolBox.SQL_NonParam(sql, ref table);
 
             foreach (DataRow item in table.Rows)
             {
-                golfIdList.Add(item["golfid"].ToString());                                      // lista skapas med alla existerande golfidn i databas
+                golfIdList.Add(item["golfid"].ToString() + " " + item["firstname"].ToString() + " " + item["surname"].ToString());                                      // lista skapas med alla existerande golfidn i databas
+             //   golfIdList.Add(item["firstname"].ToString() + " " + item["surname"].ToString());
             }
 
-            int counter = 0;
+            int counter = 0;    
             bool userIsAlreadyBookedThisTime = false;
             bool createdDivForAlreadyBookedUserCreated = false;
             foreach (Booking item in bookingsPerSpecifiedDate)                                  // loopa genom de bokningar som finns för dagen
