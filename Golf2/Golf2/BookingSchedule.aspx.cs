@@ -118,21 +118,24 @@ namespace Golf2
         /// <returns></returns>
         [WebMethod]
         public static string deletePlayerFromBooking(string removeAllPlayers, string includedid, string bookingId, string time)
-        {
-            
+        {           
             string sql = "";    
             string result = "";
-            sql = "SELECT golfid FROM included WHERE bookingid = '" + bookingId.ToString() + "'";
-            DataTable Table = new DataTable();
-            ToolBox.SQL_NonParam(sql, ref Table);
             Mail mail = new Mail();
             BindingList<string> GolfIds = new BindingList<string>();
+            Page p = new Page();
+            DateTime mailDate = Convert.ToDateTime(p.Session["NextDay"]);
+
+            sql = "SELECT golfid FROM included WHERE bookingid = '" + bookingId.ToString() + "'";
+            DataTable Table = new DataTable();
+            ToolBox.SQL_NonParam(sql, ref Table);            
 
             foreach (DataRow item in Table.Rows)
             {
                 GolfIds.Add(item["golfid"].ToString());
+               
             }
-
+            mail.SendMail(mailDate, time, "Cancellation", GolfIds);
 
             if (Convert.ToBoolean(removeAllPlayers))
             {
@@ -140,12 +143,8 @@ namespace Golf2
                 sql = "DELETE FROM included WHERE bookingid = '" + bookingId.ToString() + "'";
                 ToolBox.SQL_NonParamCommand(sql, ref result);
             }
-
             else
-            {
-                Page p = new Page();
-                DateTime mailDate = Convert.ToDateTime(p.Session["NextDay"]);
-
+            {            
                 mail.SendMail(mailDate, time, "Cancellation", GolfIds);
 
                 // deleta spelaren
