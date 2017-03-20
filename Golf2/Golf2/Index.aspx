@@ -38,7 +38,7 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner" role="listbox">
       <div class="item active">
-        <img src="biler/bild1.jpg" alt="Banan" width="100%" height="100%">
+        <img src="bilder/bild1.jpg" alt="Banan" width="100%" height="100%">
         <div class="carousel-caption">
           <h3>Banan</h3>
           <p>Banan är nu öppen och i toppenskick!</p>
