@@ -14,7 +14,8 @@
             
             <tr>
                 <td>Massutskick Medlemstyp:</td>
-                <asp:ListBox ID="typelistbox" OnSelectedIndexChanged="typelistbox_SelectedIndexChanged" runat="server"></asp:ListBox>
+
+                <asp:DropDownList ID="DropDown" onselectedindexchanged="DropDownList1_SelectedIndexChanged" runat="server"></asp:DropDownList>
             
             </tr>    
             <tr>
