@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using System.ComponentModel;
 
 namespace Golf2
 {
@@ -183,6 +184,41 @@ namespace Golf2
             DateTime newlastclosed = Convert.ToDateTime(lastclosed + " " + droplastclose.SelectedValue.ToString());
 
             bool deleteclose = true;
+
+
+            //aivsering utifrån datum, tid och golfid att banan stängts
+            BindingList<string> golfids = new BindingList<string>();
+            //Person personen = new Person();
+            DateTime date;
+
+            for (date = newfirstclosed; date.Date <= newlastclosed.Date; date = date.AddDays(1))
+            {
+
+                while (date.TimeOfDay <= newlastclosed.TimeOfDay)
+                {
+                    
+                    string sql ="SELECT included.golfid " +
+                                "FROM booking " +
+                                "INNER JOIN included ON included.bookingid = booking.bookingid " +
+                                "INNER JOIN bookingtime ON bookingtime.timeid = booking.timeid " +
+                                "WHERE booking.bookingdate = @bookingdate AND bookingtime.time = @time";
+
+                    Postgress p6 = new Postgress();
+                    golfids = p6.SQLGetGolfidsClosed(sql, date, date.ToLongTimeString());
+                    
+                    date = date.AddMinutes(10);
+                }
+
+                //BindingList<string> golfidlist = new BindingList<string>();
+
+                //foreach (object Person in golfids)
+                //{
+                //    golfidlist.Add(personen.GolfId);
+                //}
+
+                Mail mail = new Mail();
+                mail.SendMail(date, newfirstclosed.ToLongTimeString(), "closed", golfids);
+            }
 
             InsertOrDelteClosingCourse(newfirstclosed, newlastclosed, deleteclose);
             updateclosinglist();
