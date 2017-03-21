@@ -267,7 +267,7 @@ namespace Golf2
                         foreach (Booking item in dailybookings.BookingsPerSpecifiedDate)                                    //Loopar igenom alla bokningar för den aktuella dagen.
                         {
                             DateTime tmp = newfirstclosed.Date + item.BookingTime.TimeOfDay;                                //Slår ihop datum och tid. En temporär variabel skapas som Datetime för att kunna jämföra med newfirstclosed. Egentligen bara intresserade av tiden på den första dagen i spannet.
-                            if (tmp > newfirstclosed)                                                                       //Klockslagen jämförs mot varandra. Tmp = aktuell bokningstid, kollar om tmp är mer än tiden i newfirstclosed
+                            if (tmp >= newfirstclosed)                                                                       //Klockslagen jämförs mot varandra. Tmp = aktuell bokningstid, kollar om tmp är mer än tiden i newfirstclosed
                             {
                                BookingSchedule.deletePlayerFromBooking("true", "000" , item.BookingId.ToString(), item.BookingTime.ToShortTimeString());          //Om tmp-tiden är mer än newfirstclosed så skall hela bokningen tas bort.
                             }
@@ -278,7 +278,7 @@ namespace Golf2
                         foreach (Booking item in dailybookings.BookingsPerSpecifiedDate)                                    //Loopar igenom alla bokningar för den aktuella dagen.
                         {
                             DateTime tmp = newlastclosed.Date + item.BookingTime.TimeOfDay;                                 //Slår ihop datum och tid. En temporär variabel skapas som Datetime för att kunna jämföra med newfirstclosed. Egentligen bara intresserade av tiden på den första dagen i spannet.
-                            if (tmp < newlastclosed)                                                                        //Klockslagen jämförs mot varandra. Tmp = aktuell bokningstid, kollar om tmp är mer än tiden i newfirstclosed
+                            if (tmp <= newlastclosed)                                                                        //Klockslagen jämförs mot varandra. Tmp = aktuell bokningstid, kollar om tmp är mer än tiden i newfirstclosed
                             {
                                 BookingSchedule.deletePlayerFromBooking("true", "000", item.BookingId.ToString(), item.BookingTime.ToShortTimeString());          //Om tmp-tiden är mer än newfirstclosed så skall hela bokningen tas bort.
                             }

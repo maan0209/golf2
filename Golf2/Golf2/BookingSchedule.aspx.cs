@@ -68,6 +68,7 @@ namespace Golf2
                         printScorecard.Visible = true;
                         dropdownSelectTee.Visible = true;
                         getScorecardinfo.Visible = true;
+                    rubrikScorecard.Visible = true;
                     
 
                     if (!IsPostBack)
@@ -1221,8 +1222,9 @@ namespace Golf2
         {
             if(dropdownSelectTee.SelectedItem.Text != "Välj Tee")
             {
-                
 
+                //Tar in värden från dropdownlisten och skapar en lista med personer där de olika värden som finns
+                //i strängen "tmpscorecard separeras. Då kommer vi åt namn, handicap och tid för bokningen.
                 string tmpscorecard = dropdownscorecard.SelectedItem.Value;
                 List<string> person = new List<string>();
                 string nyttOrd = "";
@@ -1246,6 +1248,7 @@ namespace Golf2
                 double Par;
                 double värde;
 
+                //Sätter värde för slope och CR för man.
                 if (person[3] == "Male")
                 {
                     if (dropdownSelectTee.SelectedItem.Text == "Röd")
@@ -1264,6 +1267,7 @@ namespace Golf2
 
                 }
 
+                //sätter värde för slope och CR för kvinna.
                 else
                 {
                     if (dropdownSelectTee.SelectedItem.Text == "Röd")
@@ -1282,10 +1286,11 @@ namespace Golf2
 
                 }
 
+                //Avrundar handicapet till närmaste heltal. ,5 avrundas uppåt.
                 var erhslag = Math.Round(spelHcp, 0, MidpointRounding.AwayFromZero);
 
                 scorecardDate.Text = anyDate.ToShortDateString();
-                scorecardGolfId.Text = dropdownSelectTee.SelectedItem.Text;
+                scorecardGolfId.Text = dropdownscorecard.SelectedItem.Text;
                 scorecardName.Text = person[0];
                 scorecardHcp.Text = person[1];
                 scorecardTime.Text = person[2];
@@ -1315,7 +1320,7 @@ namespace Golf2
 
 
 
-
+                //Fördelar ut antalet erhållna slag på hålen.
                 for (int i = 0; i < erhslag;)
                 {
 
@@ -1452,6 +1457,13 @@ namespace Golf2
 
                 }
 
+                int sectionone = Convert.ToInt32(hole1Erh.Text) + Convert.ToInt32(hole2Erh.Text) + Convert.ToInt32(hole3Erh.Text) + Convert.ToInt32(hole4Erh.Text) + Convert.ToInt32(hole5Erh.Text) + Convert.ToInt32(hole6Erh.Text) + Convert.ToInt32(hole7Erh.Text) + Convert.ToInt32(hole8Erh.Text) + Convert.ToInt32(hole9Erh.Text);
+                sectionOneTotalErh.Text = sectionone.ToString();
+                sectionOneTotalErh_2.Text = sectionone.ToString();
+                int sectiontwo = Convert.ToInt32(hole10Erh.Text) + Convert.ToInt32(hole11Erh.Text) + Convert.ToInt32(hole12Erh.Text) + Convert.ToInt32(hole13Erh.Text) + Convert.ToInt32(hole14Erh.Text) + Convert.ToInt32(hole15Erh.Text) + Convert.ToInt32(hole16Erh.Text) + Convert.ToInt32(hole17Erh.Text) + Convert.ToInt32(hole18Erh.Text);
+                sectionTwoTotalErh.Text = sectiontwo.ToString();
+                int totalErh = sectionone + sectiontwo;
+                summaErh.Text = totalErh.ToString();
 
             }
 
