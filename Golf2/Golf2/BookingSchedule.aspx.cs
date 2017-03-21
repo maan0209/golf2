@@ -1222,8 +1222,9 @@ namespace Golf2
         {
             if(dropdownSelectTee.SelectedItem.Text != "Välj Tee")
             {
-                
 
+                //Tar in värden från dropdownlisten och skapar en lista med personer där de olika värden som finns
+                //i strängen "tmpscorecard separeras. Då kommer vi åt namn, handicap och tid för bokningen.
                 string tmpscorecard = dropdownscorecard.SelectedItem.Value;
                 List<string> person = new List<string>();
                 string nyttOrd = "";
@@ -1247,6 +1248,7 @@ namespace Golf2
                 double Par;
                 double värde;
 
+                //Sätter värde för slope och CR för man.
                 if (person[3] == "Male")
                 {
                     if (dropdownSelectTee.SelectedItem.Text == "Röd")
@@ -1265,6 +1267,7 @@ namespace Golf2
 
                 }
 
+                //sätter värde för slope och CR för kvinna.
                 else
                 {
                     if (dropdownSelectTee.SelectedItem.Text == "Röd")
@@ -1283,6 +1286,7 @@ namespace Golf2
 
                 }
 
+                //Avrundar handicapet till närmaste heltal. ,5 avrundas uppåt.
                 var erhslag = Math.Round(spelHcp, 0, MidpointRounding.AwayFromZero);
 
                 scorecardDate.Text = anyDate.ToShortDateString();
@@ -1316,7 +1320,7 @@ namespace Golf2
 
 
 
-
+                //Fördelar ut antalet erhållna slag på hålen.
                 for (int i = 0; i < erhslag;)
                 {
 
