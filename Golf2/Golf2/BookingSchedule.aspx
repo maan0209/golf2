@@ -76,7 +76,8 @@
 </script>
 
      <div class="container">
-        <p id="rubrikScorecard">Välj aktuellt golf-id och utslagstee.</p>
+        
+         <asp:Label ID="rubrikScorecard" runat="server" Text="Välj aktuellt golf-id och utslagstee." Visible="false"></asp:Label>
         <div id="dropdownScorecard">
             <asp:DropDownList ID="dropdownscorecard" runat="server" Visible="false"></asp:DropDownList>
             <asp:DropDownList ID="dropdownSelectTee" AutoPostBack="true" runat="server" Visible="false" OnSelectedIndexChanged="dropdownSelectTee_SelectedIndexChanged"><asp:ListItem Text="Välj Tee"></asp:ListItem><asp:ListItem Text="Röd"></asp:ListItem><asp:ListItem Text="Gul"></asp:ListItem></asp:DropDownList>
