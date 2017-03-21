@@ -112,67 +112,22 @@ namespace Golf2 {
         protected global::System.Web.UI.WebControls.DropDownList dropdownscorecard;
         
         /// <summary>
-        /// golfID control.
+        /// dropdownSelectTee control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label golfID;
+        protected global::System.Web.UI.WebControls.DropDownList dropdownSelectTee;
         
         /// <summary>
-        /// aktuelltgolfID control.
+        /// getScorecardinfo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label aktuelltgolfID;
-        
-        /// <summary>
-        /// name control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label name;
-        
-        /// <summary>
-        /// aktuelltNamn control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label aktuelltNamn;
-        
-        /// <summary>
-        /// date control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label date;
-        
-        /// <summary>
-        /// aktuelltDatum control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label aktuelltDatum;
-        
-        /// <summary>
-        /// chooseTee control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList chooseTee;
+        protected global::System.Web.UI.WebControls.Button getScorecardinfo;
         
         /// <summary>
         /// printScorecard control.
