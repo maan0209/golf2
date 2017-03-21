@@ -86,7 +86,7 @@
             <asp:Button ID="printScorecard" Visible="false" Enabled="false" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/><br />
 
   <!--Här börjar scorekortet och alla tabeller-->
-<asp:Panel ID="ScorecardWithInfo" runat="server" Visible="false"> 
+<asp:Panel ID="ScorecardWithInfo" CssClass="ScorecardWithInfo" runat="server" Visible="false"> 
    <div id="div">
 
       <!-- Tabell Huvet-->  
