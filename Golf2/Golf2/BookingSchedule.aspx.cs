@@ -1036,7 +1036,7 @@ namespace Golf2
             }
             else
             {
-                panelHeader.InnerHtml = "Här kan du avboka dig själv och övriga spelare i de bokningar som du själv har skapat. Du kan även avboka dig själv på de bokningar som någon annan har anmält dig.";
+                panelHeader.InnerHtml = "Nedanför kan du hantera avbokningar för dig själv eller spelare du bokat in.";
             }
 
             if (timeList.Count > 1)

@@ -209,6 +209,8 @@
     border-style: solid;
     border-width: thin;
     border-radius: 5px;
+    margin-left: 1%;
+    margin-right: 1%;
 }
 .timeOptionHover:hover {
     background-color: lightgray;
