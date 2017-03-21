@@ -343,7 +343,7 @@
 <td id="Hål">2500</td>
 <td id="Hål">36</td>
 <td id="Hål">Ut</td>
-<td></td>
+<td id="Erh"><asp:Label ID="sectionOneTotalErh" runat="server"></asp:Label></td>
 <td></td>
 <td></td>
 <td></td>
@@ -552,7 +552,7 @@
 <td id="Hål">2676</td>
 <td id="Hål">36</td>
 <td id="Hål">IN</td>
-<td id="Score"></td>
+<td id="Erh"><asp:Label ID="sectionTwoTotalErh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -572,7 +572,7 @@
 <td id="Hål">2500</td>
 <td id="Hål">36</td>
 <td id="Hål">UT</td>
-<td id="Score"></td>
+<td id="Erh"><asp:Label ID="sectionOneTotalErh_2" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -592,7 +592,7 @@
 <td id="Hål">5176</td>
 <td id="Hål">72</td>
 <td id="Hål">S:A</td>
-<td id="Score"></td>
+<td id="Erh"><asp:Label ID="summaErh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>

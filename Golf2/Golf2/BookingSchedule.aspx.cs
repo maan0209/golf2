@@ -1286,7 +1286,7 @@ namespace Golf2
                 var erhslag = Math.Round(spelHcp, 0, MidpointRounding.AwayFromZero);
 
                 scorecardDate.Text = anyDate.ToShortDateString();
-                scorecardGolfId.Text = dropdownSelectTee.SelectedItem.Text;
+                scorecardGolfId.Text = dropdownscorecard.SelectedItem.Text;
                 scorecardName.Text = person[0];
                 scorecardHcp.Text = person[1];
                 scorecardTime.Text = person[2];
@@ -1453,6 +1453,13 @@ namespace Golf2
 
                 }
 
+                int sectionone = Convert.ToInt32(hole1Erh.Text) + Convert.ToInt32(hole2Erh.Text) + Convert.ToInt32(hole3Erh.Text) + Convert.ToInt32(hole4Erh.Text) + Convert.ToInt32(hole5Erh.Text) + Convert.ToInt32(hole6Erh.Text) + Convert.ToInt32(hole7Erh.Text) + Convert.ToInt32(hole8Erh.Text) + Convert.ToInt32(hole9Erh.Text);
+                sectionOneTotalErh.Text = sectionone.ToString();
+                sectionOneTotalErh_2.Text = sectionone.ToString();
+                int sectiontwo = Convert.ToInt32(hole10Erh.Text) + Convert.ToInt32(hole11Erh.Text) + Convert.ToInt32(hole12Erh.Text) + Convert.ToInt32(hole13Erh.Text) + Convert.ToInt32(hole14Erh.Text) + Convert.ToInt32(hole15Erh.Text) + Convert.ToInt32(hole16Erh.Text) + Convert.ToInt32(hole17Erh.Text) + Convert.ToInt32(hole18Erh.Text);
+                sectionTwoTotalErh.Text = sectiontwo.ToString();
+                int totalErh = sectionone + sectiontwo;
+                summaErh.Text = totalErh.ToString();
 
             }
 
