@@ -128,7 +128,70 @@
 <div id="banan"> 
   <h2>Upplev vår bana i världsklass</h2>
     
-  <!--Här börjar scorekortet och alla tabeller-->
+
+ <p class="stars"><span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> </p>
+    
+    <hr class="small">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="portfolio-item">
+        <a href="bilder/bild5.jpg" target="_blank">
+          <img src="bilder/bild5.jpg" alt="golf" style="width:100%">
+
+        </a>
+      </div>
+    </div>
+      
+    <div class="col-md-4">
+      <div class="portfolio-item">
+        <a href="bilder/bild6.jpg" target="_blank">
+          <img src="bilder/bild6.jpg" alt="golf" style="width:100%">
+
+        </a>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="portfolio-item">
+        <a href="bilder/bild7.jpg" target="_blank">
+          <img src="bilder/bild7.jpg" alt="golf" style="width:100%">
+
+        </a>
+      </div>
+    </div>
+      
+       <div class="col-md-4">
+      <div class="portfolio-item">
+        <a href="bilder/bild7.jpg" target="_blank">
+          <img src="bilder/bild9.jpg" alt="golf" style="width:100%">
+
+        </a>
+      </div>
+    </div>
+      
+       <div class="col-md-4">
+      <div class="portfolio-item">
+        <a href="bilder/bild10.jpg" target="_blank">
+          <img src="bilder/bild11.jpg" alt="golf" style="width:100%"/>
+
+        </a>
+      </div>
+    </div>
+      
+       <div class="col-md-4">
+      <div class="portfolio-item">
+        <a href="bilder/bild11.jpg" target="_blank">
+          <img src="bilder/bild10.jpg" alt="golf" style="width:100%"/>
+
+        </a>
+      </div>
+    </div>         
+  </div>   
+     <hr class="small">
+</div>                           
+ 
+    
+
+      <!--Här börjar scorekortet och alla tabeller-->
 <asp:Panel ID="Scorecard" runat="server">
 <div id="div">
 
@@ -670,76 +733,9 @@
 </tr>
 
 </table>
-
-
     <asp:Button ID="printScorecard" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/>
 </div>
+         <hr class="small">
 </asp:Panel>
-
-
-
- <p class="stars"><span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> </p>
-    
-    <hr class="small">
-  <div class="row">
-    <div class="col-md-4">
-      <div class="portfolio-item">
-        <a href="bilder/bild5.jpg" target="_blank">
-          <img src="bilder/bild5.jpg" alt="golf" style="width:100%">
-
-        </a>
-      </div>
-    </div>
-      
-    <div class="col-md-4">
-      <div class="portfolio-item">
-        <a href="bilder/bild6.jpg" target="_blank">
-          <img src="bilder/bild6.jpg" alt="golf" style="width:100%">
-
-        </a>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="portfolio-item">
-        <a href="bilder/bild7.jpg" target="_blank">
-          <img src="bilder/bild7.jpg" alt="golf" style="width:100%">
-
-        </a>
-      </div>
-    </div>
-      
-       <div class="col-md-4">
-      <div class="portfolio-item">
-        <a href="bilder/bild7.jpg" target="_blank">
-          <img src="bilder/bild9.jpg" alt="golf" style="width:100%">
-
-        </a>
-      </div>
-    </div>
-      
-       <div class="col-md-4">
-      <div class="portfolio-item">
-        <a href="bilder/bild10.jpg" target="_blank">
-          <img src="bilder/bild11.jpg" alt="golf" style="width:100%"/>
-
-        </a>
-      </div>
-    </div>
-      
-       <div class="col-md-4">
-      <div class="portfolio-item">
-        <a href="bilder/bild11.jpg" target="_blank">
-          <img src="bilder/bild10.jpg" alt="golf" style="width:100%"/>
-
-        </a>
-      </div>
-    </div>         
-  </div>   
-     <hr class="small">
-</div>                           
- 
-    
-
 </asp:Content>
-
 
