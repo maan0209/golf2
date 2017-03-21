@@ -17,6 +17,7 @@ namespace Golf2
         protected void Page_Load(object sender, EventArgs e)
         {
 
+
         }
 
         protected void sendBtn_Click(object sender, EventArgs e)
@@ -122,6 +123,16 @@ namespace Golf2
         protected void typelistbox_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string sql = "SELECT distinct kategori FROM type";
+            BindingList<string> kategori = new BindingList<string>();
+
+            Postgress p = new Postgress();
+            
+            
         }
     }
 }
