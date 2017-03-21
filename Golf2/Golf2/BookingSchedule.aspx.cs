@@ -68,6 +68,7 @@ namespace Golf2
                         printScorecard.Visible = true;
                         dropdownSelectTee.Visible = true;
                         getScorecardinfo.Visible = true;
+                    rubrikScorecard.Visible = true;
                     
 
                     if (!IsPostBack)
