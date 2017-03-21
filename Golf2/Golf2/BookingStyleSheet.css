@@ -71,8 +71,6 @@
    text-align: center;
 }
 
-
-
 .aBookableSpot {
     width:31%;
     display: inline-block;
@@ -195,6 +193,30 @@
 }
 
 /* Formaterar incheckningspanelen */
+.dropdown{
+    border-style: solid;
+    border-width: thin;
+    border-radius: 5px;
+}
+.timeOptionHover:hover {
+    background-color: lightgray;
+}
+
+.sortingTimeTextDisplay {
+    text-align: center;
+    background: lightgray;
+    text-transform: full-width;
+    color: black;
+    font-size: x-large;
+    margin: 0 0 1% 0;
+    border-radius: 5px 5px 0px 0px;
+}
+.blockOfBookings{
+    border-style: solid;
+    border-width: thin;
+    vertical-align: middle;
+    border-radius: 5px;
+}
 
 .teeTimeInfo{
     width: 15%;
@@ -209,6 +231,7 @@
     width: 30%;
     display: inline-block;
     vertical-align: middle;
+    margin-left: 1%;
 }
 
 .checkInStatus {
@@ -243,9 +266,6 @@
     display: inline-block;
     vertical-align: middle;
     margin-left: 40px;
-    /*background-color: firebrick;
-    color: white;
-    border-radius: 11px;*/
 }
 
 /* Övrigt */

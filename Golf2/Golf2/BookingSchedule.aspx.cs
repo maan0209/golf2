@@ -968,7 +968,7 @@ namespace Golf2
             }
             else
             {
-                // sqlsats för medlem  - söker alla bokningar för dagen
+                // sqlsats för medlem  - söker alla bokningar för dagen där medlem är involverad eller äger bokning
                 string currUser = Session["golfid"].ToString();
                 sql = "SELECT person.golfid, person.firstname, person.surname, booking.bookingdate, bookingtime.time, included.bookingid, booking.owner, included.checkedin, included.includedid ";
                 sql += "FROM included ";
@@ -980,146 +980,247 @@ namespace Golf2
                 sql += "ORDER BY booking.timeid ASC; ";
             }
 
-
+            
             table = new DataTable();
-            ToolBox.SQL_NonParam(sql, ref table);
+            ToolBox.SQL_NonParam(sql, ref table);                                   // info hämtas om bokningar som finns i databasen beroende på valet av ovan sql-sats
 
-            HtmlGenericControl ListGroup = new HtmlGenericControl("div");
-            ListGroup.Attributes.Add("id", "ListGroup");
-            ListGroup.Attributes.Add("class", "list-group");
+            HtmlGenericControl panelContent = new HtmlGenericControl("div");        // container för alla grupperingar av bokningar 
+            panelContent.Attributes.Add("class", "panel-body");
+
+            List<string> timeList = new List<string>();                             // en lista med tider som man kan sortera vyn över skapas här
+            CreateTimeList(ref timeList, table);
+
+            // Här loopas timeList för att gruppera bokade tider i div'ar enligt denna.
+            foreach (string timeFilter in timeList)
+            {
+                HtmlGenericControl blockOfBookings = new HtmlGenericControl("div");             // container för en gruppering av individuella bokningar som hör samman
+                blockOfBookings.Attributes.Add("class", "blockOfBookings");
+                blockOfBookings.Attributes.Add("id", timeFilter.Substring(0, 5));
+                if (timeList.IndexOf(timeFilter) != 0)
+                {
+                    blockOfBookings.Style.Add("display", "none");
+                }
+
+                HtmlGenericControl blockOfBookingsHeader = new HtmlGenericControl("div");       // header för ovan container
+                blockOfBookingsHeader.Attributes.Add("class", "sortingTimeTextDisplay");
+                blockOfBookingsHeader.InnerHtml = "Starttider kl." + timeFilter.Substring(0, 3) + "xx";
+
+                blockOfBookings.Controls.Add(blockOfBookingsHeader);
+
+                // Här loopas bokningarna och de som matchar aktuell tid i timeList grupperas ihop
+                foreach (DataRow bookingRow in table.Rows)
+                {
+                    
+                    string compareToTimeFilterDummyString = (bookingRow["time"].ToString())[0].ToString() + (bookingRow["time"].ToString())[1].ToString() + ":00:00";     // dummy-string skapas för aktuell bokning i loopen, så att klockslaget ska matcha en av de hela klockslag som finns i variabel timeFilter
+                    bool skipThisLoop = ToolBox.timeLimitCheck(anyDate, bookingRow["time"].ToString());
+                    if (!skipThisLoop && timeFilter == compareToTimeFilterDummyString)                                          // om bokning skall skrivas ut, så kontrolleras det här i vilken tidsgruppering den ska hamna i
+                    {
+                        HtmlGenericControl bookedPlayer = new HtmlGenericControl("div");                                        // håller information om varje bokad spelare för dagen
+                        CreateABookingInfoLine(ref bookedPlayer, bookingRow);                                                   // här populeras ovan div med rätt controls beroende på om man är admin/medlem
+                        blockOfBookings.Controls.Add(bookedPlayer);
+                    }
+                }
+                panelContent.Controls.Add(blockOfBookings);
+            }
+
+            // panel som all info skall läggas i skapas
+            HtmlGenericControl panelFrame = new HtmlGenericControl("div");
+            panelFrame.Attributes.Add("class", "panel panel-default");
+
+            // panelens titel skapas
+            HtmlGenericControl panelHeader = new HtmlGenericControl("div");
+            panelHeader.Attributes.Add("class", "panel-heading sortingTimeTextDisplay");
+            if (isadmin)
+            {
+                panelHeader.InnerHtml = "Incheckning och avbokning av spelare";
+            }
+            else
+            {
+                panelHeader.InnerHtml = "Här kan du avboka dig själv och övriga spelare i de bokningar som du själv har skapat. Du kan även avboka dig själv på de bokningar som någon annan har anmält dig.";
+            }
+
+            if (timeList.Count > 1)
+            {
+                #region ############## dokumentation bootstrap HTML-struktur ############## 
+                //< div class="dropdown">
+                //<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+                //<span class="caret"></span></button>
+                //    <ul class="dropdown-menu">
+                //        <li><a href = "#" > HTML </ a ></ li >
+                //        < li >< a href="#">CSS</a></li>
+                //        <li><a href = "#" > JavaScript </ a ></ li >
+                //    </ ul >
+                //</ div >
+                #endregion
+
+                HtmlGenericControl timePickerDropDown = new HtmlGenericControl("div");
+                timePickerDropDown.Attributes.Add("class", "dropdown");
+                Button dropDownButton = new Button();
+                dropDownButton.Attributes.Add("class", "btn btn-primary dropdown-toggle");
+                dropDownButton.Attributes.Add("data-toggle", "dropdown");
+                dropDownButton.Text = "Välj starttid" ;
+
+                HtmlGenericControl buttonArrow = new HtmlGenericControl("span");            // verkar inte som denna kan läggas i en vanlig button,  !! att utredas senare
+                buttonArrow.Attributes.Add("class", "caret");
+
+                HtmlGenericControl timePickerList = new HtmlGenericControl("ul");
+                timePickerList.Attributes.Add("class", "dropdown-menu");
+
+                foreach (string item in timeList)
+                {
+                    HtmlGenericControl timeOption = new HtmlGenericControl("li");
+                    timeOption.Attributes.Add("class", "timeOptionHover");
+                    timeOption.Attributes.Add("onclick", "showThisBlockOfBookings(\'" + item.ToString().Substring(0, 5) + "')");
+                    timeOption.InnerHtml = item.ToString().Substring(0, 5);
+                    
+                    timePickerList.Controls.Add(timeOption);
+                }
 
 
+                dropDownButton.Controls.Add(buttonArrow);
+                timePickerDropDown.Controls.Add(dropDownButton);
+                timePickerDropDown.Controls.Add(timePickerList);
 
+                panelFrame.Controls.Add(panelHeader);
+                panelFrame.Controls.Add(timePickerDropDown);
+            }
+            else
+            {
+                panelFrame.Controls.Add(panelHeader);
+            }
+            
+            panelFrame.Controls.Add(panelContent);
+            DisplayBookingSchedule.Controls.Add(panelFrame);
+
+        }
+
+        /// <summary>
+        /// Skapar tidsgrupper om hela klockslag baserat på 
+        /// de bokade tider som finns och skall visas
+        /// </summary>
+        /// <param name="timeList"></param>
+        /// <param name="table"></param>
+        private void CreateTimeList(ref List<string> timeList, DataTable table)
+        {
+            // Denna loop läser ut vilka unika bokningstider som finns.
             foreach (DataRow item in table.Rows)
             {
-
-                // Incheckning och avbokning får senast göras fem minuter innan golfrundan börjar
-                // Här görs en kontroll på detta innan den bokade tiden får printas ut till webbsidan
-                // Passering av tidsgränsen gör att bokningen ej listas
-                //DateTime currentTime = DateTime.Now;
-                //DateTime timeLimitation = Convert.ToDateTime(DateTime.Now.ToShortDateString() + " " + item["time"]).AddMinutes(-5);
-                bool skipThisLoop = ToolBox.timeLimitCheck(anyDate, item["time"].ToString());
+                bool skipThisLoop = ToolBox.timeLimitCheck(anyDate, item["time"].ToString());       // kontrollerar om tiden ska behandlas (passerade tider ska ej behandlas)
                 if (skipThisLoop)
                 {
-                    // ingenting görs  
+                    // inget händer
                 }
                 else
                 {
-                    string concatenatedString = "";
-                    //kontrollerar om det är ett gästkonto och filtrerar bort onödig info isf.
-                    if (item["golfid"].ToString() == "Gäst")
+                    string s = item["time"].ToString().Substring(0, 2) + ":00:00";
+
+                    // ser till så att unika poster av tider enbart läggs till
+                    if (timeList.Count == 0)
                     {
-                        concatenatedString = "Golfid: " + item["golfid"].ToString() + " ";
+                        timeList.Add(s);
                     }
-                    else
+                    else if (!timeList.Contains(s))
                     {
-                        concatenatedString = "Golfid: " + item["golfid"].ToString() + ", ";
-                        concatenatedString += item["FirstName"].ToString() + " " + item["SurName"].ToString() + " ";
+                        timeList.Add(s);
                     }
-
-                    // kontrollerar incheckningsstatus
-                    HtmlGenericControl checkinDiv = new HtmlGenericControl("div");
-                    checkinDiv.Attributes.Add("class", "checkInStatus");
-                    checkinDiv.Attributes.Add("id", "chStatus" + item["includedid"].ToString());
-                    if (Convert.ToBoolean(item["checkedin"]))
-                    {
-                        checkinDiv.InnerHtml = "Incheckad";
-                        checkinDiv.Style.Add("background-color", "lightgreen");
-                    }
-                    else
-                    {
-                        checkinDiv.InnerHtml = "Ej incheckad";
-                        checkinDiv.Style.Add("background-color", "lightgray");
-                    }
-
-
-                    HtmlGenericControl List = new HtmlGenericControl("div");
-
-                    HtmlGenericControl teeTime = new HtmlGenericControl("div");
-                    teeTime.Attributes.Add("class", "teeTimeInfo");
-                    teeTime.InnerHtml = "Starttid: " + item["time"].ToString();
-
-                    HtmlGenericControl bookedByInfo = new HtmlGenericControl("div");
-                    bookedByInfo.Attributes.Add("class", "bookedByInfo");
-                    bookedByInfo.InnerHtml = "bokad av " + item["owner"].ToString();
-
-                    HtmlGenericControl listInfo = new HtmlGenericControl("div");
-                    listInfo.InnerHtml = concatenatedString;
-                    listInfo.Attributes.Add("class", "checkInInfo");
-
-                    // Detta avsnitt styr vilken funktionalitet som blir tillgänglig beroende på roll
-                    // Personal/admin: ser en incheckningsknapp + avbokningsknapp
-                    // Medlem: ser bara avbokningsknapp
-                    HtmlGenericControl checkInOutButton = new HtmlGenericControl("input");
-                    if (isadmin)
-                    {
-                        checkInOutButton.Attributes.Add("class", "checkInButton");
-                        if (!Convert.ToBoolean(item["checkedin"]))
-                        {
-                            checkInOutButton.Attributes.Add("value", "Checka in");
-                            checkInOutButton.Attributes.Add("checkedin", "false");
-                        }
-                        else
-                        {
-                            checkInOutButton.Attributes.Add("value", "Ångra");
-                            checkInOutButton.Attributes.Add("checkedin", "true");
-                        }
-
-                        checkInOutButton.Attributes.Add("golfid", item["golfid"].ToString());
-                        checkInOutButton.Attributes.Add("type", "button");
-                        checkInOutButton.Attributes.Add("id", "bookedTee" + item["includedid"].ToString());
-                        //förklaring på onclick: <aktuell bokad spelares golfid>, <speltid>, <datum>, <PK i included-tabell>
-                        checkInOutButton.Attributes.Add("onclick", "togglePlayerCheckin(\'" + item["golfid"].ToString() + "\', \'" + item["time"].ToString() + "\', \'" + item["bookingdate"].ToString() + "\', \'" + item["includedid"].ToString() + "\')");
-                    }
-                    // avbokningsknapp skapas
-                    HtmlGenericControl cancelBookingButton = new HtmlGenericControl("input");
-                    cancelBookingButton.Attributes.Add("value", "Avboka");
-                    cancelBookingButton.Attributes.Add("id", "cancelTee" + item["includedid"].ToString());      // unikt id för knapp
-                    cancelBookingButton.Attributes.Add("type", "button");
-                    cancelBookingButton.Attributes.Add("class", "cancelTeeButton disable" + item["bookingid"].ToString());                             // css-formatering
-                                                                                                                                                       //cancelBookingButton.Attributes.Add("owner", item["owner"].ToString());                      // vem som äger bokningen
-                                                                                                                                                       //förklaring på onclick: <bokningsid> <includedid> <golfid att avbokas> <bokningsägare>
-                    cancelBookingButton.Attributes.Add("onclick", "cancelPlayer(\'" + item["bookingid"].ToString() + "\', \'" + item["includedid"].ToString() + "\', \'" + item["golfid"].ToString() + "\', \'" + item["owner"].ToString() + "\',\'"+item["time"].ToString()+"\')");
-
-                    List.Controls.Add(listInfo);
-                    List.Controls.Add(teeTime);
-                    List.Controls.Add(bookedByInfo);
-                    List.Controls.Add(checkinDiv);
-                    
-                    // incheckningsknapp läggs till i struktur enbart om man är admin
-                    if (isadmin)
-                    {
-                        List.Controls.Add(checkInOutButton);
-                    }
-                    List.Controls.Add(cancelBookingButton);
-                    ListGroup.Controls.Add(List);
                 }
             }
+        }
 
 
-            // OBS! gamla koden som låg i BookingSchedule.aspx 170313
-            //< div class="panel panel-default" id="panelIdTodaysBookings" runat="server" visible="true">
-            //    <div class="panel-heading" id="TodaysBookings" runat="server" visible="true">Dagens Bokningar</div>
-            //    <div class="panel-body" id="DisplayCheckIns" runat="server" visible="true"></div>
-            //</div>
+        /// <summary>
+        /// Skapar varje summeringsrad för bokningar under en dag.
+        /// Lägger bara in en avbokningsknapp om man är medlem, men 
+        /// även en incheckningsknapp om man är admin.
+        /// </summary>
+        /// <param name="bookedPlayer"></param>
+        /// <param name="item"></param>
+        private void CreateABookingInfoLine(ref HtmlGenericControl bookedPlayer, DataRow item)
+        {
+            string concatenatedString = "";
+            //kontrollerar om det är ett gästkonto och filtrerar bort onödig info isf.
+            if (item["golfid"].ToString() == "Gäst")
+            {
+                concatenatedString = "Golfid: " + item["golfid"].ToString() + " ";
+            }
+            else
+            {
+                concatenatedString = "Golfid: " + item["golfid"].ToString() + ", ";
+                concatenatedString += item["FirstName"].ToString() + " " + item["SurName"].ToString() + " ";
+            }
 
-            HtmlGenericControl panelIdTodaysBookings = new HtmlGenericControl("div");
-            panelIdTodaysBookings.Attributes.Add("class", "panel panel-default");
+            // kontrollerar incheckningsstatus
+            HtmlGenericControl checkinDiv = new HtmlGenericControl("div");
+            checkinDiv.Attributes.Add("class", "checkInStatus");
+            checkinDiv.Attributes.Add("id", "chStatus" + item["includedid"].ToString());
+            if (Convert.ToBoolean(item["checkedin"]))
+            {
+                checkinDiv.InnerHtml = "Incheckad";
+                checkinDiv.Style.Add("background-color", "lightgreen");
+            }
+            else
+            {
+                checkinDiv.InnerHtml = "Ej incheckad";
+                checkinDiv.Style.Add("background-color", "lightgray");
+            }
 
-            HtmlGenericControl todaysBookings = new HtmlGenericControl("div");
-            todaysBookings.Attributes.Add("class","panel-heading");
-            todaysBookings.InnerHtml = "Dagens Bokningar";
+            HtmlGenericControl teeTime = new HtmlGenericControl("div");             // starttid det gäller
+            teeTime.Attributes.Add("class", "teeTimeInfo");
+            teeTime.InnerHtml = "Starttid: " + item["time"].ToString().Substring(0,5);
 
-            HtmlGenericControl DisplayCheckIns = new HtmlGenericControl("div");
-            DisplayCheckIns.Attributes.Add("class", "panel-body");
+            HtmlGenericControl bookedByInfo = new HtmlGenericControl("div");        // den som bokat
+            bookedByInfo.Attributes.Add("class", "bookedByInfo");
+            bookedByInfo.InnerHtml = "bokad av " + item["owner"].ToString();
 
-            DisplayCheckIns.Controls.Add(ListGroup);
+            HtmlGenericControl playerInfo = new HtmlGenericControl("div");          // håller information om spelaren
+            playerInfo.InnerHtml = concatenatedString;
+            playerInfo.Attributes.Add("class", "checkInInfo");
 
-           
-            panelIdTodaysBookings.Controls.Add(todaysBookings);
-            panelIdTodaysBookings.Controls.Add(DisplayCheckIns);
-            DisplayBookingSchedule.Controls.Add(panelIdTodaysBookings);
+            // Detta avsnitt styr vilken funktionalitet som blir tillgänglig beroende på roll
+            // Personal/admin: ser en incheckningsknapp + avbokningsknapp
+            // Medlem: ser bara avbokningsknapp
+            HtmlGenericControl checkInOutButton = new HtmlGenericControl("input");
+            if (isadmin)
+            {
+                checkInOutButton.Attributes.Add("class", "checkInButton");
+                if (!Convert.ToBoolean(item["checkedin"]))
+                {
+                    checkInOutButton.Attributes.Add("value", "Checka in");
+                    checkInOutButton.Attributes.Add("checkedin", "false");
+                }
+                else
+                {
+                    checkInOutButton.Attributes.Add("value", "Ångra");
+                    checkInOutButton.Attributes.Add("checkedin", "true");
+                }
 
+                checkInOutButton.Attributes.Add("golfid", item["golfid"].ToString());
+                checkInOutButton.Attributes.Add("type", "button");
+                checkInOutButton.Attributes.Add("id", "bookedTee" + item["includedid"].ToString());
+                //förklaring på onclick: <aktuell bokad spelares golfid>, <speltid>, <datum>, <PK i included-tabell>
+                checkInOutButton.Attributes.Add("onclick", "togglePlayerCheckin(\'" + item["golfid"].ToString() + "\', \'" + item["time"].ToString() + "\', \'" + item["bookingdate"].ToString() + "\', \'" + item["includedid"].ToString() + "\')");
+            }
+            // avbokningsknapp skapas
+            HtmlGenericControl cancelBookingButton = new HtmlGenericControl("input");
+            cancelBookingButton.Attributes.Add("value", "Avboka");
+            cancelBookingButton.Attributes.Add("id", "cancelTee" + item["includedid"].ToString());      // unikt id för knapp
+            cancelBookingButton.Attributes.Add("type", "button");
+            cancelBookingButton.Attributes.Add("class", "cancelTeeButton disable" + item["bookingid"].ToString());                             // css-formatering
+                                                                                                                                               //cancelBookingButton.Attributes.Add("owner", item["owner"].ToString());                      // vem som äger bokningen
+                                                                                                                                               //förklaring på onclick: <bokningsid> <includedid> <golfid att avbokas> <bokningsägare>
+            cancelBookingButton.Attributes.Add("onclick", "cancelPlayer(\'" + item["bookingid"].ToString() + "\', \'" + item["includedid"].ToString() + "\', \'" + item["golfid"].ToString() + "\', \'" + item["owner"].ToString() + "\',\'" + item["time"].ToString() + "\')");
+
+            bookedPlayer.Controls.Add(playerInfo);
+            bookedPlayer.Controls.Add(teeTime);
+            bookedPlayer.Controls.Add(bookedByInfo);
+            bookedPlayer.Controls.Add(checkinDiv);
+
+            // incheckningsknapp läggs till i struktur enbart om man är admin
+            if (isadmin)
+            {
+                bookedPlayer.Controls.Add(checkInOutButton);
+            }
+            bookedPlayer.Controls.Add(cancelBookingButton);
         }
 
 

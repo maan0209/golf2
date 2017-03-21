@@ -69,6 +69,24 @@ $(function () {
     });
 });
 
+/* */
+function showThisBlockOfBookings(elementToShow) {
+    console.log("asdfads");
+    console.log(elementToShow.toString());
+    $(".blockOfBookings").each(function () {
+        var id = $(this).attr('id');
+        if (id == elementToShow) {
+            console.log("bokningstider för: " + elementToShow +" visas");
+            $(this).css('display', 'block')
+        }
+        else {
+            console.log("bokningstider för: " + id + " döljs");
+            $(this).css('display', 'none')
+        }
+        
+    });
+};
+
 /* Används för att trigga en postback*/
 function fulfix(theTimeToBook) {
     var fakeButton = document.getElementById('ContentPlaceHolder1_fakeSenderButton');
