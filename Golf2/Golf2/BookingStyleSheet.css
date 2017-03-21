@@ -1,6 +1,6 @@
 ﻿/* RESETTA SIDAN*/
 * {
-    margin: 1px 0px 0px 0px;
+    margin: 0px;
     padding: 0px;
 }
 
@@ -9,7 +9,7 @@
     margin-top: 60px;
     margin-left: auto;
     margin-right: auto;
-    width: 60%;
+    width: 1080px;
     height: auto;
 }
 
@@ -53,13 +53,12 @@
     margin-bottom: auto;
 }
 
-
 /* Formaterar bokningsplatser i en modal */
 .aBookingIsClosed{
     display: inline-block;
     min-width: 70px;
     min-height: 70px;
-    background-color: lightcyan;
+    background-color: #a3a3a3;
     margin: 1px;
     border-style: solid;
     border-width: thin;
@@ -70,8 +69,6 @@
 .TimeIsClosed{
    text-align: center;
 }
-
-
 
 .aBookableSpot {
     width:31%;
@@ -145,37 +142,47 @@
 .aBooking {
     min-width: 70px;
     min-height: 70px;
-    background-color: lightgray;
+    background-color: #fafafa;
     margin: 1px;
     display: inline-block;
     border-style: solid;
     border-width: thin;
     border-color: #969696;
     margin-bottom: 2px;
+    border-radius: 2px;
 }
 
 .aBookingFull {
     min-width: 70px;
     min-height: 70px;
-    background-color: lightcoral;
+    background-color: #F45D4C;
     margin: 1px;
     display: inline-block;
     border-style: solid;
-    border-width: thin;
+    border-width: 1px;;
     border-color: #969696;
     margin-bottom: 2px;
+    border-radius: 2px;
 }
 
 .aBookingSpotsLeft {
     min-width: 70px;
     min-height: 70px;
-    background-color: lightyellow;
+    background-color: #A1DBB2;
     margin: 1px;
     display: inline-block;
     border-style: solid;
     border-width: thin;
     border-color: #969696;
     margin-bottom: 2px;
+    border-radius: 2px;
+}
+
+.aBooking:hover, .aBookingFull:hover, .aBookingSpotsLeft:hover{
+    box-shadow:         1px 0px 30px 0px rgba(0, 0, 0, 0.17);
+    -webkit-transition: box-shadow 100ms linear;
+    -ms-transition: box-shadow 100ms linear;
+    transition: box-shadow 100ms linear;
 }
 
 .badgeRow {
@@ -192,6 +199,9 @@
 
 #cdate {
     text-align: center;
+    vertical-align: middle;
+    color: #fafafa;
+
 }
 
 /* Formaterar incheckningspanelen */
@@ -216,8 +226,7 @@
     vertical-align: middle;
     width: 10%;
     text-align: center;
-    border-radius: 5px;
-    
+    border-radius: 5px;    
 }
 
 .bookedByInfo {
@@ -251,34 +260,111 @@
 /* Övrigt */
 
 #ContentPlaceHolder1_DisplayChangeDay{
-
-    background-color: darkseagreen;
-    width: 98%;
-    height: 20%; 
+    background-color: rgb(69, 69, 69);
+    width: 1007px;
+    height: 30%; 
+    margin-bottom: 5px;
+    border-radius: 4px;
 }
 
-
-#ScheduelChangeDay{
-
-     width:15%;
-    height: 15%;
-    background-color: lightgray;
-}
+/*Föregående dag*/
 #ContentPlaceHolder1_Button1{
-       font-family: inherit;
-    font-size: 30px;
+    font-family: inherit;
+    font-size: 20px;
     line-height: inherit;
-    width: 10%;
-    height: 35%;
-
+    width: 60px;
+    height: 40px;
+    border-radius: 4px;
+    margin: 10px 5px;
+    float: left;
 }
-#ContentPlaceHolder1_Button2{
-       font-family: inherit;
-    font-size: 30px;
-    line-height: inherit;
-    width: 10%;
-    height: 35%;
-    float: right;
 
+/*Nästa dag*/
+#ContentPlaceHolder1_Button2{
+    font-family: inherit;
+    font-size: 20px;
+    line-height: inherit;
+    width: 60px;
+    height: 40px;
+    border-radius: 4px;
+    margin: 10px 5px;
+    float: right;
 }
  
+#ContentPlaceHolder1_Button2:hover, #ContentPlaceHolder1_Button1:hover{
+    background-color: #fafafa;
+    border-color: #fafafa;
+    background-color:  1px 0px 30px 0px rgba(0, 0, 0, 0.17);
+    -webkit-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+
+/* Mindre skärm *//* Mindre skärm *//* Mindre skärm *//* Mindre skärm *//* Mindre skärm */
+
+@media only screen and (max-width:1600px) {
+
+.container {
+    margin-top: 60px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: auto;
+}
+
+#ContentPlaceHolder1_DisplayBookingSchedule {
+    width: 432px;
+    margin: auto;
+}    
+    
+#ContentPlaceHolder1_DisplayChangeDay{
+    background-color: rgb(69, 69, 69);
+    width: 432px;
+    height: 60px; 
+    margin-bottom: 5px;
+    border-radius: 4px;
+    margin: auto;
+}
+
+    #ContentPlaceHolder1_Button1{
+    font-family: inherit;
+    font-size: 20px;
+    line-height: inherit;
+    width: 60px;
+    height: 40px;
+    border-radius: 4px;
+    margin: 10px 5px;
+    float: left;
+}
+    
+#ContentPlaceHolder1_Button2{
+    font-family: inherit;
+    font-size: 20px;
+    line-height: inherit;
+    width: 60px;
+    height: 40px;
+    border-radius: 4px;
+    margin: 10px 5px;
+    float: right;
+}
+ 
+#cdate {
+    text-align: center;
+    vertical-align: middle;
+    color: #fafafa;
+    font-size:20px;
+}
+
+.ScorecardWithInfo{
+    display:none;
+}
+   
+.changeDayButton {
+    width: 32.5%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+}
+
+

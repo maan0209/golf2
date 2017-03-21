@@ -5,6 +5,7 @@
         #div{
         float:left;
     }
+
     </style>
 </asp:Content>
 
@@ -76,22 +77,16 @@
 </script>
 
      <div class="container">
+        
+         <asp:Label ID="rubrikScorecard" runat="server" Text="Välj aktuellt golf-id och utslagstee." Visible="false"></asp:Label>
         <div id="dropdownScorecard">
-            <asp:DropDownList ID="dropdownscorecard" runat="server" OnSelectedIndexChanged="dropdownscorecard_SelectedIndexChanged" AutoPostBack="true" Visible="false">
-
-                
-            </asp:DropDownList>
-            
-            
-            <asp:Label ID="golfID" runat="server" Text="" Visible="false"></asp:Label><asp:Label ID="aktuelltgolfID" runat="server" Visible="false"></asp:Label>
-             <asp:Label ID="name" runat="server" Text="" Visible="false"></asp:Label><asp:Label ID="aktuelltNamn" runat="server" Visible="false"></asp:Label>
-             <asp:Label ID="date" runat="server" Text="" Visible="false"></asp:Label><asp:Label ID="aktuelltDatum" runat="server" Visible="false"></asp:Label>
-             <asp:RadioButtonList ID="chooseTee" runat="server" Visible="false"><asp:ListItem Text="Röd" Value="red" /><asp:ListItem Text="Gul" Value="yellow" /></asp:RadioButtonList>
-
-             <asp:Button ID="printScorecard" Visible="false" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/><br />
+            <asp:DropDownList ID="dropdownscorecard" runat="server" Visible="false"></asp:DropDownList>
+            <asp:DropDownList ID="dropdownSelectTee" AutoPostBack="true" runat="server" Visible="false" OnSelectedIndexChanged="dropdownSelectTee_SelectedIndexChanged"><asp:ListItem Text="Välj Tee"></asp:ListItem><asp:ListItem Text="Röd"></asp:ListItem><asp:ListItem Text="Gul"></asp:ListItem></asp:DropDownList>
+            <asp:Button ID="getScorecardinfo" Visible="false" Enabled="false" runat="server" Text="Hämta uppgifter" OnClick="getScorecardinfo_Click" />
+            <asp:Button ID="printScorecard" Visible="false" Enabled="false" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/><br />
 
   <!--Här börjar scorekortet och alla tabeller-->
-<asp:Panel ID="ScorecardWithInfo" runat="server" Visible="false"> 
+<asp:Panel ID="ScorecardWithInfo" CssClass="ScorecardWithInfo" runat="server" Visible="false"> 
    <div id="div">
 
       <!-- Tabell Huvet-->  
@@ -348,7 +343,7 @@
 <td id="Hål">2500</td>
 <td id="Hål">36</td>
 <td id="Hål">Ut</td>
-<td></td>
+<td id="Erh"><asp:Label ID="sectionOneTotalErh" runat="server"></asp:Label></td>
 <td></td>
 <td></td>
 <td></td>
@@ -557,7 +552,7 @@
 <td id="Hål">2676</td>
 <td id="Hål">36</td>
 <td id="Hål">IN</td>
-<td id="Score"></td>
+<td id="Erh"><asp:Label ID="sectionTwoTotalErh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -577,7 +572,7 @@
 <td id="Hål">2500</td>
 <td id="Hål">36</td>
 <td id="Hål">UT</td>
-<td id="Score"></td>
+<td id="Erh"><asp:Label ID="sectionOneTotalErh_2" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>
@@ -597,7 +592,7 @@
 <td id="Hål">5176</td>
 <td id="Hål">72</td>
 <td id="Hål">S:A</td>
-<td id="Score"></td>
+<td id="Erh"><asp:Label ID="summaErh" runat="server"></asp:Label></td>
 <td id="Score"></td>
 <td id="Score"></td>
 <td id="Score"></td>

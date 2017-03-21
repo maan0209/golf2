@@ -66,7 +66,10 @@ namespace Golf2
                         ScorecardWithInfo.Visible = true;
                         dropdownscorecard.Visible = true;
                         printScorecard.Visible = true;
-                    chooseTee.Visible = true;
+                        dropdownSelectTee.Visible = true;
+                        getScorecardinfo.Visible = true;
+                    rubrikScorecard.Visible = true;
+                    
 
                     if (!IsPostBack)
                     {
@@ -1181,270 +1184,17 @@ namespace Golf2
 
         #endregion
 
-        protected void dropdownscorecard_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (chooseTee.SelectedIndex > -1)
-            {
-
-                if (IsPostBack)
-                {
-
-               
-
-
-                    aktuelltgolfID.Text = dropdownscorecard.SelectedItem.Text;
-                    aktuelltNamn.Text = dropdownscorecard.SelectedItem.Value;
-                    aktuelltDatum.Text = anyDate.ToShortDateString();
-                    string selectedTee = chooseTee.SelectedValue;
-
-                    string tmpscorecard = aktuelltNamn.Text;
-                    List<string> person = new List<string>();
-                    string nyttOrd = "";
-
-                    foreach (char c in tmpscorecard)
-                    {
-                        if (c == Convert.ToChar("#"))
-                        {
-                            person.Add(nyttOrd);
-                            nyttOrd = "";
-                        }
-                        else
-                        {
-                            nyttOrd += c.ToString();
-                        }
-                    }
-
-
-
-                    double spelHcp;
-                    double slope;
-                    double CR;
-                    double Par;
-                    double värde;
-
-                    if (person[3] == "Male")
-                    {
-                        if (selectedTee == "red")
-                        {
-                            slope = 120;
-                            CR = 67.8;
-                        }
-                        else
-                        {
-                            slope = 128;
-                            CR = 71.4;
-                        }
-                        värde = 113;
-                        Par = 72;
-                        spelHcp = Convert.ToDouble(person[1]) * (slope / värde) + (CR - Par);
-
-                    }
-
-                    else
-                    {
-                        if (selectedTee == "red")
-                        {
-                            slope = 124;
-                            CR = 73;
-                        }
-                        else
-                        {
-                            slope = 133;
-                            CR = 77.4;
-                        }
-                        värde = 113;
-                        Par = 72;
-                        spelHcp = Convert.ToDouble(person[1]) * (slope / värde) + (CR - Par);
-
-                    }
-
-                    var erhslag = Math.Round(spelHcp, 0, MidpointRounding.AwayFromZero);
-
-                    scorecardDate.Text = anyDate.ToShortDateString();
-                    scorecardGolfId.Text = aktuelltgolfID.Text;
-                    scorecardName.Text = person[0];
-                    scorecardHcp.Text = person[1];
-                    scorecardTime.Text = person[2];
-                    scorecardSpelHcp.Text = erhslag.ToString();
-
-
-
-                    hole1Erh.Text = hole1Par.Text;
-                    hole2Erh.Text = hole2Par.Text;
-                    hole3Erh.Text = hole3Par.Text;
-                    hole4Erh.Text = hole4Par.Text;
-                    hole5Erh.Text = hole5Par.Text;
-                    hole6Erh.Text = hole6Par.Text;
-                    hole7Erh.Text = hole7Par.Text;
-                    hole8Erh.Text = hole8Par.Text;
-                    hole9Erh.Text = hole9Par.Text;
-                    hole10Erh.Text = hole10Par.Text;
-                    hole11Erh.Text = hole11Par.Text;
-                    hole12Erh.Text = hole12Par.Text;
-                    hole13Erh.Text = hole13Par.Text;
-                    hole14Erh.Text = hole14Par.Text;
-                    hole15Erh.Text = hole15Par.Text;
-                    hole16Erh.Text = hole16Par.Text;
-                    hole17Erh.Text = hole17Par.Text;
-                    hole18Erh.Text = hole18Par.Text;
-
-
-
-
-
-                    for (int i = 0; i < erhslag;)
-                    {
-
-
-
-
-                        //index 1
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole15Erh.Text) + 1;
-                            hole15Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 2
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole4Erh.Text) + 1;
-                            hole4Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 3
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole13Erh.Text) + 1;
-                            hole13Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 4
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole5Erh.Text) + 1;
-                            hole5Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 5
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole18Erh.Text) + 1;
-                            hole18Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 6
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole9Erh.Text) + 1;
-                            hole9Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 7
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole12Erh.Text) + 1;
-                            hole12Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 8
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole7Erh.Text) + 1;
-                            hole7Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 9
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole10Erh.Text) + 1;
-                            hole10Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 10
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole3Erh.Text) + 1;
-                            hole3Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 11
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole17Erh.Text) + 1;
-                            hole17Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 12
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole8Erh.Text) + 1;
-                            hole8Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-
-                        //Index 13
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole11Erh.Text) + 1;
-                            hole11Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 14
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole2Erh.Text) + 1;
-                            hole2Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 15
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole16Erh.Text) + 1;
-                            hole16Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 16
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole1Erh.Text) + 1;
-                            hole1Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 17
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole14Erh.Text) + 1;
-                            hole14Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-                        //Index 18
-                        if (i < erhslag)
-                        {
-                            int totalStrokes = Convert.ToInt32(hole6Erh.Text) + 1;
-                            hole6Erh.Text = totalStrokes.ToString();
-                            i++;
-                        }
-
-                    }
-
-
-                }
-               
-            }
-            else
-            {
-                Response.Write("<script>alert('Välj vilken tee som scorekortet ska gälla.')</script>");
-            }
-        }
-
+       
+        //Skapar en dropdownlist med golfid baserat på dagens bokningar
         private void generateDropdownList()
         {
             DailyBookings bokning = new DailyBookings(anyDate);
 
             var name = from t in bokning.BookingsPerSpecifiedDate
+                       
                        select new
                        {
+                           
                            CompleteName = t.FirstName + " " + t.SurName + "#" + t.Hcp + "#" + t.BookingTime.ToShortTimeString() + "#" + t.Gender + "#",
                            GolfID = t.GolfId,
 
@@ -1456,6 +1206,7 @@ namespace Golf2
             dropdownscorecard.DataBind();
         }
 
+        //Metod för att rensa scorekortet
         private void clearScorecard()
         {
             scorecardDate.Text = "";
@@ -1464,6 +1215,268 @@ namespace Golf2
             scorecardName.Text = "";
             scorecardSpelHcp.Text = "";
             scorecardTime.Text = "";
+        }
+
+        //Fyller scorekortet med aktuell information baserat på golfid och vald tee.
+        protected void getScorecardinfo_Click(object sender, EventArgs e)
+        {
+            if(dropdownSelectTee.SelectedItem.Text != "Välj Tee")
+            {
+
+                //Tar in värden från dropdownlisten och skapar en lista med personer där de olika värden som finns
+                //i strängen "tmpscorecard separeras. Då kommer vi åt namn, handicap och tid för bokningen.
+                string tmpscorecard = dropdownscorecard.SelectedItem.Value;
+                List<string> person = new List<string>();
+                string nyttOrd = "";
+
+                foreach (char c in tmpscorecard)
+                {
+                    if (c == Convert.ToChar("#"))
+                    {
+                        person.Add(nyttOrd);
+                        nyttOrd = "";
+                    }
+                    else
+                    {
+                        nyttOrd += c.ToString();
+                    }
+                }
+
+                double spelHcp;
+                double slope;
+                double CR;
+                double Par;
+                double värde;
+
+                //Sätter värde för slope och CR för man.
+                if (person[3] == "Male")
+                {
+                    if (dropdownSelectTee.SelectedItem.Text == "Röd")
+                    {
+                        slope = 120;
+                        CR = 67.8;
+                    }
+                    else
+                    {
+                        slope = 128;
+                        CR = 71.4;
+                    }
+                    värde = 113;
+                    Par = 72;
+                    spelHcp = Convert.ToDouble(person[1]) * (slope / värde) + (CR - Par);
+
+                }
+
+                //sätter värde för slope och CR för kvinna.
+                else
+                {
+                    if (dropdownSelectTee.SelectedItem.Text == "Röd")
+                    {
+                        slope = 124;
+                        CR = 73;
+                    }
+                    else
+                    {
+                        slope = 133;
+                        CR = 77.4;
+                    }
+                    värde = 113;
+                    Par = 72;
+                    spelHcp = Convert.ToDouble(person[1]) * (slope / värde) + (CR - Par);
+
+                }
+
+                //Avrundar handicapet till närmaste heltal. ,5 avrundas uppåt.
+                var erhslag = Math.Round(spelHcp, 0, MidpointRounding.AwayFromZero);
+
+                scorecardDate.Text = anyDate.ToShortDateString();
+                scorecardGolfId.Text = dropdownscorecard.SelectedItem.Text;
+                scorecardName.Text = person[0];
+                scorecardHcp.Text = person[1];
+                scorecardTime.Text = person[2];
+                scorecardSpelHcp.Text = erhslag.ToString();
+
+
+
+                hole1Erh.Text = hole1Par.Text;
+                hole2Erh.Text = hole2Par.Text;
+                hole3Erh.Text = hole3Par.Text;
+                hole4Erh.Text = hole4Par.Text;
+                hole5Erh.Text = hole5Par.Text;
+                hole6Erh.Text = hole6Par.Text;
+                hole7Erh.Text = hole7Par.Text;
+                hole8Erh.Text = hole8Par.Text;
+                hole9Erh.Text = hole9Par.Text;
+                hole10Erh.Text = hole10Par.Text;
+                hole11Erh.Text = hole11Par.Text;
+                hole12Erh.Text = hole12Par.Text;
+                hole13Erh.Text = hole13Par.Text;
+                hole14Erh.Text = hole14Par.Text;
+                hole15Erh.Text = hole15Par.Text;
+                hole16Erh.Text = hole16Par.Text;
+                hole17Erh.Text = hole17Par.Text;
+                hole18Erh.Text = hole18Par.Text;
+
+
+
+
+                //Fördelar ut antalet erhållna slag på hålen.
+                for (int i = 0; i < erhslag;)
+                {
+
+
+
+
+                    //index 1
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole15Erh.Text) + 1;
+                        hole15Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 2
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole4Erh.Text) + 1;
+                        hole4Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 3
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole13Erh.Text) + 1;
+                        hole13Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 4
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole5Erh.Text) + 1;
+                        hole5Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 5
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole18Erh.Text) + 1;
+                        hole18Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 6
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole9Erh.Text) + 1;
+                        hole9Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 7
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole12Erh.Text) + 1;
+                        hole12Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 8
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole7Erh.Text) + 1;
+                        hole7Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 9
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole10Erh.Text) + 1;
+                        hole10Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 10
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole3Erh.Text) + 1;
+                        hole3Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 11
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole17Erh.Text) + 1;
+                        hole17Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 12
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole8Erh.Text) + 1;
+                        hole8Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+
+                    //Index 13
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole11Erh.Text) + 1;
+                        hole11Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 14
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole2Erh.Text) + 1;
+                        hole2Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 15
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole16Erh.Text) + 1;
+                        hole16Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 16
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole1Erh.Text) + 1;
+                        hole1Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 17
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole14Erh.Text) + 1;
+                        hole14Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+                    //Index 18
+                    if (i < erhslag)
+                    {
+                        int totalStrokes = Convert.ToInt32(hole6Erh.Text) + 1;
+                        hole6Erh.Text = totalStrokes.ToString();
+                        i++;
+                    }
+
+                }
+
+                int sectionone = Convert.ToInt32(hole1Erh.Text) + Convert.ToInt32(hole2Erh.Text) + Convert.ToInt32(hole3Erh.Text) + Convert.ToInt32(hole4Erh.Text) + Convert.ToInt32(hole5Erh.Text) + Convert.ToInt32(hole6Erh.Text) + Convert.ToInt32(hole7Erh.Text) + Convert.ToInt32(hole8Erh.Text) + Convert.ToInt32(hole9Erh.Text);
+                sectionOneTotalErh.Text = sectionone.ToString();
+                sectionOneTotalErh_2.Text = sectionone.ToString();
+                int sectiontwo = Convert.ToInt32(hole10Erh.Text) + Convert.ToInt32(hole11Erh.Text) + Convert.ToInt32(hole12Erh.Text) + Convert.ToInt32(hole13Erh.Text) + Convert.ToInt32(hole14Erh.Text) + Convert.ToInt32(hole15Erh.Text) + Convert.ToInt32(hole16Erh.Text) + Convert.ToInt32(hole17Erh.Text) + Convert.ToInt32(hole18Erh.Text);
+                sectionTwoTotalErh.Text = sectiontwo.ToString();
+                int totalErh = sectionone + sectiontwo;
+                summaErh.Text = totalErh.ToString();
+
+            }
+
+            else
+            {
+                Response.Write("<script>alert('Välj vilken tee som scorekortet ska gälla.')</script>");
+            }
+        }
+
+        protected void dropdownSelectTee_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            getScorecardinfo.Enabled = true;
+            printScorecard.Enabled = true;
         }
     }
 }

@@ -101,6 +101,25 @@ namespace Golf2
                         //Status.Text = "mailet är skickat";
                     }
                 }
+                else if (typeOfMail == "closed")
+                {
+                    foreach (string email in EmailList)
+                    {
+                        subjectTbx.Text = "Closed";
+                        notification = "Din bokning för " + date + " klockan " + time + " har blivit avbokad på grund av att banan behöver stängas";
+                        bodyTbx.Text = notification;
+
+                        MailMessage message = new MailMessage(fromTbx.Text, toTbx.Text);
+                        message.IsBodyHtml = true;
+
+                        SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587);
+                        client.EnableSsl = true;
+
+                        client.Credentials = new System.Net.NetworkCredential("golfklubben_halslaget@outlook.com", "Golfbil123321");
+                        client.Send(message);
+                        //Status.Text = "mailet är skickat";
+                    }
+                }
             }
 
             catch { }

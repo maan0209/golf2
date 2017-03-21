@@ -389,6 +389,40 @@ namespace Golf2
             }
         } 
 
+        public BindingList<string> SQLGetGolfidsClosed(string sql, DateTime date, string time)
+        {
+
+            TimeSpan time2 = TimeSpan.Parse(time);
+
+            try
+            {
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("bookingdate", date.Date);
+                cmd.Parameters.AddWithValue("time", time2);
+                dr = cmd.ExecuteReader();
+
+                BindingList<string> golfids = new BindingList<string>();
+
+                while (dr.Read())
+                {
+                      golfids.Add(dr["golfid"].ToString());
+                }
+
+                dr.Close();
+                return golfids;
+
+            }
+            catch (NpgsqlException ex)
+            {
+                string exm = ex.Message;
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
 
         //public void SQLInsertSeasonDates (DateTime Startdate, DateTime Enddate)
         //{
