@@ -45,7 +45,7 @@
             
 			<div id="navbar" class="navbar-collapse collapse">				
                 <ul class="nav navbar-nav">
-					<li class=""><a href="inloggad.aspx#about">Boka</a></li>
+					<li class=""><a href="BookingSchedule.aspx">Boka</a></li>
 					<li class=""><a href="inloggad.aspx#nyheter">Nyheter</a></li>
 					<li class=""><a href="inloggad.aspx#banan">Banan</a></li>
                     <li class=""><a href="#">Om oss</a></li>
