@@ -330,7 +330,7 @@
 
 /* Mindre skärm *//* Mindre skärm *//* Mindre skärm *//* Mindre skärm *//* Mindre skärm */
 
-@media only screen and (max-width:1600px) {
+@media only screen and (max-width:1300px) {
 
 .container {
     margin-top: 60px;
