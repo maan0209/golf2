@@ -203,9 +203,10 @@
     color: #fafafa;
 
 }
-
 /* Formaterar incheckningspanelen */
-.dropdown{
+/* Formaterar incheckningspanelen */
+/* Formaterar incheckningspanelen */
+.dropdowndrop{
     border-style: solid;
     border-width: thin;
     border-radius: 5px;
@@ -231,6 +232,7 @@
     vertical-align: middle;
     border-radius: 5px;
 }
+/* Formaterar incheckningspanelen */
 
 .teeTimeInfo{
     width: 15%;
@@ -245,7 +247,6 @@
     width: 30%;
     display: inline-block;
     vertical-align: middle;
-    margin-left: 1%;
 }
 
 .checkInStatus {
@@ -279,6 +280,9 @@
     display: inline-block;
     vertical-align: middle;
     margin-left: 40px;
+    /*background-color: firebrick;
+    color: white;
+    border-radius: 11px;*/
 }
 
 /* Övrigt */

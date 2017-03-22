@@ -127,8 +127,68 @@
     
 <div id="banan"> 
   <h2>Upplev vår bana i världsklass</h2>
+
+ <p class="stars"><span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> </p>
     
-  <!--Här börjar scorekortet och alla tabeller-->
+    <hr class="small">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="portfolio-item">
+        <a href="images/bild5.jpg" target="_blank">
+          <img src="images/bild5.jpg" alt="golf" style="width:100%">
+
+        </a>
+      </div>
+    </div>
+      
+    <div class="col-md-4">
+      <div class="portfolio-item">
+        <a href="images/bild6.jpg" target="_blank">
+          <img src="images/bild6.jpg" alt="golf" style="width:100%">
+
+        </a>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="portfolio-item">
+        <a href="images/bild7.jpg" target="_blank">
+          <img src="images/bild7.jpg" alt="golf" style="width:100%">
+
+        </a>
+      </div>
+    </div>
+      
+       <div class="col-md-4">
+      <div class="portfolio-item">
+        <a href="images/bild7.jpg" target="_blank">
+          <img src="images/bild9.jpg" alt="golf" style="width:100%">
+
+        </a>
+      </div>
+    </div>
+      
+       <div class="col-md-4">
+      <div class="portfolio-item">
+        <a href="images/bild10.jpg" target="_blank">
+          <img src="images/bild11.jpg" alt="golf" style="width:100%"/>
+
+        </a>
+      </div>
+    </div>
+      
+       <div class="col-md-4">
+      <div class="portfolio-item">
+        <a href="images/bild11.jpg" target="_blank">
+          <img src="images/bild10.jpg" alt="golf" style="width:100%"/>
+
+        </a>
+      </div>
+    </div>         
+  </div>   
+     <hr class="small">
+</div>                           
+ 
+     <!--Här börjar scorekortet och alla tabeller-->
 <asp:Panel ID="Scorecard" runat="server">
 <div id="div">
 
@@ -674,71 +734,7 @@
 
     <asp:Button ID="printScorecard" runat="server" OnClientClick="return printpage();" Text="Skriv ut scorekort"/>
 </div>
-</asp:Panel>
-
-
-
- <p class="stars"><span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span> </p>
-    
-    <hr class="small">
-  <div class="row">
-    <div class="col-md-4">
-      <div class="portfolio-item">
-        <a href="images/bild5.jpg" target="_blank">
-          <img src="images/bild5.jpg" alt="golf" style="width:100%">
-
-        </a>
-      </div>
-    </div>
-      
-    <div class="col-md-4">
-      <div class="portfolio-item">
-        <a href="images/bild6.jpg" target="_blank">
-          <img src="images/bild6.jpg" alt="golf" style="width:100%">
-
-        </a>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="portfolio-item">
-        <a href="images/bild7.jpg" target="_blank">
-          <img src="images/bild7.jpg" alt="golf" style="width:100%">
-
-        </a>
-      </div>
-    </div>
-      
-       <div class="col-md-4">
-      <div class="portfolio-item">
-        <a href="images/bild7.jpg" target="_blank">
-          <img src="images/bild9.jpg" alt="golf" style="width:100%">
-
-        </a>
-      </div>
-    </div>
-      
-       <div class="col-md-4">
-      <div class="portfolio-item">
-        <a href="images/bild10.jpg" target="_blank">
-          <img src="images/bild11.jpg" alt="golf" style="width:100%"/>
-
-        </a>
-      </div>
-    </div>
-      
-       <div class="col-md-4">
-      <div class="portfolio-item">
-        <a href="images/bild11.jpg" target="_blank">
-          <img src="images/bild10.jpg" alt="golf" style="width:100%"/>
-
-        </a>
-      </div>
-    </div>         
-  </div>   
-     <hr class="small">
-</div>                           
- 
-    
+</asp:Panel> 
 
 </asp:Content>
 
