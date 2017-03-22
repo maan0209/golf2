@@ -6,20 +6,20 @@
 <%--STÄNG ÖPPNA SÄSONG--%>
 <div class="container" id="season">
   <h2>Säsongsinställningar</h2>
-  <p>Välj när säsongen startar och slutar.</p>      
+  <p class="padmin">Välj när säsongen startar och slutar.</p>      
   <div class="row">
 
     <div class="col-sm-4 kalendersektion">
-        <p>Säsongsstart:</p>
+        <p class="padmin">Säsongsstart:</p>
      <asp:Calendar ID="Calendar1" runat="server" OnSelectionChanged="Calendar1_SelectionChanged" Height="162px" Width="100%"></asp:Calendar>
-        <p>Valt datum:</p>
+        <p class="padmin">Valt datum:</p>
         <asp:Label ID="lblStartdatum" runat="server" Text="Label"></asp:Label>
     </div>
 
     <div class="col-sm-4 kalendersektion">
-        <p>Säsongsslut:</p>
+        <p class="padmin">Säsongsslut:</p>
         <asp:Calendar ID="Calendar2" runat="server" OnSelectionChanged="Calendar2_SelectionChanged" Height="162px" Width="100%"></asp:Calendar>
-        <p>Valt datum:</p>
+        <p class="padmin">Valt datum:</p>
         <asp:Label ID="lblSlutdatum" runat="server" Text="Label"></asp:Label>
     </div>  
   </div>
@@ -33,20 +33,20 @@
 <%--STÄNG BANAN--%>
   <div class="container" id="closecourse">
   <h2>Stäng eller öppna banan</h2>
-  <p>Välj dagar & tider att stänga eller öppna.</p>
+  <p class="padmin">Välj dagar & tider att stänga eller öppna.</p>
 
   <div class="row">
     <div class="col-sm-4 kalendersektion">
-        <p>Välj första dagen banan ska vara stängd:</p>
+        <p class="padmin">Välj första dagen banan ska vara stängd:</p>
         <asp:Calendar ID="Calendar3" runat="server" OnSelectionChanged="Calendar3_SelectionChanged" Height="162px" Width="100%"> </asp:Calendar>
-        <p>Valda datum:</p>
+        <p class="padmin">Valda datum:</p>
         <asp:Label ID="lblfirstclosedday" runat="server" Text=""></asp:Label>
     </div>
 
         <div class="col-sm-4 kalendersektion">
-        <p>Välj sista dagen banan ska vara stängd:</p>
+        <p class="padmin">Välj sista dagen banan ska vara stängd:</p>
         <asp:Calendar ID="Calendar4" runat="server" OnSelectionChanged="Calendar4_SelectionChanged" Height="162px" Width="100%"></asp:Calendar>
-        <p>Valt datum:</p>
+        <p class="padmin">Valt datum:</p>
         <asp:Label ID="lbllastclosedday" runat="server" Text=""></asp:Label>
     </div>       
   </div>
@@ -54,12 +54,12 @@
     <div class="row">
 
     <div class="col-sm-3 kalendersektion">
-        <asp:Label ID="Label1" runat="server" Text="Välj tid då banan öppnar"></asp:Label>
+        <asp:Label ID="Label1" runat="server" Text="Välj tid stängning startar:"></asp:Label>
         <asp:DropDownList ID="dropfirstclose" runat="server"></asp:DropDownList>
     </div>
 
     <div class="col-sm-3 kalendersektion">
-        <asp:Label ID="Label2" runat="server" Text="Välj tid då banan stänger"></asp:Label>
+        <asp:Label ID="Label2" runat="server" Text="Välj tid stängning startar:"></asp:Label>
         <asp:DropDownList ID="droplastclose" runat="server"></asp:DropDownList>
     </div>  
   </div>
@@ -68,11 +68,11 @@
 
     <div class="row">
     <div class="col-sm-8 kalendersektion">
-        <p>Välj de dagar du vill öppna:</p>
+        <p class="padmin">Tabort stängnig av dagar:</p>
         <asp:ListBox ID="listcloseddays" CssClass="listcloseddays" Height="162px" Width="100%" runat="server"></asp:ListBox>
     </div>  
  </div>  
-    <asp:LinkButton ID="LinkButton2" CssClass="btnadmin" OnClick="LinkButton2_Click" Font-Underline="false" runat="server">Öppna</asp:LinkButton>
+    <asp:LinkButton ID="LinkButton2" CssClass="btnadmin" OnClick="LinkButton2_Click" Font-Underline="false" runat="server">Ta bort</asp:LinkButton>
     <hr class="small">
 </div>
 
@@ -80,7 +80,7 @@
 <%--VÄLJ BANANS ÖPPETIDER--%>
     <div class="container" id="openhours">
          <h2>Dagliga öppetider</h2>
-          <p>Välj när banan öppnar och stänger.</p> 
+          <p class="padmin">Välj när banan öppnar och stänger.</p> 
   
   <div class="row">
     <div class="col-sm-3 kalendersektion">
