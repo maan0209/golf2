@@ -1054,7 +1054,7 @@ namespace Golf2
                 #endregion
 
                 HtmlGenericControl timePickerDropDown = new HtmlGenericControl("div");
-                timePickerDropDown.Attributes.Add("class", "dropdowndrop");
+                timePickerDropDown.Attributes.Add("class", "dropdown dropdowndrop");
                 Button dropDownButton = new Button();
                 dropDownButton.Attributes.Add("class", "btn btn-primary dropdown-toggle");
                 dropDownButton.Attributes.Add("data-toggle", "dropdown");
