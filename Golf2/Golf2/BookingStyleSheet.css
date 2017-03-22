@@ -206,7 +206,7 @@
 /* Formaterar incheckningspanelen */
 /* Formaterar incheckningspanelen */
 /* Formaterar incheckningspanelen */
-.dropdowndrop{
+.dropdowndrop {
     border-style: solid;
     border-width: thin;
     border-radius: 5px;
@@ -328,9 +328,14 @@
     transition: background-color 100ms linear;
 }
 
+/* P i Admin*/
+.padmin{
+    text-align:left;
+}
+
 /* Mindre skärm *//* Mindre skärm *//* Mindre skärm *//* Mindre skärm *//* Mindre skärm */
 
-@media only screen and (max-width:1600px) {
+@media only screen and (max-width:1300px) {
 
 .container {
     margin-top: 60px;

@@ -39,7 +39,7 @@
 			<div id="navbar" class="navbar-collapse collapse">				
                 <ul class="nav navbar-nav">
 					<li class=""><a href="#about">Boka</a></li>
-					<li class=""><a href="#">Nyheter</a></li>
+					<li class=""><a href="#nyheter">Nyheter</a></li>
 					<li class=""><a href="#banan">Banan</a></li>
                     <li class=""><a href="#">Om oss</a></li>
                     <li class=""><a href="#">Kontakt</a></li>
@@ -66,7 +66,7 @@
                                         
 										<div class="form-group">
                                             <asp:LinkButton ID="Log_In" Cssclass="btn btn-primary btn-block" runat="server" OnClick="Log_In_Click">
-                                            <%--<span class="glyphicon glyphicon-log-in"></span>--%> Logga in
+                                            <span class="glyphicon glyphicon-log-in"></span> Logga in
                                             </asp:LinkButton>
 											 
 										</div>
